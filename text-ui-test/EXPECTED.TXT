@@ -43,10 +43,10 @@ Here are the tasks in your list:
 3.[E][X] project meeting (from: Mon 2pm to: 4pm)
 ____________________________________________________________
 ____________________________________________________________
-Specify the task number to mark!
+Specify the task number to mark you bozo!
 ____________________________________________________________
 ____________________________________________________________
-Please enter a command. (todo, list, deadline, event, blah or bye)
+Please enter a command. (todo, list, deadline, event, mark, unmark or bye)
 ____________________________________________________________
 ____________________________________________________________
 Finally! I was getting tired of you!

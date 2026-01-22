@@ -21,9 +21,6 @@ public class Ragebait {
                         System.out.println(String.valueOf(i+1) + "." + taskList.get(i).toString());
                     }
                     break;
-                case "blah":
-                    System.out.println("Blah blah blah… wow, you’re original!");
-                    break;
                 case "bye":
                     System.out.println("Finally! I was getting tired of you!");
                     System.out.println("____________________________________________________________");
@@ -31,26 +28,46 @@ public class Ragebait {
                     return;
                 case "mark":
                     if (inputArr.length < 2) {
-                        System.out.println("Specify the task number to mark!");
+                        System.out.println("Specify the task number to mark you bozo!");
                         break;
                     }
-                    int markIndex = Integer.parseInt(inputArr[1]) - 1;
-                    taskList.get(markIndex).markDone();
-                    System.out.println("NICE LA! You managed to accomplish something in your life for once.");
-                    System.out.println(taskList.get(markIndex).toString());
+                    try {
+                        int markIndex = Integer.parseInt(inputArr[1]) - 1;
+                        if (markIndex < 0 || taskList.size() <= markIndex) {
+                            System.out.println("THIS DOES NOT EXIST BRO");
+                        } else {
+                            taskList.get(markIndex).markDone();
+                            System.out.println("NICE LA! You managed to accomplish something in your life for once.");
+                            System.out.println(taskList.get(markIndex).toString());
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a valid number!");
+                    }
                     break;
                 case "unmark":
                     if (inputArr.length < 2) {
-                        System.out.println("Specify the task number to unmark!");
+                        System.out.println("Specify the task number to unmark you bozo!");
                         break;
                     }
-                    int unmarkIndex = Integer.parseInt(inputArr[1]) - 1;
-                    taskList.get(unmarkIndex).markUndone();
-                    System.out.println("WHY ARE YOU SKIVING.");
-                    System.out.println(taskList.get(unmarkIndex).toString());
+                    try {
+                        int unmarkIndex = Integer.parseInt(inputArr[1]) - 1;
+                        if (unmarkIndex < 0 || taskList.size() <= unmarkIndex) {
+                            System.out.println("THIS DOES NOT EXIST!");
+                        } else {
+                            taskList.get(unmarkIndex).markUndone();
+                            System.out.println("WHY ARE YOU SKIVING.");
+                            System.out.println(taskList.get(unmarkIndex).toString());
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a integer!");
+                    }
                     break;
 
                 case "todo":
+                    if (inputArr.length < 2) {
+                        System.out.println("You can't be doing nothing all day long!");
+                        break;
+                    }
                     ToDo currTodo = new ToDo(inputArr[1]);
                     taskList.add(currTodo);
                     System.out.println("Got it. I've added this task:");
@@ -59,6 +76,10 @@ public class Ragebait {
                     break;
 
                 case "deadline":
+                    if (inputArr.length < 2) {
+                        System.out.println("No deadlines?! So free??");
+                        break;
+                    }
                     String deadline[] = inputArr[1].split("/", 2);
                     Deadline currDeadline = new Deadline(deadline[0], deadline[1]);
                     taskList.add(currDeadline);
@@ -68,6 +89,10 @@ public class Ragebait {
                     break;
 
                 case "event":
+                    if (inputArr.length < 2) {
+                        System.out.println("Go touch some grass...");
+                        break;
+                    }
                     String event[] = inputArr[1].split("/", 3);
                     Event currEvent = new Event(event[0], event[1], event[2]);
                     taskList.add(currEvent);
@@ -79,7 +104,7 @@ public class Ragebait {
 
 
                 default:
-                    System.out.println("Please enter a command. (todo, list, deadline, event, blah or bye)");
+                    System.out.println("Please enter a command. (todo, list, deadline, event, mark, unmark or bye)");
 
             }
             System.out.println("____________________________________________________________");
