@@ -46,7 +46,7 @@ ____________________________________________________________
 Specify the task number to mark you bozo!
 ____________________________________________________________
 ____________________________________________________________
-Please enter a command. (todo, list, deadline, event, mark, unmark or bye)
+Please enter a command. (todo, list, deadline, event, mark, unmark, delete or bye)
 ____________________________________________________________
 ____________________________________________________________
 Finally! I was getting tired of you!

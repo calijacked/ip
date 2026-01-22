@@ -42,6 +42,7 @@ public class Ragebait {
                         }
                     } catch (NumberFormatException e) {
                         System.out.println("Please enter a valid number!");
+                        break;
                     }
                     break;
                 case "unmark":
@@ -59,7 +60,8 @@ public class Ragebait {
                             System.out.println(taskList.get(unmarkIndex).toString());
                         }
                     } catch (NumberFormatException e) {
-                        System.out.println("Please enter a integer!");
+                        System.out.println("Please enter an integer!");
+                        break;
                     }
                     break;
 
@@ -80,6 +82,11 @@ public class Ragebait {
                         System.out.println("No deadlines?! So free??");
                         break;
                     }
+
+                    if (!inputArr[1].contains("/by")) {
+                        System.out.println("Please include a /by date!");
+                        break;
+                    }
                     String deadline[] = inputArr[1].split("/", 2);
                     Deadline currDeadline = new Deadline(deadline[0], deadline[1]);
                     taskList.add(currDeadline);
@@ -93,6 +100,11 @@ public class Ragebait {
                         System.out.println("Go touch some grass...");
                         break;
                     }
+
+                    if (!inputArr[1].contains("/from") || !inputArr[1].contains("/to")) {
+                        System.out.println("Please include a /from or /to date!");
+                        break;
+                    }
                     String event[] = inputArr[1].split("/", 3);
                     Event currEvent = new Event(event[0], event[1], event[2]);
                     taskList.add(currEvent);
@@ -100,11 +112,30 @@ public class Ragebait {
                     System.out.println(currEvent.toString());
                     System.out.println(printTotal(taskList));
                     break;
-
-
+                case "delete":
+                    if (inputArr.length < 2) {
+                        System.out.println("Specify the task number to delete you lazy bozo!");
+                        break;
+                    }
+                    try {
+                        int deleteIndex = Integer.parseInt(inputArr[1]) - 1;
+                        if (deleteIndex < 0 || taskList.size() <= deleteIndex) {
+                            System.out.println("I CAN'T DELETE! THIS DOES NOT EXIST!");
+                            break;
+                        } else {
+                            System.out.println("Are you done? or just lazy? Removed:");
+                            System.out.println(taskList.get(deleteIndex).toString());
+                            taskList.remove(deleteIndex);
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter an integer!");
+                        break;
+                    }
+                    System.out.println(printTotal(taskList));
+                    break;
 
                 default:
-                    System.out.println("Please enter a command. (todo, list, deadline, event, mark, unmark or bye)");
+                    System.out.println("Please enter a command. (todo, list, deadline, event, mark, unmark, delete or bye)");
 
             }
             System.out.println("____________________________________________________________");
@@ -114,4 +145,5 @@ public class Ragebait {
      public static String printTotal(ArrayList<Task> taskArr) {
         return "Now you have " + taskArr.size() + " task(s) in the list.";
      }
+
 }
