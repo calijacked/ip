@@ -5,7 +5,7 @@ public class Ragebait {
         System.out.println(
                 "____________________________________________________________\n" +
                         "Hello Fatty! I'm Ragebait! What can I do for you? :)\n" +
-                        "_________________________________________");
+                        "____________________________________________________________");
         Scanner sc = new Scanner(System.in);
         ArrayList<Task> taskList = new ArrayList<>();
         while (true) {
@@ -16,8 +16,9 @@ public class Ragebait {
             System.out.println("____________________________________________________________");
             switch (command) {
                 case "list":
+                    System.out.println("Here are the tasks in your list:");
                     for(int i = 0; i < taskList.size(); i++) {
-                        System.out.println(String.valueOf(i+1) + ". " + taskList.get(i).toString());
+                        System.out.println(String.valueOf(i+1) + "." + taskList.get(i).toString());
                     }
                     break;
                 case "blah":
@@ -61,7 +62,7 @@ public class Ragebait {
                     String deadline[] = inputArr[1].split("/", 2);
                     Deadline currDeadline = new Deadline(deadline[0], deadline[1]);
                     taskList.add(currDeadline);
-                    System.out.println("Got it. I've added this task: ");
+                    System.out.println("Got it. I've added this task:");
                     System.out.println(currDeadline.toString());
                     System.out.println(printTotal(taskList));
                     break;
