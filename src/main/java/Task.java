@@ -5,7 +5,7 @@ public class Task {
     protected String description;
 
     public Task(String description) {
-        this.description = description;
+        this.description = description.trim();
         this.isDone = false;
     }
 
@@ -17,7 +17,7 @@ public class Task {
         isDone = false;
     }
 
-    public String getStatusIcon() {
+    public String toString() {
         return (isDone ? "[X] "  : "[ ] ") + description; // mark done task with X
     }
 
