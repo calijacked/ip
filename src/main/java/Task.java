@@ -3,9 +3,11 @@ import java.util.ArrayList;
 public class Task {
     protected boolean isDone;
     protected String description;
+    protected TaskType type;
 
-    public Task(String description) {
+    public Task(String description, TaskType type) {
         this.description = description.trim();
+        this.type = type;
         this.isDone = false;
     }
 
@@ -18,7 +20,7 @@ public class Task {
     }
 
     public String toString() {
-        return (isDone ? "[X] "  : "[ ] ") + description; // mark done task with X
+        return "[" + type.getSymbol() + "]" + (isDone ? "[X] " : "[ ] ") + description;
     }
 
 }

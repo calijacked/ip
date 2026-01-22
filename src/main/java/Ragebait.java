@@ -105,12 +105,17 @@ public class Ragebait {
                         System.out.println("Please include a /from or /to date!");
                         break;
                     }
-                    String event[] = inputArr[1].split("/", 3);
-                    Event currEvent = new Event(event[0], event[1], event[2]);
-                    taskList.add(currEvent);
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println(currEvent.toString());
-                    System.out.println(printTotal(taskList));
+                    try {
+                        String event[] = inputArr[1].split("/", 3);
+                        Event currEvent = new Event(event[0], event[1], event[2]);
+                        taskList.add(currEvent);
+                        System.out.println("Got it. I've added this task:");
+                        System.out.println(currEvent.toString());
+                        System.out.println(printTotal(taskList));
+                    }
+                    catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println("Please type the event like: description /from start /to end");
+                    }
                     break;
                 case "delete":
                     if (inputArr.length < 2) {
