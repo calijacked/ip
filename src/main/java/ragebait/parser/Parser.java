@@ -2,8 +2,19 @@ package ragebait.parser;
 
 import ragebait.command.*;
 
+/**
+ * Parses user input into the corresponding Command objects for the Ragebait application.
+ * Converts a raw input string into a specific Command that can be executed.
+ */
 public class Parser {
 
+    /**
+     * Parses a full command string entered by the user and returns the corresponding Command object.
+     *
+     * @param fullCommand The raw input string entered by the user.
+     * @return A Command object corresponding to the parsed input.
+     * @throws IllegalArgumentException If the command is unknown or required arguments are missing.
+     */
     public static Command parse(String fullCommand) {
         String[] parts = fullCommand.split(" ", 2);
         String command = parts[0].toLowerCase();
