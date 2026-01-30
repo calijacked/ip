@@ -1,20 +1,22 @@
 package main.java;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class Event extends Task {
-    protected  String to;
-    protected  String from;
+    protected LocalDateTime from;
+    protected LocalDateTime to;
 
-    public Event(String description, String from, String to) {
+    // Constructor for creating new events
+    public Event(String description, LocalDateTime from, LocalDateTime to) {
         super(description, TaskType.EVENT);
-        this.to = to.split("to")[1].trim();
-        this.from = from.split("from")[1].trim();
+        this.from = from;
+        this.to = to;
     }
 
-    // Used for loading from file
-    public Event(String description, String from, String to, boolean isDone) {
-        super(description, TaskType.EVENT);
-        this.from = from.trim();
-        this.to = to.trim();
+    // Constructor for loading from file
+    public Event(String description, LocalDateTime from, LocalDateTime to, boolean isDone) {
+        this(description, from, to);
         if (isDone) {
             markDone();
         }
@@ -22,12 +24,16 @@ public class Event extends Task {
 
     @Override
     public String toString() {
-        return super.toString() + " (from: " + from + " to: " + to  + ")";
+        DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
+        return super.toString() + " (from: " + from.format(displayFormatter) + " to: "
+                + to.format(displayFormatter) + ")";
     }
 
     @Override
     public String toFileFormat() {
-        return "E | " + getStatusIcon() + " | " + description + " | " + from + " | " + to;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+        return "E | " + (isDone ? "1" : "0") + " | " + description + " | " + from.format(formatter)
+                + " | " + to.format(formatter);
     }
 }
 

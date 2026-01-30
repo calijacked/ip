@@ -1,3 +1,4 @@
 T | 0 | homework
-E | 1 | have fun | now | 12am
-D | 0 | get coffee | 2 march
+T | 1 | math
+D | 1 | english | 12/01/2026 1800
+E | 0 | party | 20/01/2026 1800 | 20/01/2026 2200

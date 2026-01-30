@@ -1,18 +1,22 @@
 package main.java;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class Deadline extends Task {
 
-    protected String by;
+    protected LocalDateTime by;
 
-    public Deadline(String description, String by) {
+    public Deadline(String description, LocalDateTime by) {
         super(description, TaskType.DEADLINE);
-        this.by = by.split("by")[1].trim();
+        this.by = by;
     }
 
     // Used for loading from file
-    public Deadline(String description, String by, boolean isDone) {
+    public Deadline(String description, String byStr, boolean isDone) {
         super(description, TaskType.DEADLINE);
-        this.by = by.trim();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+        this.by = LocalDateTime.parse(byStr, formatter);
         if (isDone) {
             markDone();
         }
@@ -20,11 +24,14 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        return super.toString() + " (by: " + by + ")";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
+        return super.toString() + " (by: " + by.format(formatter) + ")";
     }
 
     @Override
     public String toFileFormat() {
-        return "D | " + getStatusIcon() + " | " + description + " | " + by;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+
+        return "D | " + (isDone ? "1" : "0") + " | " + description + " | " + by.format(formatter);
     }
 }
