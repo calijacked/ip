@@ -1,4 +1,8 @@
-package main.java;
+package main.java.command;
+
+import main.java.storage.Storage;
+import main.java.ui.UI;
+import main.java.task.TaskList;
 
 public class UnmarkCommand extends Command {
     private final int index;

@@ -1,4 +1,9 @@
-package main.java;
+package main.java.storage;
+import main.java.task.Deadline;
+import main.java.task.Event;
+import main.java.task.Task;
+import main.java.task.ToDo;
+
 import java.time.LocalDateTime;
 
 import java.io.*;

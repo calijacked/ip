@@ -1,4 +1,8 @@
-package main.java;
+package main.java.command;
+
+import main.java.storage.Storage;
+import main.java.task.TaskList;
+import main.java.ui.UI;
 
 public class DeleteCommand extends Command {
     private final int index;

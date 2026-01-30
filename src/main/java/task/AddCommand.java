@@ -1,4 +1,8 @@
-package main.java;
+package main.java.task;
+
+import main.java.command.Command;
+import main.java.storage.Storage;
+import main.java.ui.UI;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
