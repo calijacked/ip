@@ -1,7 +1,9 @@
 package main.java;
+import java.time.LocalDateTime;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
 
 public class Storage {
 
@@ -67,6 +69,7 @@ public class Storage {
     // Convert file line → Task object
     private Task parseTask(String line) {
         String[] parts = line.split(" \\| ");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
 
         String type = parts[0];
         boolean isDone = parts[1].equals("1");
@@ -78,7 +81,9 @@ public class Storage {
             case "D":
                 return new Deadline(description, parts[3], isDone);
             case "E":
-                return new Event(description, parts[3], parts[4], isDone);
+                LocalDateTime fromDateTime = LocalDateTime.parse(parts[3], formatter);
+                LocalDateTime toDateTime = LocalDateTime.parse(parts[4], formatter);
+                return new Event(description, fromDateTime, toDateTime, isDone);
             default:
                 throw new IllegalArgumentException("Unknown task type");
         }

@@ -1,5 +1,8 @@
 package main.java;
 import java.util.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Ragebait {
     private static final String DATA_DIR = "data";
     private static final String DATA_FILE = "data/ragebait.txt";
@@ -92,13 +95,27 @@ public class Ragebait {
                         System.out.println("Please include a /by date!");
                         break;
                     }
-                    String deadline[] = inputArr[1].split("/", 2);
-                    Deadline currDeadline = new Deadline(deadline[0], deadline[1]);
-                    taskList.add(currDeadline);
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println(currDeadline.toString());
-                    System.out.println(printTotal(taskList));
-                    break;
+                    try {
+                        String[] deadlineParts = inputArr[1].split("/by", 2);
+                        String desc = deadlineParts[0].trim();
+                        String byStr = deadlineParts[1].trim();
+
+                        // Attempt to parse date to make sure it's valid
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+                        LocalDateTime byDateTime = LocalDateTime.parse(byStr, formatter);
+
+                        Deadline currDeadline = new Deadline(desc, byDateTime);
+                        taskList.add(currDeadline);
+
+                        System.out.println("Got it. I've added this task:");
+                        System.out.println(currDeadline.toString());
+                        System.out.println(printTotal(taskList));
+                        break;
+                    }
+                    catch (Exception e) {
+                        System.out.println("Invalid date/time format! Please enter like: dd/MM/yyyy HHmm (e.g., 02/12/2019 1800)");
+                        break;
+                    }
 
                 case "event":
                     if (inputArr.length < 2) {
@@ -111,15 +128,30 @@ public class Ragebait {
                         break;
                     }
                     try {
-                        String event[] = inputArr[1].split("/", 3);
-                        Event currEvent = new Event(event[0], event[1], event[2]);
+                        // Split the input into description, from, and to
+                        String[] parts = inputArr[1].split("/from", 2);
+                        String desc = parts[0].trim();
+                        String fromTo = parts[1].trim();
+
+                        // Split the remaining part into from and to
+                        String[] fromToParts = fromTo.split("/to", 2);
+                        String fromStr = fromToParts[0].trim();
+                        String toStr = fromToParts[1].trim();
+
+                        // Attempt to parse dates
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+                        LocalDateTime fromDateTime = LocalDateTime.parse(fromStr, formatter);
+                        LocalDateTime toDateTime = LocalDateTime.parse(toStr, formatter);
+
+                        Event currEvent = new Event(desc, fromDateTime, toDateTime);
                         taskList.add(currEvent);
+
                         System.out.println("Got it. I've added this task:");
                         System.out.println(currEvent.toString());
                         System.out.println(printTotal(taskList));
                     }
-                    catch (ArrayIndexOutOfBoundsException e) {
-                        System.out.println("Please type the event like: description /from start /to end");
+                    catch (Exception e) {
+                        System.out.println("Invalid input! Please type like: description /from dd/MM/yyyy HHmm /to dd/MM/yyyy HHmm");
                     }
                     break;
                 case "delete":
