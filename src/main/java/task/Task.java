@@ -1,4 +1,4 @@
-package main.java.task;
+package task;
 
 public abstract class Task {
     protected boolean isDone;

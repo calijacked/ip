@@ -1,7 +1,7 @@
-package main.java.parser;
+package parser;
 
-import main.java.command.*;
-import main.java.task.AddCommand;
+import command.*;
+import task.AddCommand;
 
 public class Parser {
 

@@ -1,10 +1,8 @@
-package main.java.ragebait;
-
-import main.java.parser.Parser;
-import main.java.storage.Storage;
-import main.java.ui.UI;
-import main.java.command.Command;
-import main.java.task.TaskList;
+import parser.Parser;
+import storage.Storage;
+import ui.UI;
+import command.Command;
+import task.TaskList;
 
 public class Ragebait {
     private Storage storage;

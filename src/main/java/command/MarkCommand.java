@@ -1,8 +1,8 @@
-package main.java.command;
+package command;
 
-import main.java.storage.Storage;
-import main.java.task.TaskList;
-import main.java.ui.UI;
+import storage.Storage;
+import task.TaskList;
+import ui.UI;
 
 public class MarkCommand extends Command {
     private final int index;
