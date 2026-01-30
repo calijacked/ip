@@ -1,13 +1,17 @@
-import java.lang.reflect.Array;
+package main.java;
 import java.util.*;
 public class Ragebait {
+    private static final String DATA_DIR = "data";
+    private static final String DATA_FILE = "data/ragebait.txt";
+
     public static void main(String[] args) {
+        Storage storage = new Storage("data/ragebait.txt");
+        ArrayList<Task> taskList = storage.load();
         System.out.println(
                 "____________________________________________________________\n" +
                         "Hello Fatty! I'm Ragebait! What can I do for you? :)\n" +
                         "____________________________________________________________");
         Scanner sc = new Scanner(System.in);
-        ArrayList<Task> taskList = new ArrayList<>();
         while (true) {
             String input = sc.nextLine().trim();
             String inputArr[] = input.split(" ", 2);
@@ -25,6 +29,7 @@ public class Ragebait {
                     System.out.println("Finally! I was getting tired of you!");
                     System.out.println("____________________________________________________________");
                     sc.close();
+                    storage.save(taskList);
                     return;
                 case "mark":
                     if (inputArr.length < 2) {
