@@ -1,8 +1,8 @@
-package command;
+package ragebait.command;
 
-import storage.Storage;
-import task.TaskList;
-import ui.UI;
+import ragebait.storage.Storage;
+import ragebait.task.TaskList;
+import ragebait.ui.UI;
 
 public class MarkCommand extends Command {
     private final int index;
@@ -11,6 +11,9 @@ public class MarkCommand extends Command {
         this.index = index;
     }
 
+    public int getIndex() {
+        return index;
+    }
     @Override
     public void execute(TaskList tasks, UI ui, Storage storage) {
         if (index < 0 || index >= tasks.size()) {

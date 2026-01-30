@@ -1,8 +1,8 @@
-package task;
+package ragebait.command;
 
-import command.Command;
-import storage.Storage;
-import ui.UI;
+import ragebait.storage.Storage;
+import ragebait.task.*;
+import ragebait.ui.UI;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,7 +23,7 @@ public class AddCommand extends Command {
 
             switch (type) {
                 case "todo":
-                    t = new ToDo(args);  // ✅ todos never need a date
+                    t = new ToDo(args);  // todos never need a date
                     break;
 
                 case "deadline":

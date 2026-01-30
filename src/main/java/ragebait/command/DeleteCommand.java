@@ -1,14 +1,18 @@
-package command;
+package ragebait.command;
 
-import storage.Storage;
-import task.TaskList;
-import ui.UI;
+import ragebait.storage.Storage;
+import ragebait.task.TaskList;
+import ragebait.ui.UI;
 
 public class DeleteCommand extends Command {
     private final int index;
 
     public DeleteCommand(int index) {
         this.index = index;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     @Override
@@ -20,6 +24,6 @@ public class DeleteCommand extends Command {
         ui.showMessage("Are you done? or just lazy? Removed:");
         ui.showMessage(tasks.get(index).toString());
         tasks.remove(index);
-        ui.showMessage("Now you have " + tasks.size() + " task(s) in the list.");
+        ui.showMessage("Now you have " + tasks.size() + " ragebait.task(s) in the list.");
     }
 }

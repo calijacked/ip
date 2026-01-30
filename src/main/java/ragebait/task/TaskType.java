@@ -1,4 +1,4 @@
-package task;
+package ragebait.task;
 
 public enum TaskType {
     TODO("T"),

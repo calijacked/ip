@@ -1,4 +1,4 @@
-package task;
+package ragebait.task;
 
 public class ToDo extends Task {
 

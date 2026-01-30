@@ -28,7 +28,7 @@ test {
 }
 
 application {
-    mainClass.set("Ragebait")
+    mainClass.set("ragebait.Ragebait")
 }
 
 shadowJar {

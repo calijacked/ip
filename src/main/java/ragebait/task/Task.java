@@ -1,4 +1,4 @@
-package task;
+package ragebait.task;
 
 public abstract class Task {
     protected boolean isDone;

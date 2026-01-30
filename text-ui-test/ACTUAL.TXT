@@ -1,24 +1,24 @@
 ____________________________________________________________
-Hello Fatty! I'm ragebait.Ragebait! What can I do for you? :)
+Hello Fatty! I'm ragebait.ragebait.Ragebait! What can I do for you? :)
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this ragebait.task:
+Got it. I've added this ragebait.ragebait.task:
 [T][ ] borrow book
-Now you have 1 ragebait.task(s) in the list.
+Now you have 1 ragebait.ragebait.task(s) in the list.
 ____________________________________________________________
 ____________________________________________________________
 Here are the tasks in your list:
 1.[T][ ] borrow book
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this ragebait.task:
+Got it. I've added this ragebait.ragebait.task:
 [D][ ] return book (by: Sunday)
-Now you have 2 ragebait.task(s) in the list.
+Now you have 2 ragebait.ragebait.task(s) in the list.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this ragebait.task:
+Got it. I've added this ragebait.ragebait.task:
 [E][ ] project meeting (from: Mon 2pm to: 4pm)
-Now you have 3 ragebait.task(s) in the list.
+Now you have 3 ragebait.ragebait.task(s) in the list.
 ____________________________________________________________
 ____________________________________________________________
 NICE LA! You managed to accomplish something in your life for once.
@@ -43,10 +43,10 @@ Here are the tasks in your list:
 3.[E][X] project meeting (from: Mon 2pm to: 4pm)
 ____________________________________________________________
 ____________________________________________________________
-Specify the ragebait.task number to mark you bozo!
+Specify the ragebait.ragebait.task number to mark you bozo!
 ____________________________________________________________
 ____________________________________________________________
-Please enter a command. (todo, list, deadline, event, mark, unmark, delete or bye)
+Please enter a ragebait.command. (todo, list, deadline, event, mark, unmark, delete or bye)
 ____________________________________________________________
 ____________________________________________________________
 Finally! I was getting tired of you!

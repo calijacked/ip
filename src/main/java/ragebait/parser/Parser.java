@@ -1,7 +1,6 @@
-package parser;
+package ragebait.parser;
 
-import command.*;
-import task.AddCommand;
+import ragebait.command.*;
 
 public class Parser {
 
@@ -16,13 +15,13 @@ public class Parser {
             case "bye":
                 return new ExitCommand();
             case "mark":
-                if (args.isEmpty()) throw new IllegalArgumentException("Specify a task number!");
+                if (args.isEmpty()) throw new IllegalArgumentException("Specify a ragebait.task number!");
                 return new MarkCommand(Integer.parseInt(args) - 1);
             case "unmark":
-                if (args.isEmpty()) throw new IllegalArgumentException("Specify a task number!");
+                if (args.isEmpty()) throw new IllegalArgumentException("Specify a ragebait.task number!");
                 return new UnmarkCommand(Integer.parseInt(args) - 1);
             case "delete":
-                if (args.isEmpty()) throw new IllegalArgumentException("Specify a task number!");
+                if (args.isEmpty()) throw new IllegalArgumentException("Specify a ragebait.task number!");
                 return new DeleteCommand(Integer.parseInt(args) - 1);
             case "todo":
             case "deadline":

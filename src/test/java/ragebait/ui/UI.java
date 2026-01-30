@@ -1,4 +1,4 @@
-package ui;
+package ragebait.ui;
 import java.util.Scanner;
 
 public class UI {

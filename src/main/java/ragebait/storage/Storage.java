@@ -1,8 +1,8 @@
-package storage;
-import task.Deadline;
-import task.Event;
-import task.Task;
-import task.ToDo;
+package ragebait.storage;
+import ragebait.task.Deadline;
+import ragebait.task.Event;
+import ragebait.task.Task;
+import ragebait.task.ToDo;
 
 import java.time.LocalDateTime;
 
@@ -55,7 +55,7 @@ public class Storage {
         return tasks;
     }
 
-    // Save whenever task list changes
+    // Save whenever ragebait.task list changes
     public void save(ArrayList<Task> tasks) {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));
@@ -90,7 +90,7 @@ public class Storage {
                 LocalDateTime toDateTime = LocalDateTime.parse(parts[4], formatter);
                 return new Event(description, fromDateTime, toDateTime, isDone);
             default:
-                throw new IllegalArgumentException("Unknown task type");
+                throw new IllegalArgumentException("Unknown ragebait.task type");
         }
     }
 }

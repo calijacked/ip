@@ -1,8 +1,10 @@
-import parser.Parser;
-import storage.Storage;
-import ui.UI;
-import command.Command;
-import task.TaskList;
+package ragebait;
+
+import ragebait.parser.Parser;
+import ragebait.storage.Storage;
+import ragebait.ui.UI;
+import ragebait.command.Command;
+import ragebait.task.TaskList;
 
 public class Ragebait {
     private Storage storage;

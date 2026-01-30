@@ -1,14 +1,18 @@
-package command;
+package ragebait.command;
 
-import storage.Storage;
-import ui.UI;
-import task.TaskList;
+import ragebait.storage.Storage;
+import ragebait.ui.UI;
+import ragebait.task.TaskList;
 
 public class UnmarkCommand extends Command {
     private final int index;
 
     public UnmarkCommand(int index) {
         this.index = index;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     @Override
