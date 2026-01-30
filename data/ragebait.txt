@@ -1,0 +1,3 @@
+T | 0 | homework
+E | 1 | have fun | now | 12am
+D | 0 | get coffee | 2 march

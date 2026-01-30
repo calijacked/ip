@@ -1,3 +1,5 @@
+package main.java;
+
 public enum TaskType {
     TODO("T"),
     DEADLINE("D"),
