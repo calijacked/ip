@@ -7,15 +7,33 @@ import ragebait.ui.UI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Command to add a new task (ToDo, Deadline, or Event) to the TaskList.
+ * Parses the user input and creates the appropriate Task object.
+ */
 public class AddCommand extends Command {
     private final String type;
     private final String args;
 
+    /**
+     * Constructs an AddCommand with the specified task type and arguments.
+     *
+     * @param type Type of the task ("todo", "deadline", or "event").
+     * @param args Arguments for the task (description and optional date/time).
+     */
     public AddCommand(String type, String args) {
         this.type = type;
         this.args = args;
     }
 
+    /**
+     * Parses the input arguments and adds the corresponding Task to the TaskList.
+     * Displays messages via UI about the added task or any errors in input.
+     *
+     * @param tasks TaskList to add the new task to.
+     * @param ui UI to display messages to the user.
+     * @param storage Storage for saving tasks (not used in this command).
+     */
     @Override
     public void execute(TaskList tasks, UI ui, Storage storage) {
         try {
@@ -23,7 +41,7 @@ public class AddCommand extends Command {
 
             switch (type) {
                 case "todo":
-                    t = new ToDo(args);  // todos never need a date
+                    t = new ToDo(args);  // ToDos do not need dates
                     break;
 
                 case "deadline":
