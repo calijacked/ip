@@ -39,6 +39,11 @@ public class Parser {
             case "event":
                 if (args.isEmpty()) throw new IllegalArgumentException("No description provided!");
                 return new AddCommand(command, args);
+            case "find":
+                if (args.isEmpty()) {
+                    throw new IllegalArgumentException("Please provide a keyword to search!");
+                }
+                return new FindCommand(args);
             default:
                 throw new IllegalArgumentException("Unknown command!");
         }
