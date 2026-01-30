@@ -24,6 +24,6 @@ public class DeleteCommand extends Command {
         ui.showMessage("Are you done? or just lazy? Removed:");
         ui.showMessage(tasks.get(index).toString());
         tasks.remove(index);
-        ui.showMessage("Now you have " + tasks.size() + " ragebait.task(s) in the list.");
+        ui.showMessage("Now you have " + tasks.size() + " task(s) in the list.");
     }
 }
