@@ -7,7 +7,7 @@ plugins {
 
 
 checkstyle {
-    toolVersion = '13.1.0'
+    toolVersion = '11.1.0'
 }
 
 repositories {
@@ -60,5 +60,6 @@ shadowJar {
 
 run{
     standardInput = System.in
+    enableAssertions = true
 }
 
