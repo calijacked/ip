@@ -1,4 +1,5 @@
 package ragebait.ui;
+import javafx.application.Application;
 
 import java.util.Scanner;
 
