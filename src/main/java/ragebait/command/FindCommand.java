@@ -41,4 +41,7 @@ public class FindCommand extends Command {
             }
         }
     }
+
+    public static class Commands {
+    }
 }
