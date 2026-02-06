@@ -80,7 +80,10 @@ public class TaskList {
      * @return String listing all tasks, or a message if the list is empty.
      */
     public String listTasks() {
-        if (tasks.isEmpty()) return "No tasks in the list!";
+        if (tasks.isEmpty()) {
+            return "No tasks in the list!";
+        }
+
         StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");
         for (int i = 0; i < tasks.size(); i++) {
             sb.append(i + 1).append(".").append(tasks.get(i).toString()).append("\n");

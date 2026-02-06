@@ -1,10 +1,10 @@
 package ragebait;
 
+import ragebait.command.Command;
 import ragebait.parser.Parser;
 import ragebait.storage.Storage;
-import ragebait.ui.UI;
-import ragebait.command.Command;
 import ragebait.task.TaskList;
+import ragebait.ui.UI;
 
 /**
  * Main class for the Ragebait application.
@@ -42,9 +42,9 @@ public class Ragebait {
             try {
                 String fullCommand = ui.readCommand();
                 ui.showLine();
-                Command c = Parser.parse(fullCommand);  // Returns a Command object
+                Command c = Parser.parse(fullCommand); //Returns a Command object
                 c.execute(tasks, ui, storage);
-                isExit = c.isExit();  // ExitCommand will set this to true
+                isExit = c.isExit(); //ExitCommand will set this to true
             } catch (Exception e) {
                 ui.showError(e.getMessage());
             } finally {
