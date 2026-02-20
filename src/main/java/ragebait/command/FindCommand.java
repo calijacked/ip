@@ -1,11 +1,12 @@
 package ragebait.command;
 
+import java.util.ArrayList;
+
 import ragebait.storage.Storage;
+import ragebait.task.Task;
 import ragebait.task.TaskList;
 import ragebait.ui.UI;
-import ragebait.task.Task;
 
-import java.util.ArrayList;
 
 /**
  * Finds and lists all tasks whose description contains the given keyword.
@@ -41,7 +42,6 @@ public class FindCommand extends Command {
             }
         }
     }
-
-    public static class Commands {
-    }
 }
+
+

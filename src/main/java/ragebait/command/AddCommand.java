@@ -1,11 +1,15 @@
 package ragebait.command;
 
-import ragebait.storage.Storage;
-import ragebait.task.*;
-import ragebait.ui.UI;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import ragebait.storage.Storage;
+import ragebait.task.Deadline;
+import ragebait.task.Event;
+import ragebait.task.Task;
+import ragebait.task.TaskList;
+import ragebait.task.ToDo;
+import ragebait.ui.UI;
 
 /**
  * Command to add a new task (ToDo, Deadline, or Event) to the TaskList.

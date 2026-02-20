@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
  * Represents a task with a specific deadline.
  * A Deadline task has a description and a due date/time.
  */
+@SuppressWarnings("checkstyle:Regexp")
 public class Deadline extends Task {
 
     /** The due date and time of this deadline task */
@@ -47,18 +48,6 @@ public class Deadline extends Task {
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
-        return super.toString() + " (by: " + by.format(formatter) + ")";
-    }
-
-    /**
-     * Returns a string suitable for saving to a file.
-     * Format: "D | 1/0 | description | dd/MM/yyyy HHmm"
-     *
-     * @return File-format string of the task.
-     */
-    @Override
-    public String toFileFormat() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-        return "D | " + (isDone ? "1" : "0") + " | " + description + " | " + by.format(formatter);
+        return String.format("[D]%s (by: %s", by.format(formatter));
     }
 }

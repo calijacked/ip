@@ -7,13 +7,19 @@ package ragebait.task;
  */
 public abstract class Task {
 
-    /** Whether the task is completed */
+    /**
+     * Whether the task is completed
+     */
     protected boolean isDone;
 
-    /** Description of the task */
+    /**
+     * Description of the task
+     */
     protected String description;
 
-    /** Type of the task (TODO, DEADLINE, EVENT) */
+    /**
+     * Type of the task (TODO, DEADLINE, EVENT)
+     */
     protected TaskType type;
 
     /**
@@ -21,7 +27,7 @@ public abstract class Task {
      * The task is initially not completed.
      *
      * @param description Description of the task.
-     * @param type Type of the task.
+     * @param type        Type of the task.
      */
     public Task(String description, TaskType type) {
         this.description = description.trim();
@@ -49,7 +55,7 @@ public abstract class Task {
      * @return "1" if completed, "0" if not completed.
      */
     protected String getStatusIcon() {
-        return isDone ? "1" : "0";
+        return isDone ? "X" : " ";
     }
 
     /**
@@ -60,14 +66,6 @@ public abstract class Task {
      */
     @Override
     public String toString() {
-        return "[" + type.getSymbol() + "]" + (isDone ? "[X] " : "[ ] ") + description;
+        return String.format("[%s] %s", this.getStatusIcon(), description);
     }
-
-    /**
-     * Returns a string suitable for saving the task to a file.
-     * Each subclass must implement this to provide its own format.
-     *
-     * @return File-format string of the task.
-     */
-    public abstract String toFileFormat();
 }

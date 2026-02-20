@@ -1,8 +1,8 @@
 package ragebait.command;
 
 import ragebait.storage.Storage;
-import ragebait.ui.UI;
 import ragebait.task.TaskList;
+import ragebait.ui.UI;
 
 /**
  * Command to mark a task as not done in the TaskList.
