@@ -38,6 +38,9 @@ public class Deadline extends Task {
         }
     }
 
+    public String toFileFormat() {
+        return type.getSymbol() + VERTICAL_BAR_SEPERATOR + super.toFileFormat();
+    }
     /**
      * Returns a string representation of the Deadline task, including its status and due date.
      *

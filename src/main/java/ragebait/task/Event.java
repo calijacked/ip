@@ -47,6 +47,9 @@ public class Event extends Task {
         }
     }
 
+    public String toFileFormat() {
+        return type.getSymbol() + VERTICAL_BAR_SEPERATOR + super.toFileFormat();
+    }
     /**
      * Returns a string representation of the Event, including status, start, and end times.
      *

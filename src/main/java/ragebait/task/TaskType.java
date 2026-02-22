@@ -5,16 +5,24 @@ package ragebait.task;
  * Each task type has a symbol used for display and file storage.
  */
 public enum TaskType {
-    /** To-do task type */
+    /**
+     * To-do task type
+     */
     TODO("T"),
 
-    /** Deadline task type */
+    /**
+     * Deadline task type
+     */
     DEADLINE("D"),
 
-    /** Event task type */
+    /**
+     * Event task type
+     */
     EVENT("E");
 
-    /** Symbol representing the task type */
+    /**
+     * Symbol representing the task type
+     */
     private final String symbol;
 
     /**
@@ -33,5 +41,14 @@ public enum TaskType {
      */
     public String getSymbol() {
         return symbol;
+    }
+
+    public static TaskType convertToTaskType(String symbol) {
+        for (TaskType type : values()) {
+            if (type.symbol.equals(symbol)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Invalid task type");
     }
 }

@@ -10,11 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import ragebait.exception.RagebaitException;
-import ragebait.task.Deadline;
-import ragebait.task.Event;
-import ragebait.task.Task;
-import ragebait.task.TaskList;
-import ragebait.task.ToDo;
+import ragebait.task.*;
 
 /**
  * Handles loading and saving tasks to persistent storage.
@@ -23,6 +19,9 @@ import ragebait.task.ToDo;
 public class Storage {
     static final int MIN_TASK_PARTS = 3;
     static final int MAX_TASK_PARTS = 5;
+    private static final String SEPERATOR = " \\| ";
+    private static final String MARKED_DONE = "1";
+
 
     /** Path to the file used for storing tasks */
     private final String filePath;
@@ -108,24 +107,24 @@ public class Storage {
      * @throws IllegalArgumentException If the task type is unknown.
      */
     public Task parseTask(String line) throws RagebaitException {
-        String[] parts = line.split(" \\| ");
+        String[] parts = line.split(SEPERATOR);
 
         if (parts.length < MIN_TASK_PARTS || parts.length > MAX_TASK_PARTS) {
             throw new RagebaitException("Line is corrupted and is not in correct format");
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-        String type = parts[0]; // T or D or E
-        boolean isDone = parts[1].equals("1"); // 1 or 0
+        TaskType type = TaskType.convertToTaskType(parts[0]); // T or D or E
+        boolean isDone = parts[1].equals(MARKED_DONE); // 1 or 0
         String description = parts[2];
 
         switch (type) {
-        case "T":
+        case TODO:
             return new ToDo(description, isDone);
-        case "D":
+        case DEADLINE:
             LocalDateTime byDateTime = LocalDateTime.parse(parts[3], formatter);
             return new Deadline(description, byDateTime, isDone);
-        case "E":
+        case EVENT:
             LocalDateTime fromDateTime = LocalDateTime.parse(parts[3], formatter);
             LocalDateTime toDateTime = LocalDateTime.parse(parts[4], formatter);
             return new Event(description, fromDateTime, toDateTime, isDone);

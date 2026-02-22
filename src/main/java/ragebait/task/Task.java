@@ -6,6 +6,9 @@ package ragebait.task;
  * This class is abstract and should be extended by specific task types like ToDo, Deadline, and Event.
  */
 public abstract class Task {
+    public static final String VERTICAL_BAR_SEPERATOR = " \\| ";
+    public static final String MARKED = "1";
+    public static final String UNMARKED = "0";
 
     /**
      * Whether the task is completed
@@ -21,6 +24,7 @@ public abstract class Task {
      * Type of the task (TODO, DEADLINE, EVENT)
      */
     protected TaskType type;
+
 
     /**
      * Constructs a new Task with a description and type.
@@ -58,7 +62,9 @@ public abstract class Task {
         return isDone ? "X" : " ";
     }
 
-    abstract String toFileFormat();
+    public String toFileFormat() {
+        return isDone ? MARKED : UNMARKED + VERTICAL_BAR_SEPERATOR + this.description;
+    }
     /**
      * Returns a string representation of the task for display purposes,
      * including its type, status, and description.

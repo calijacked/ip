@@ -30,6 +30,10 @@ public class ToDo extends Task {
         }
     }
 
+    public String toFileFormat() {
+        return type.getSymbol() + VERTICAL_BAR_SEPERATOR + super.toFileFormat();
+    }
+
     /**
      * Returns a string representation of the To-Do task for display purposes.
      *
