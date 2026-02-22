@@ -28,13 +28,11 @@ public class Deadline extends Task {
      * Constructs a Deadline task from a string representation of the date (used for loading from file).
      *
      * @param description Description of the task.
-     * @param byStr Due date/time as a string in the format "dd/MM/yyyy HHmm".
+     * @param byDateTime Due date/time in the format "dd/MM/yyyy HHmm".
      * @param isDone True if the task is already completed, false otherwise.
      */
-    public Deadline(String description, String byStr, boolean isDone) {
-        super(description, TaskType.DEADLINE);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-        this.by = LocalDateTime.parse(byStr, formatter);
+    public Deadline(String description, LocalDateTime byDateTime, boolean isDone) {
+        this(description, byDateTime);
         if (isDone) {
             markDone();
         }
@@ -48,6 +46,6 @@ public class Deadline extends Task {
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
-        return String.format("[D]%s (by: %s", by.format(formatter));
+        return String.format("[%s]%s (by: %s", type.getSymbol(), super.toString(), by.format(formatter));
     }
 }

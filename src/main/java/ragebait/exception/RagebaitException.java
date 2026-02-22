@@ -20,4 +20,8 @@ public class RagebaitException extends Exception {
     public RagebaitException(String message) {
         super(message); // Call the constructor of the superclass (Exception)
     }
+
+    public RagebaitException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

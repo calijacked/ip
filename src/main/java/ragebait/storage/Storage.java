@@ -1,23 +1,33 @@
 package ragebait.storage;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import ragebait.exception.RagebaitException;
 import ragebait.task.Deadline;
 import ragebait.task.Event;
 import ragebait.task.Task;
+import ragebait.task.TaskList;
 import ragebait.task.ToDo;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.io.*;
-import java.util.ArrayList;
 
 /**
  * Handles loading and saving tasks to persistent storage.
  * Manages reading tasks from a file at startup and writing them back whenever tasks change.
  */
 public class Storage {
+    static final int MIN_TASK_PARTS = 3;
+    static final int MAX_TASK_PARTS = 5;
 
     /** Path to the file used for storing tasks */
     private final String filePath;
+
+
 
     /**
      * Constructs a Storage object with a given file path.
@@ -34,29 +44,30 @@ public class Storage {
      *
      * @return An ArrayList of Task objects loaded from the file.
      */
-    public ArrayList<Task> load() {
-        ArrayList<Task> tasks = new ArrayList<>();
+    public TaskList load() throws RagebaitException {
+        TaskList tasks = new TaskList();
         File file = new File(filePath);
 
+        // Ensure /data folder exists and creates the folder if it does not
+        file.getParentFile().mkdirs();
+
+        // File does not exist, start with an empty list
+        if (!file.exists()) {
+            return tasks;
+        }
+
         try {
-            // Ensure folder exists
-            file.getParentFile().mkdirs();
-
-            // If file does not exist, create and return empty list
-            if (!file.exists()) {
-                file.createNewFile();
-                return tasks;
-            }
-
+            // If a save file exist
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
-
+            // Stores the next line into string variable line and loops until EOF
             while ((line = br.readLine()) != null) {
+                // Read the saved file and add the tasks to the task list
                 try {
                     Task task = parseTask(line);
                     tasks.add(task);
-                } catch (Exception e) {
-                    System.out.println("Skipping corrupted line: " + line);
+                } catch (RagebaitException e) {
+                    throw new RagebaitException("Aborting operation. Corrupted line: " + line, e);
                 }
             }
             br.close();
@@ -73,11 +84,11 @@ public class Storage {
      *
      * @param tasks ArrayList of Task objects to save.
      */
-    public void save(ArrayList<Task> tasks) {
+    public void save(TaskList tasks) {
+
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));
-
-            for (Task task : tasks) {
+            for (Task task : tasks.getAllTasks()) {
                 bw.write(task.toFileFormat());
                 bw.newLine();
             }
@@ -96,25 +107,30 @@ public class Storage {
      * @return Task object corresponding to the line.
      * @throws IllegalArgumentException If the task type is unknown.
      */
-    private Task parseTask(String line) {
+    public Task parseTask(String line) throws RagebaitException {
         String[] parts = line.split(" \\| ");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
 
-        String type = parts[0];
-        boolean isDone = parts[1].equals("1");
+        if (parts.length < MIN_TASK_PARTS || parts.length > MAX_TASK_PARTS) {
+            throw new RagebaitException("Line is corrupted and is not in correct format");
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+        String type = parts[0]; // T or D or E
+        boolean isDone = parts[1].equals("1"); // 1 or 0
         String description = parts[2];
 
         switch (type) {
-            case "T":
-                return new ToDo(description, isDone);
-            case "D":
-                return new Deadline(description, parts[3], isDone);
-            case "E":
-                LocalDateTime fromDateTime = LocalDateTime.parse(parts[3], formatter);
-                LocalDateTime toDateTime = LocalDateTime.parse(parts[4], formatter);
-                return new Event(description, fromDateTime, toDateTime, isDone);
-            default:
-                throw new IllegalArgumentException("Unknown ragebait.task type");
+        case "T":
+            return new ToDo(description, isDone);
+        case "D":
+            LocalDateTime byDateTime = LocalDateTime.parse(parts[3], formatter);
+            return new Deadline(description, byDateTime, isDone);
+        case "E":
+            LocalDateTime fromDateTime = LocalDateTime.parse(parts[3], formatter);
+            LocalDateTime toDateTime = LocalDateTime.parse(parts[4], formatter);
+            return new Event(description, fromDateTime, toDateTime, isDone);
+        default:
+            throw new RagebaitException("Unknown task type found in file");
         }
     }
 }

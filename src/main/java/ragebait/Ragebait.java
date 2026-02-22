@@ -1,6 +1,7 @@
 package ragebait;
 
 import ragebait.command.Command;
+import ragebait.exception.RagebaitException;
 import ragebait.parser.Parser;
 import ragebait.storage.Storage;
 import ragebait.task.TaskList;
@@ -11,6 +12,7 @@ import ragebait.ui.UI;
  * Initializes storage, UI, and task list, and runs the main program loop.
  */
 public class Ragebait {
+    static final String FILE_PATH = "data/ragebait.txt";
     private Storage storage;
     private TaskList tasks;
     private UI ui;
@@ -18,15 +20,15 @@ public class Ragebait {
     /**
      * Constructs a Ragebait application with a specified file path for storage.
      *
-     * @param filePath Path to the file where tasks are saved and loaded.
      */
-    public Ragebait(String filePath) {
+    public Ragebait() {
         ui = new UI();
-        storage = new Storage(filePath);
+        storage = new Storage(FILE_PATH);
         try {
-            tasks = new TaskList(storage.load());
-        } catch (Exception e) {
+            tasks = new TaskList(storage.load().getAllTasks());
+        } catch (RagebaitException e) {
             ui.showMessage("Error loading tasks. Starting with an empty list.");
+            e.printStackTrace();
             tasks = new TaskList();
         }
     }
@@ -61,6 +63,6 @@ public class Ragebait {
      * @param args Command-line arguments (not used).
      */
     public static void main(String[] args) {
-        new Ragebait("data/ragebait.txt").run();
+        new Ragebait().run();
     }
 }

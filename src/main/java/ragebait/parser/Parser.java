@@ -7,9 +7,13 @@ import ragebait.command.*;
  * Converts a raw input string into a specific Command that can be executed.
  */
 public class Parser {
-
+    // --- Syntax Constants ---
+    public static final String TAG_BY = " /by ";
+    public static final String TAG_FROM = " /from ";
+    public static final String TAG_TO = " /to ";
+    public static final String EVENT_SPLIT_REGEX = " /from | /to ";
     /**
-     * Parses a full command string entered by the user and returns the corresponding Command object.
+     * Parses   a full command string entered by the user and returns the corresponding Command object.
      *
      * @param fullCommand The raw input string entered by the user.
      * @return A Command object corresponding to the parsed input.

@@ -23,7 +23,7 @@ public class UI {
      */
     public void showWelcome() {
         System.out.println("____________________________________________________________");
-        System.out.println("Hello Fatty! I'm ragebait.Ragebait! What can I do for you? :)");
+        System.out.println("Hello Fatty! I'm Ragebait! What can I do for you? :)");
         System.out.println("____________________________________________________________");
     }
 

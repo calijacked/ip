@@ -58,6 +58,7 @@ public abstract class Task {
         return isDone ? "X" : " ";
     }
 
+    abstract String toFileFormat();
     /**
      * Returns a string representation of the task for display purposes,
      * including its type, status, and description.
