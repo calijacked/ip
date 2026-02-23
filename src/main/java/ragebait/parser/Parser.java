@@ -1,8 +1,8 @@
 package ragebait.parser;
 
 import ragebait.command.AddCommand;
-import ragebait.command.CommandType;
 import ragebait.command.Command;
+import ragebait.command.CommandType;
 import ragebait.command.DeleteCommand;
 import ragebait.command.ExitCommand;
 import ragebait.command.FindCommand;

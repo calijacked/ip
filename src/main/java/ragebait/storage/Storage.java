@@ -8,14 +8,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 import ragebait.exception.RagebaitException;
-import ragebait.task.*;
+import ragebait.task.Deadline;
+import ragebait.task.Event;
+import ragebait.task.Task;
+import ragebait.task.TaskList;
+import ragebait.task.TaskType;
+import ragebait.task.ToDo;
 
 /**
  * Handles loading and saving tasks to persistent storage.
- * Manages reading tasks from a file at startup and writing them back whenever tasks change.
+ * Manages reading tasks from a file at startup and writing tasks back whenever tasks change.
  */
 public class Storage {
     static final int MIN_TASK_PARTS = 3;
@@ -23,46 +27,41 @@ public class Storage {
     private static final String SEPERATOR = " \\| ";
     private static final String MARKED_DONE = "1";
 
-
     /** Path to the file used for storing tasks */
     private final String filePath;
-
-
 
     /**
      * Constructs a Storage object with a given file path.
      *
-     * @param filePath Path to the file for storing tasks.
+     * @param filePath Path to the file for storing task data.
      */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
     /**
-     * Loads tasks from the storage file. Creates the file and its parent directories if they do not exist.
-     * Skips corrupted lines with a warning.
+     * Loads tasks from the storage file.
+     * Creates the file and parent directories if they do not exist.
+     * Skips corrupted lines and throws an exception if corruption is detected.
      *
-     * @return An ArrayList of Task objects loaded from the file.
+     * @return TaskList containing loaded Task objects.
+     * @throws RagebaitException If storage loading fails or file data is corrupted.
      */
     public TaskList load() throws RagebaitException {
         TaskList tasks = new TaskList();
         File file = new File(filePath);
 
-        // Ensure /data folder exists and creates the folder if it does not
         file.getParentFile().mkdirs();
 
-        // File does not exist, start with an empty list
         if (!file.exists()) {
             return tasks;
         }
 
         try {
-            // If a save file exist
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
-            // Stores the next line into string variable line and loops until EOF
+
             while ((line = br.readLine()) != null) {
-                // Read the saved file and add the tasks to the task list
                 try {
                     Task task = parseTask(line);
                     tasks.add(task);
@@ -80,9 +79,9 @@ public class Storage {
     }
 
     /**
-     * Saves all tasks to the storage file, overwriting its previous contents.
+     * Saves all tasks to the storage file, overwriting previous contents.
      *
-     * @param tasks ArrayList of Task objects to save.
+     * @param tasks TaskList containing tasks to be saved.
      */
     public void save(TaskList tasks) {
 
@@ -100,12 +99,12 @@ public class Storage {
     }
 
     /**
-     * Converts a line from the storage file into a Task object.
-     * Supports ToDo, Deadline, and Event tasks.
+     * Parses a line from the storage file into a Task object.
+     * Supports ToDo, Deadline, and Event task types.
      *
-     * @param line Line from the storage file representing a task.
-     * @return Task object corresponding to the line.
-     * @throws IllegalArgumentException If the task type is unknown.
+     * @param line Storage file line representing a task.
+     * @return Parsed Task object.
+     * @throws RagebaitException If the task type is unknown or format is invalid.
      */
     public Task parseTask(String line) throws RagebaitException {
         String[] parts = line.split(SEPERATOR);
@@ -115,8 +114,8 @@ public class Storage {
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-        TaskType type = TaskType.convertToTaskType(parts[0]); // T or D or E
-        boolean isDone = parts[1].equals(MARKED_DONE); // 1 or 0
+        TaskType type = TaskType.convertToTaskType(parts[0]);
+        boolean isDone = parts[1].equals(MARKED_DONE);
         String description = parts[2];
 
         switch (type) {
