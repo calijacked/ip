@@ -7,8 +7,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import ragebait.Ragebait;
+
 /**
- * Controller for the main GUI.
+ * Anchor Pane Controller for the main GUI.
  */
 public class MainWindow extends AnchorPane {
     @FXML
@@ -20,10 +22,10 @@ public class MainWindow extends AnchorPane {
     @FXML
     private Button sendButton;
 
-    private Duke duke;
+    private Ragebait ragebait;
 
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
-    private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
+    private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/angry.png"));
+    private final Image ragebaitImage = new Image(this.getClass().getResourceAsStream("/images/troll.png"));
 
     @FXML
     public void initialize() {
@@ -31,8 +33,12 @@ public class MainWindow extends AnchorPane {
     }
 
     /** Injects the Duke instance */
-    public void setDuke(Duke d) {
-        duke = d;
+    public void setRagebait(Ragebait ragebait) {
+        this.ragebait = ragebait;
+        String welcomeMessage = ragebait.getWelcomeMessage();
+        dialogContainer.getChildren().addAll(
+            DialogBox.getRagebaitDialog(welcomeMessage, ragebaitImage)
+        );
     }
 
     /**
@@ -42,10 +48,10 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
-        String response = duke.getResponse(input);
+        String response = ragebait.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getDukeDialog(response, dukeImage)
+                DialogBox.getRagebaitDialog(response, ragebaitImage)
         );
         userInput.clear();
     }

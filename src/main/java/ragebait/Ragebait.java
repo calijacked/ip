@@ -34,37 +34,18 @@ public class Ragebait {
         }
     }
 
-    /**
-     * Starts the main program loop to read and execute user commands until exit.
-     * Continuously reads user input, parses commands, executes them, and handles exceptions.
-     */
-    public void run() {
-        ui.showWelcome();
-        boolean isExit = false;
-
-        while (!isExit) {
-            try {
-                String input = ui.readCommand();
-                ui.showLine();
-                Command c = Parser.parse(input); //Returns a Command object
-                c.execute(tasks, ui, storage);
-                isExit = c.isExit(); //ExitCommand will set this to true
-            } catch (RagebaitException e) {
-                ui.showError(e.getMessage());
-            } finally {
-                ui.showLine();
-            }
+    public String getResponse(String input) {
+        try {
+            Command c = Parser.parse(input); //Returns a Command object
+            c.execute(tasks, ui, storage);
+        } catch (RagebaitException e) {
+            ui.showError(e.getMessage());
         }
-
-        ui.close();
+        return "1";
     }
 
-    /**
-     * Entry point of the application.
-     *
-     * @param args Command-line arguments (not used).
-     */
-    public static void main(String[] args) {
-        new Ragebait().run();
+    public String getWelcomeMessage() {
+        return ui.getWelcome();
     }
 }
+
