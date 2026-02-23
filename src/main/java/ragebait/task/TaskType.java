@@ -39,12 +39,19 @@ public enum TaskType {
     /**
      * Returns the symbol representing the task type.
      *
-     * @return Symbol of the task type.
+     * @return Symbol representing the task type.
      */
     public String getSymbol() {
         return symbol;
     }
 
+    /**
+     * Converts a string symbol into the corresponding TaskType.
+     *
+     * @param symbol Symbol string to convert.
+     * @return Matching TaskType.
+     * @throws RagebaitException If the symbol does not match any TaskType.
+     */
     public static TaskType convertToTaskType(String symbol) throws RagebaitException {
         String normalised = symbol.trim().toUpperCase();
         for (TaskType type : TaskType.values()) {
