@@ -1,6 +1,8 @@
 package ragebait.parser;
 
 import ragebait.command.*;
+import ragebait.exception.RagebaitException;
+import ragebait.task.TaskType;
 
 /**
  * Parses user input into the corresponding Command objects for the Ragebait application.
@@ -8,48 +10,69 @@ import ragebait.command.*;
  */
 public class Parser {
     // --- Syntax Constants ---
+    public static final int CUTOFF = 1;
+    public static final int OFFSET = 1;
+    public static final String BLANK = "";
     public static final String TAG_BY = " /by ";
     public static final String TAG_FROM = " /from ";
     public static final String TAG_TO = " /to ";
     public static final String EVENT_SPLIT_REGEX = " /from | /to ";
     /**
-     * Parses   a full command string entered by the user and returns the corresponding Command object.
+     * Parses a full command string entered by the user and returns the corresponding Command object.
      *
      * @param fullCommand The raw input string entered by the user.
      * @return A Command object corresponding to the parsed input.
      * @throws IllegalArgumentException If the command is unknown or required arguments are missing.
      */
-    public static Command parse(String fullCommand) {
+    public static Command parse(String fullCommand) throws RagebaitException {
+        // Get the command
         String[] parts = fullCommand.split(" ", 2);
-        String command = parts[0].toLowerCase();
-        String args = parts.length > 1 ? parts[1].trim() : "";
+        CommandType command = CommandType.convertToCommandType(parts[0].toLowerCase());
+        // Separates single commands from other commands (mark, unmark, todo, event, deadline)
+        String args = parts.length > CUTOFF ? parts[1].trim() : BLANK;
 
         switch (command) {
-            case "list":
-                return new ListCommand();
-            case "bye":
-                return new ExitCommand();
-            case "mark":
-                if (args.isEmpty()) throw new IllegalArgumentException("Specify a ragebait.task number!");
-                return new MarkCommand(Integer.parseInt(args) - 1);
-            case "unmark":
-                if (args.isEmpty()) throw new IllegalArgumentException("Specify a ragebait.task number!");
-                return new UnmarkCommand(Integer.parseInt(args) - 1);
-            case "delete":
-                if (args.isEmpty()) throw new IllegalArgumentException("Specify a ragebait.task number!");
-                return new DeleteCommand(Integer.parseInt(args) - 1);
-            case "todo":
-            case "deadline":
-            case "event":
-                if (args.isEmpty()) throw new IllegalArgumentException("No description provided!");
-                return new AddCommand(command, args);
-            case "find":
-                if (args.isEmpty()) {
-                    throw new IllegalArgumentException("Please provide a keyword to search!");
-                }
-                return new FindCommand(args);
-            default:
-                throw new IllegalArgumentException("Unknown command!");
+        case list:
+            return new ListCommand();
+        case bye:
+            return new ExitCommand();
+        case mark:
+            if (args.isEmpty()) {
+                throw new RagebaitException("Specify an existing task number! Check using command list!");
+            }
+            return new MarkCommand(Integer.parseInt(args) - OFFSET);
+        case unmark:
+            if (args.isEmpty()) {
+                throw new RagebaitException("Specify an existing task number! Check using command list!");
+            }
+            return new UnmarkCommand(Integer.parseInt(args) - OFFSET);
+        case delete:
+            if (args.isEmpty()) {
+                throw new RagebaitException("Specify an existing task number! Check using command list!");
+            }
+            return new DeleteCommand(Integer.parseInt(args) - OFFSET);
+        case todo:
+            if (args.isEmpty()) {
+                throw new RagebaitException("No description provided!");
+            }
+            return new AddCommand(TaskType.convertToTaskType(command.getCommand()), args);
+        case deadline:
+            if (args.isEmpty()) {
+                throw new RagebaitException("No description and by date provided!!");
+            }
+            return new AddCommand(TaskType.convertToTaskType(command.getCommand()), args);
+        case event:
+            if (args.isEmpty()) {
+                throw new RagebaitException("No description, by and from date provided!!");
+            }
+            return new AddCommand(TaskType.convertToTaskType(command.getCommand()), args);
+        case find:
+            if (args.isEmpty()) {
+                throw new RagebaitException("Please provide a keyword to search!");
+            }
+            return new FindCommand(args);
+        default:
+            throw new RagebaitException("Unknown command!");
         }
     }
 }

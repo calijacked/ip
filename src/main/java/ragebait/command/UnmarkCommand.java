@@ -9,6 +9,7 @@ import ragebait.ui.UI;
  * Used when the user wants to undo the completion of a task.
  */
 public class UnmarkCommand extends Command {
+    private static final int START_RANGE = 0;
     private final int index;
 
     /**
@@ -38,12 +39,12 @@ public class UnmarkCommand extends Command {
      */
     @Override
     public void execute(TaskList tasks, UI ui, Storage storage) {
-        if (index < 0 || index >= tasks.size()) {
-            ui.showMessage("THIS DOES NOT EXIST!");
+        int endRange = tasks.size();
+        if (index < START_RANGE || index >= endRange) {
+            ui.showMessage("I CAN'T UNMARK AN INVISIBLE TASK");
             return;
         }
         tasks.get(index).markUndone();
-        ui.showMessage("WHY ARE YOU SKIVING.");
-        ui.showMessage(tasks.get(index).toString());
+        ui.getUnmarked(tasks.get(index));
     }
 }

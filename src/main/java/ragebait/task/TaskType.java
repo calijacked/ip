@@ -1,7 +1,7 @@
 package ragebait.task;
 
 /**
- * Represents the type of a task in the Ragebait application.
+ * Represents the type of task in the Ragebait application.
  * Each task type has a symbol used for display and file storage.
  */
 public enum TaskType {
@@ -44,11 +44,10 @@ public enum TaskType {
     }
 
     public static TaskType convertToTaskType(String symbol) {
-        for (TaskType type : values()) {
-            if (type.symbol.equals(symbol)) {
-                return type;
-            }
+        try {
+            return TaskType.valueOf(symbol);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid task type");
         }
-        throw new IllegalArgumentException("Invalid task type");
     }
 }

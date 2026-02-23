@@ -26,7 +26,7 @@ public class FindCommand extends Command {
 
     @Override
     public void execute(TaskList tasks, UI ui, Storage storage) {
-        ArrayList<Task> matchingTasks = new ArrayList<>();
+        TaskList matchingTasks = new TaskList();
         for (Task task : tasks.getAllTasks()) {
             if (task.toString().toLowerCase().contains(keyword.toLowerCase())) {
                 matchingTasks.add(task);
@@ -34,12 +34,9 @@ public class FindCommand extends Command {
         }
 
         if (matchingTasks.isEmpty()) {
-            ui.showMessage("No matching tasks found for keyword: " + keyword);
+            ui.getNoTasksFound();
         } else {
-            ui.showMessage("Here are the matching tasks in your list:");
-            for (int i = 0; i < matchingTasks.size(); i++) {
-                ui.showMessage((i + 1) + "." + matchingTasks.get(i).toString());
-            }
+            ui.getFindHeader(matchingTasks);
         }
     }
 }

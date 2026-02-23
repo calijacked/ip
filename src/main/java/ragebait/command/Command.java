@@ -1,5 +1,6 @@
 package ragebait.command;
 
+import ragebait.exception.RagebaitException;
 import ragebait.storage.Storage;
 import ragebait.task.TaskList;
 import ragebait.ui.UI;
@@ -17,7 +18,7 @@ public abstract class Command {
      * @param ui    UI for user interaction.
      * @param storage Storage for persisting task data.
      */
-    public abstract void execute(TaskList tasks, UI ui, Storage storage);
+    public abstract void execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException;
 
     /**
      * Indicates whether this command causes the application to exit.

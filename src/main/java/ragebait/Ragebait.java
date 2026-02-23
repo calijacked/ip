@@ -27,7 +27,7 @@ public class Ragebait {
         try {
             tasks = new TaskList(storage.load().getAllTasks());
         } catch (RagebaitException e) {
-            ui.showMessage("Error loading tasks. Starting with an empty list.");
+            ui.showError("Error loading tasks. Starting with an empty list.");
             e.printStackTrace();
             tasks = new TaskList();
         }
@@ -42,12 +42,12 @@ public class Ragebait {
 
         while (!isExit) {
             try {
-                String fullCommand = ui.readCommand();
+                String input = ui.readCommand();
                 ui.showLine();
-                Command c = Parser.parse(fullCommand); //Returns a Command object
+                Command c = Parser.parse(input); //Returns a Command object
                 c.execute(tasks, ui, storage);
                 isExit = c.isExit(); //ExitCommand will set this to true
-            } catch (Exception e) {
+            } catch (RagebaitException e) {
                 ui.showError(e.getMessage());
             } finally {
                 ui.showLine();

@@ -3,12 +3,10 @@ package ragebait.command;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import ragebait.Ragebait;
+import ragebait.exception.RagebaitException;
 import ragebait.storage.Storage;
-import ragebait.task.Deadline;
-import ragebait.task.Event;
-import ragebait.task.Task;
-import ragebait.task.TaskList;
-import ragebait.task.ToDo;
+import ragebait.task.*;
 import ragebait.ui.UI;
 
 /**
@@ -16,7 +14,8 @@ import ragebait.ui.UI;
  * Parses the user input and creates the appropriate Task object.
  */
 public class AddCommand extends Command {
-    private final String type;
+    private Task task = null;
+    private final TaskType type;
     private final String args;
 
     /**
@@ -25,7 +24,7 @@ public class AddCommand extends Command {
      * @param type Type of the task ("todo", "deadline", or "event").
      * @param args Arguments for the task (description and optional date/time).
      */
-    public AddCommand(String type, String args) {
+    public AddCommand(TaskType type, String args) {
         this.type = type;
         this.args = args;
     }
@@ -39,50 +38,46 @@ public class AddCommand extends Command {
      * @param storage Storage for saving tasks (not used in this command).
      */
     @Override
-    public void execute(TaskList tasks, UI ui, Storage storage) {
+    public void execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
         try {
-            Task t = null;
-
             switch (type) {
-                case "todo":
-                    t = new ToDo(args);  // ToDos do not need dates
-                    break;
+            case TODO:
+                task = new ToDo(args);
+                break;
 
-                case "deadline":
-                    if (!args.contains("/by")) {
-                        ui.showMessage("Please include a /by date!");
-                        return;
-                    }
-                    String[] dParts = args.split("/by", 2);
-                    DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-                    LocalDateTime by = LocalDateTime.parse(dParts[1].trim(), dFormatter);
-                    t = new Deadline(dParts[0].trim(), by);
-                    break;
+            case DEADLINE:
+                if (!args.contains("/by")) {
+                    throw new RagebaitException("Please include a /by date!");
+                }
+                String[] dParts = args.split("/by", 2);
+                String dDescription = dParts[0].trim();
+                DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+                LocalDateTime by = LocalDateTime.parse(dParts[1].trim(), dFormatter);
+                task = new Deadline(dDescription, by);
+                break;
 
-                case "event":
-                    if (!args.contains("/from") || !args.contains("/to")) {
-                        ui.showMessage("Please include a /from and /to date!");
-                        return;
-                    }
-                    String[] eParts = args.split("/from", 2);
-                    String desc = eParts[0].trim();
-                    String[] fromTo = eParts[1].split("/to", 2);
-                    DateTimeFormatter eFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-                    LocalDateTime from = LocalDateTime.parse(fromTo[0].trim(), eFormatter);
-                    LocalDateTime to = LocalDateTime.parse(fromTo[1].trim(), eFormatter);
-                    t = new Event(desc, from, to);
-                    break;
+            case EVENT:
+                if (!args.contains("/from") || !args.contains("/to")) {
+                    throw new RagebaitException("Please include a /from and /to date!");
+                }
+                String[] eParts = args.split("/from", 2);
+                String eDescription = eParts[0].trim();
+                String[] fromTo = eParts[1].split("/to", 2);
+                DateTimeFormatter eFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+                LocalDateTime from = LocalDateTime.parse(fromTo[0].trim(), eFormatter);
+                LocalDateTime to = LocalDateTime.parse(fromTo[1].trim(), eFormatter);
+                task = new Event(eDescription, from, to);
+                break;
+            default:
+                throw new RagebaitException("Unknown Type!");
             }
 
-            if (t != null) {
-                tasks.add(t);
-                ui.showMessage("Got it. I've added this task:");
-                ui.showMessage(t.toString());
-                ui.showMessage("Now you have " + tasks.size() + " task(s) in the list.");
+            if (task != null) {
+                tasks.add(task);
+                ui.getTaskAdded(task, tasks.size());
             }
-
-        } catch (Exception e) {
-            ui.showMessage("Invalid input or date format! Use dd/MM/yyyy HHmm.");
+        } catch (RagebaitException e) {
+            throw new RagebaitException("Invalid input or date format! Use dd/MM/yyyy HHmm.");
         }
     }
 }

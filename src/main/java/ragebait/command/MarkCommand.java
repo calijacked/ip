@@ -8,6 +8,8 @@ import ragebait.ui.UI;
  * Command to mark a task as completed in the TaskList.
  */
 public class MarkCommand extends Command {
+    private static final int START_RANGE = 0;
+
     private final int index;
 
     /**
@@ -28,13 +30,13 @@ public class MarkCommand extends Command {
      */
     @Override
     public void execute(TaskList tasks, UI ui, Storage storage) {
-        if (index < 0 || index >= tasks.size()) {
-            ui.showMessage("THIS DOES NOT EXIST BRO");
+        int endRange = tasks.size();
+        if (index < START_RANGE || index >= endRange) {
+            ui.showMessage("I CAN'T MARK SOMETHING THAT DOES NOT EXIST");
             return;
         }
         tasks.get(index).markDone();
-        ui.showMessage("NICE LA! You managed to accomplish something in your life for once.");
-        ui.showMessage(tasks.get(index).toString());
+        ui.getMarked(tasks.get(index));
     }
 
     /**

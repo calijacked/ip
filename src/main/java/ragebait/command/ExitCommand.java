@@ -19,7 +19,7 @@ public class ExitCommand extends Command {
      */
     @Override
     public void execute(TaskList tasks, UI ui, Storage storage) {
-        ui.showMessage("Finally! I was getting tired of you!");
+        ui.getGoodbye();
         storage.save(tasks);
     }
 
