@@ -18,8 +18,9 @@ public class Ragebait {
     private UI ui;
 
     /**
-     * Constructs a Ragebait application with a specified file path for storage.
-     *
+     * Constructs a Ragebait application with default storage file path.
+     * Initializes UI, Storage, and TaskList.
+     * If task loading fails, starts with an empty task list.
      */
     public Ragebait() {
         ui = new UI();
@@ -35,6 +36,7 @@ public class Ragebait {
 
     /**
      * Starts the main program loop to read and execute user commands until exit.
+     * Continuously reads user input, parses commands, executes them, and handles exceptions.
      */
     public void run() {
         ui.showWelcome();
