@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
-public class UITest {
+public class UserInterfaceTest {
 
     private ByteArrayOutputStream outputStream;
     private UI ui;
