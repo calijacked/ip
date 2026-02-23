@@ -22,6 +22,7 @@ public class Main extends Application {
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
             stage.setScene(scene);
+            stage.setTitle("Ragebait Chatbot");
             fxmlLoader.<MainWindow>getController().setRagebait(ragebait); // inject the Ragebait instance
             stage.show();
         } catch (IOException e) {
