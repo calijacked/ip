@@ -2,49 +2,34 @@ package ragebait.ui;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 public class UserInterfaceTest {
 
-    private ByteArrayOutputStream outputStream;
     private UI ui;
 
     @BeforeEach
     void setUp() {
-        outputStream = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outputStream));
         ui = new UI();
     }
 
     @Test
     void testShowWelcome() {
-        ui.showWelcome();
-
-        String output = outputStream.toString();
-
+        String output = ui.getWelcome();
         assertTrue(output.contains("Ragebait"));
     }
 
     @Test
     void testShowLine() {
-        ui.showLine();
-
-        String output = outputStream.toString();
-
+        String output = ui.showLine();
         assertTrue(output.contains("_"));
     }
 
     @Test
     void testShowError() {
-        ui.showError("Error!");
-
-        String output = outputStream.toString();
-
+        String output = ui.showError("Error!");
         assertTrue(output.contains("Error!"));
     }
 }
