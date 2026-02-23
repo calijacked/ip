@@ -11,11 +11,12 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 public class UITest {
 
-    private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    private ByteArrayOutputStream outputStream;
     private UI ui;
 
     @BeforeEach
     void setUp() {
+        outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
         ui = new UI();
     }

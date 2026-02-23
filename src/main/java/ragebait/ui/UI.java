@@ -19,7 +19,7 @@ public class UI {
     }
 
     public void showWelcome() {
-        System.out.println("Oh great. You're back.\n" + "What disaster are we managing today?");
+        System.out.println("Oh great.\n" + "I'm Ragebait. What disaster are we managing today?");
     }
 
     public String getDelete(Task task, int size) {

@@ -46,7 +46,7 @@ public class ParserTest {
 
     @Test
     public void testUnknownCommandThrowsException() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(RagebaitException.class, () -> {
             Parser.parse("fly away");
         });
         assertEquals("Unknown command!", exception.getMessage());
