@@ -7,49 +7,55 @@ import ragebait.task.TaskList;
 import ragebait.ui.UI;
 
 /**
- * Command to delete a task from the TaskList.
- * Removes the task at the specified index and displays messages via UI.
+ * Represents a command that deletes a task from the TaskList.
+ * The task is removed based on its index.
  */
 public class DeleteCommand extends Command {
+
+    /** The minimum valid task index. */
     private static final int START_RANGE = 0;
+
+    /** The index of the task to be deleted (0-based). */
     private final int index;
 
     /**
-     * Constructs a DeleteCommand for the task at the specified index.
+     * Creates a DeleteCommand for the task at the specified index.
      *
-     * @param index Index of the task to delete (0-based).
+     * @param index The 0-based index of the task to delete.
      */
     public DeleteCommand(int index) {
         this.index = index;
     }
 
     /**
-     * Returns the index of the task to delete.
+     * Returns the index of the task to be deleted.
      *
-     * @return Task index.
+     * @return The 0-based task index.
      */
     public int getIndex() {
         return index;
     }
 
     /**
-     * Deletes the task at the given index from the TaskList.
-     * Displays messages about the removed task and the updated task count.
+     * Executes the delete command by removing the task at the given index
+     * from the TaskList and displaying the updated task count.
      *
-     * @param tasks TaskList containing all tasks.
-     * @param ui UI for displaying messages to the user.
-     * @param storage Storage for saving tasks (not used in this command).
+     * @param tasks The TaskList containing all tasks.
+     * @param ui The UI used to display messages.
+     * @param storage The Storage responsible for persisting tasks.
+     * @throws RagebaitException If the specified index is out of range.
      */
     @Override
     public void execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
         Task selectedTask = tasks.get(index);
 
         int endRange = tasks.size();
-        // After removal of an item
         int newSize = endRange - 1;
+
         if (index < START_RANGE || index >= endRange) {
             throw new RagebaitException("I CAN'T DELETE! THIS DOES NOT EXIST!");
         }
+
         ui.getDelete(selectedTask, newSize);
         tasks.remove(index);
     }
