@@ -21,23 +21,25 @@ public class Parser {
     public static final int CUTOFF = 1;
     public static final int OFFSET = 1;
     public static final String BLANK = "";
+
     /**
      * Parses a full command string entered by the user and returns the corresponding Command object.
      *
      * @param fullCommand The raw input string entered by the user.
-     * @return A Command object corresponding to the parsed input.
-     * @throws IllegalArgumentException If the command is unknown or required arguments are missing.
+     * @return Command object corresponding to the parsed input.
+     * @throws RagebaitException If the command is unknown or arguments are invalid.
      */
     public static Command parse(String fullCommand) throws RagebaitException {
         CommandType command;
-        // Get the command
+
         String[] parts = fullCommand.split(" ", 2);
+
         try {
             command = CommandType.convertToCommandType(parts[0].toLowerCase());
         } catch (RagebaitException e) {
             throw e;
         }
-        // Separates single commands from other commands (mark, unmark, todo, event, deadline)
+
         String args = parts.length > CUTOFF ? parts[1].trim() : BLANK;
 
         switch (command) {
