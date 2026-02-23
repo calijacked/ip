@@ -3,9 +3,9 @@ package ragebait.exception;
 /**
  * Represents a custom exception specific to the Ragebait application.
  *
- * <p>This exception is thrown when invalid user input or application-level
+ * This exception is thrown when invalid user input or application-level
  * errors occur. It extends {@link Exception}, making it a checked exception
- * that must be handled or declared.</p>
+ * that must be handled or declared.
  */
 public class RagebaitException extends Exception {
 

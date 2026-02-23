@@ -15,22 +15,36 @@ import ragebait.task.ToDo;
 import ragebait.ui.UI;
 
 /**
- * Command to add a new task (ToDo, Deadline, or Event) to the TaskList.
- * Parses the user input and creates the appropriate Task object.
+ * Represents a command that adds a new Task to the TaskList.
+ * The task can be a TODO, DEADLINE, or EVENT.
+ * Parses the user input arguments and creates the appropriate Task object.
  */
 public class AddCommand extends Command {
+
+    /** Tag used to separate description and deadline datetime. */
     public static final String TAG_BY = " /by ";
+
+    /** Tag used to indicate the start datetime of an event. */
     public static final String TAG_FROM = " /from ";
+
+    /** Tag used to indicate the end datetime of an event. */
     public static final String TAG_TO = " /to ";
+
+    /** The task to be created and added to the list. */
     private Task task = null;
+
+    /** The type of task to be created. */
     private final TaskType type;
+
+    /** The raw argument string containing description and date/time details. */
     private final String args;
 
     /**
-     * Constructs an AddCommand with the specified task type and arguments.
+     * Creates an AddCommand with the specified task type and arguments.
      *
-     * @param type Type of the task ("todo", "deadline", or "event").
-     * @param args Arguments for the task (description and optional date/time).
+     * @param type The TaskType indicating whether the task is TODO, DEADLINE, or EVENT.
+     * @param args The raw argument string containing the task description
+     *             and any required date/time information.
      */
     public AddCommand(TaskType type, String args) {
         this.type = type;
@@ -38,12 +52,19 @@ public class AddCommand extends Command {
     }
 
     /**
-     * Parses the input arguments and adds the corresponding Task to the TaskList.
-     * Displays messages via UI about the added task or any errors in input.
+     * Executes the command by parsing the arguments, creating the appropriate Task,
+     * and adding it to the given TaskList.
      *
-     * @param tasks TaskList to add the new task to.
-     * @param ui UI to display messages to the user.
-     * @param storage Storage for saving tasks (not used in this command).
+     * For DEADLINE tasks, the expected format is:
+     * deadline {DESCRIPTION} /by d/M/yyyy HHmm
+     *
+     * For EVENT tasks, the expected format is:
+     * event {DESCRIPTION} /from d/M/yyyy HHmm /to d/M/yyyy HHmm
+     *
+     * @param tasks The TaskList to add the new task to.
+     * @param ui The UI used to display feedback messages.
+     * @param storage The Storage responsible for saving tasks.
+     * @throws RagebaitException If required fields are missing or if date/time parsing fails.
      */
     @Override
     public void execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
@@ -93,6 +114,7 @@ public class AddCommand extends Command {
                 }
                 task = new Event(eDescription, from, to);
                 break;
+
             default:
                 throw new RagebaitException("Unknown Type!");
             }
