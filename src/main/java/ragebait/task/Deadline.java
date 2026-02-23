@@ -28,8 +28,8 @@ public class Deadline extends Task {
      * Constructs a Deadline task from a string representation of the date (used for loading from file).
      *
      * @param description Description of the task.
-     * @param byDateTime Due date/time in the format "dd/MM/yyyy HHmm".
-     * @param isDone True if the task is already completed, false otherwise.
+     * @param byDateTime Due date/time of the task.
+     * @param isDone True if the task is already completed.
      */
     public Deadline(String description, LocalDateTime byDateTime, boolean isDone) {
         this(description, byDateTime);
@@ -38,11 +38,17 @@ public class Deadline extends Task {
         }
     }
 
+    /**
+     * Converts the deadline task into file storage format.
+     *
+     * @return Formatted string for file saving.
+     */
     public String toFileFormat() {
         DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
         return type.getSymbol() + VERTICAL_BAR_SEPERATOR + super.toFileFormat() + VERTICAL_BAR_SEPERATOR
                 + by.format(displayFormatter);
     }
+
     /**
      * Returns a string representation of the Deadline task, including its status and due date.
      *
