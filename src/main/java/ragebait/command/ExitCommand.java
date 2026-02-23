@@ -5,17 +5,18 @@ import ragebait.task.TaskList;
 import ragebait.ui.UI;
 
 /**
- * Command to exit the Ragebait application.
- * Saves the current task list to storage and signals the program to terminate.
+ * Represents a command that exits the Ragebait application.
+ * Saves the current tasks before terminating the program.
  */
 public class ExitCommand extends Command {
 
     /**
-     * Executes the exit command by saving all tasks to storage and displaying a farewell message.
+     * Executes the exit command by saving the current TaskList
+     * and displaying a farewell message.
      *
-     * @param tasks TaskList containing all tasks.
-     * @param ui UI for displaying messages to the user.
-     * @param storage Storage used to persist the tasks.
+     * @param tasks The TaskList containing all tasks.
+     * @param ui The UI used to display messages.
+     * @param storage The Storage responsible for persisting tasks.
      */
     @Override
     public void execute(TaskList tasks, UI ui, Storage storage) {
@@ -24,9 +25,9 @@ public class ExitCommand extends Command {
     }
 
     /**
-     * Indicates that this command will terminate the application.
+     * Returns true to indicate that this command exits the application.
      *
-     * @return true always, since executing this command exits the program.
+     * @return true, since this command terminates the program.
      */
     @Override
     public boolean isExit() {
