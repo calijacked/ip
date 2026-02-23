@@ -1,84 +1,125 @@
 package ragebait.command;
 
-import ragebait.storage.Storage;
-import ragebait.task.*;
-import ragebait.ui.UI;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
+import ragebait.exception.RagebaitException;
+import ragebait.storage.Storage;
+import ragebait.task.Deadline;
+import ragebait.task.Event;
+import ragebait.task.Task;
+import ragebait.task.TaskList;
+import ragebait.task.TaskType;
+import ragebait.task.ToDo;
+import ragebait.ui.UI;
 
 /**
- * Command to add a new task (ToDo, Deadline, or Event) to the TaskList.
- * Parses the user input and creates the appropriate Task object.
+ * Represents a command that adds a new Task to the TaskList.
+ * The task can be a TODO, DEADLINE, or EVENT.
+ * Parses the user input arguments and creates the appropriate Task object.
  */
 public class AddCommand extends Command {
-    private final String type;
+
+    /** Tag used to separate description and deadline datetime. */
+    public static final String TAG_BY = " /by ";
+
+    /** Tag used to indicate the start datetime of an event. */
+    public static final String TAG_FROM = " /from ";
+
+    /** Tag used to indicate the end datetime of an event. */
+    public static final String TAG_TO = " /to ";
+
+    /** The task to be created and added to the list. */
+    private Task task = null;
+
+    /** The type of task to be created. */
+    private final TaskType type;
+
+    /** The raw argument string containing description and date/time details. */
     private final String args;
 
     /**
-     * Constructs an AddCommand with the specified task type and arguments.
+     * Creates an AddCommand with the specified task type and arguments.
      *
-     * @param type Type of the task ("todo", "deadline", or "event").
-     * @param args Arguments for the task (description and optional date/time).
+     * @param type The TaskType indicating whether the task is TODO, DEADLINE, or EVENT.
+     * @param args The raw argument string containing the task description
+     *             and any required date/time information.
      */
-    public AddCommand(String type, String args) {
+    public AddCommand(TaskType type, String args) {
         this.type = type;
         this.args = args;
     }
 
     /**
-     * Parses the input arguments and adds the corresponding Task to the TaskList.
-     * Displays messages via UI about the added task or any errors in input.
+     * Executes the command by parsing the arguments, creating the appropriate Task,
+     * and adding it to the given TaskList.
      *
-     * @param tasks TaskList to add the new task to.
-     * @param ui UI to display messages to the user.
-     * @param storage Storage for saving tasks (not used in this command).
+     * For DEADLINE tasks, the expected format is:
+     * deadline {DESCRIPTION} /by d/M/yyyy HHmm
+     *
+     * For EVENT tasks, the expected format is:
+     * event {DESCRIPTION} /from d/M/yyyy HHmm /to d/M/yyyy HHmm
+     *
+     * @param tasks The TaskList to add the new task to.
+     * @param ui The UI used to display feedback messages.
+     * @param storage The Storage responsible for saving tasks.
+     * @throws RagebaitException If required fields are missing or if date/time parsing fails.
      */
     @Override
-    public void execute(TaskList tasks, UI ui, Storage storage) {
-        try {
-            Task t = null;
+    public String execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
 
-            switch (type) {
-                case "todo":
-                    t = new ToDo(args);  // ToDos do not need dates
-                    break;
+        switch (type) {
+        case TODO:
+            task = new ToDo(args);
+            break;
 
-                case "deadline":
-                    if (!args.contains("/by")) {
-                        ui.showMessage("Please include a /by date!");
-                        return;
-                    }
-                    String[] dParts = args.split("/by", 2);
-                    DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-                    LocalDateTime by = LocalDateTime.parse(dParts[1].trim(), dFormatter);
-                    t = new Deadline(dParts[0].trim(), by);
-                    break;
-
-                case "event":
-                    if (!args.contains("/from") || !args.contains("/to")) {
-                        ui.showMessage("Please include a /from and /to date!");
-                        return;
-                    }
-                    String[] eParts = args.split("/from", 2);
-                    String desc = eParts[0].trim();
-                    String[] fromTo = eParts[1].split("/to", 2);
-                    DateTimeFormatter eFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-                    LocalDateTime from = LocalDateTime.parse(fromTo[0].trim(), eFormatter);
-                    LocalDateTime to = LocalDateTime.parse(fromTo[1].trim(), eFormatter);
-                    t = new Event(desc, from, to);
-                    break;
+        case DEADLINE:
+            if (!args.contains(TAG_BY)) {
+                throw new RagebaitException("Please include a /by datetime exactly like this: \n"
+                        + "deadline {DESCRIPTTON} /by d/M/yyyy HHmm");
             }
-
-            if (t != null) {
-                tasks.add(t);
-                ui.showMessage("Got it. I've added this task:");
-                ui.showMessage(t.toString());
-                ui.showMessage("Now you have " + tasks.size() + " task(s) in the list.");
+            String[] dParts = args.split(TAG_BY, 2);
+            String dDescription = dParts[0].trim();
+            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+            LocalDateTime by;
+            try {
+                by = LocalDateTime.parse(dParts[1].trim(), dFormatter);
+            } catch (DateTimeParseException e) {
+                throw new RagebaitException("Invalid by datetime format! Use d/M/yyyy HHmm");
             }
+            task = new Deadline(dDescription, by);
+            break;
 
-        } catch (Exception e) {
-            ui.showMessage("Invalid input or date format! Use dd/MM/yyyy HHmm.");
+        case EVENT:
+            if (!args.contains(TAG_FROM) || !args.contains(TAG_TO)) {
+                throw new RagebaitException("Please include a /from datetime and /to datetime exactly like this: \n"
+                        + "event {DESCRIPTION} /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
+            }
+            String[] eParts = args.split(TAG_FROM, 2);
+            String eDescription = eParts[0].trim();
+            String[] fromTo = eParts[1].split(TAG_TO, 2);
+            DateTimeFormatter eFormatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+            LocalDateTime from;
+            LocalDateTime to;
+            try {
+                from = LocalDateTime.parse(fromTo[0].trim(), eFormatter);
+            } catch (DateTimeParseException e) {
+                throw new RagebaitException("Invalid from datetime format! Use d/M/yyyy HHmm");
+            }
+            try {
+                to = LocalDateTime.parse(fromTo[1].trim(), eFormatter);
+            } catch (DateTimeParseException e) {
+                throw new RagebaitException("Invalid to datetime format! Use d/M/yyyy HHmm");
+            }
+            task = new Event(eDescription, from, to);
+            break;
+
+        default:
+            throw new RagebaitException("Unknown Type!");
         }
+        tasks.add(task);
+        storage.save(tasks);
+        return ui.getTaskAdded(task, tasks.size());
     }
 }
