@@ -39,7 +39,9 @@ public class Deadline extends Task {
     }
 
     public String toFileFormat() {
-        return type.getSymbol() + VERTICAL_BAR_SEPERATOR + super.toFileFormat();
+        DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+        return type.getSymbol() + VERTICAL_BAR_SEPERATOR + super.toFileFormat() + VERTICAL_BAR_SEPERATOR
+                + by.format(displayFormatter);
     }
     /**
      * Returns a string representation of the Deadline task, including its status and due date.
@@ -48,7 +50,7 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
-        return String.format("[%s]%s (by: %s", type.getSymbol(), super.toString(), by.format(formatter));
+        DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
+        return String.format("[%s]%s (by: %s)", type.getSymbol(), super.toString(), by.format(displayFormatter));
     }
 }

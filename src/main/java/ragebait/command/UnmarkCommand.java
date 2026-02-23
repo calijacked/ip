@@ -1,6 +1,8 @@
 package ragebait.command;
 
+import ragebait.exception.RagebaitException;
 import ragebait.storage.Storage;
+import ragebait.task.Task;
 import ragebait.task.TaskList;
 import ragebait.ui.UI;
 
@@ -38,13 +40,16 @@ public class UnmarkCommand extends Command {
      * @param storage Storage for saving data (not used in this command).
      */
     @Override
-    public void execute(TaskList tasks, UI ui, Storage storage) {
+    public void execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
+        Task selectedTask = tasks.get(index);
         int endRange = tasks.size();
         if (index < START_RANGE || index >= endRange) {
-            ui.showMessage("I CAN'T UNMARK AN INVISIBLE TASK");
-            return;
+            throw new RagebaitException("I CAN'T UNMARK AN INVISIBLE TASK");
         }
-        tasks.get(index).markUndone();
-        ui.getUnmarked(tasks.get(index));
+        if (!selectedTask.isMarked()) {
+            throw new RagebaitException("Task is already unmarked!");
+        }
+        selectedTask.markUndone();
+        ui.getUnmarked(selectedTask);
     }
 }

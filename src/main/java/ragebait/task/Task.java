@@ -6,7 +6,7 @@ package ragebait.task;
  * This class is abstract and should be extended by specific task types like ToDo, Deadline, and Event.
  */
 public abstract class Task {
-    public static final String VERTICAL_BAR_SEPERATOR = " \\| ";
+    public static final String VERTICAL_BAR_SEPERATOR = " | ";
     public static final String MARKED = "1";
     public static final String UNMARKED = "0";
 
@@ -63,7 +63,7 @@ public abstract class Task {
     }
 
     public String toFileFormat() {
-        return isDone ? MARKED : UNMARKED + VERTICAL_BAR_SEPERATOR + this.description;
+        return (isDone ? MARKED : UNMARKED) + VERTICAL_BAR_SEPERATOR + this.description;
     }
     /**
      * Returns a string representation of the task for display purposes,
@@ -74,5 +74,9 @@ public abstract class Task {
     @Override
     public String toString() {
         return String.format("[%s] %s", this.getStatusIcon(), description);
+    }
+
+    public boolean isMarked() {
+        return isDone;
     }
 }

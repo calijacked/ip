@@ -2,11 +2,16 @@ package ragebait.command;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
-import ragebait.Ragebait;
 import ragebait.exception.RagebaitException;
 import ragebait.storage.Storage;
-import ragebait.task.*;
+import ragebait.task.Deadline;
+import ragebait.task.Event;
+import ragebait.task.Task;
+import ragebait.task.TaskList;
+import ragebait.task.TaskType;
+import ragebait.task.ToDo;
 import ragebait.ui.UI;
 
 /**
@@ -14,6 +19,9 @@ import ragebait.ui.UI;
  * Parses the user input and creates the appropriate Task object.
  */
 public class AddCommand extends Command {
+    public static final String TAG_BY = " /by ";
+    public static final String TAG_FROM = " /from ";
+    public static final String TAG_TO = " /to ";
     private Task task = null;
     private final TaskType type;
     private final String args;
@@ -46,26 +54,43 @@ public class AddCommand extends Command {
                 break;
 
             case DEADLINE:
-                if (!args.contains("/by")) {
-                    throw new RagebaitException("Please include a /by date!");
+                if (!args.contains(TAG_BY)) {
+                    throw new RagebaitException("Please include a /by datetime exactly like this: \n"
+                            + "deadline {DESCRIPTTON} /by d/M/yyyy HHmm");
                 }
-                String[] dParts = args.split("/by", 2);
+                String[] dParts = args.split(TAG_BY, 2);
                 String dDescription = dParts[0].trim();
-                DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-                LocalDateTime by = LocalDateTime.parse(dParts[1].trim(), dFormatter);
+                DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+                LocalDateTime by;
+                try {
+                    by = LocalDateTime.parse(dParts[1].trim(), dFormatter);
+                } catch (DateTimeParseException e) {
+                    throw new RagebaitException("Invalid by datetime format! Use d/M/yyyy HHmm");
+                }
                 task = new Deadline(dDescription, by);
                 break;
 
             case EVENT:
-                if (!args.contains("/from") || !args.contains("/to")) {
-                    throw new RagebaitException("Please include a /from and /to date!");
+                if (!args.contains(TAG_FROM) || !args.contains(TAG_TO)) {
+                    throw new RagebaitException("Please include a /from datetime and /to datetime exactly like this: \n"
+                            + "event {DESCRIPTION} /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
                 }
-                String[] eParts = args.split("/from", 2);
+                String[] eParts = args.split(TAG_FROM, 2);
                 String eDescription = eParts[0].trim();
-                String[] fromTo = eParts[1].split("/to", 2);
-                DateTimeFormatter eFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-                LocalDateTime from = LocalDateTime.parse(fromTo[0].trim(), eFormatter);
-                LocalDateTime to = LocalDateTime.parse(fromTo[1].trim(), eFormatter);
+                String[] fromTo = eParts[1].split(TAG_TO, 2);
+                DateTimeFormatter eFormatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+                LocalDateTime from;
+                LocalDateTime to;
+                try {
+                    from = LocalDateTime.parse(fromTo[0].trim(), eFormatter);
+                } catch (DateTimeParseException e) {
+                    throw new RagebaitException("Invalid from datetime format! Use d/M/yyyy HHmm");
+                }
+                try {
+                    to = LocalDateTime.parse(fromTo[1].trim(), eFormatter);
+                } catch (DateTimeParseException e) {
+                    throw new RagebaitException("Invalid to datetime format! Use d/M/yyyy HHmm");
+                }
                 task = new Event(eDescription, from, to);
                 break;
             default:
@@ -77,7 +102,7 @@ public class AddCommand extends Command {
                 ui.getTaskAdded(task, tasks.size());
             }
         } catch (RagebaitException e) {
-            throw new RagebaitException("Invalid input or date format! Use dd/MM/yyyy HHmm.");
+            throw e;
         }
     }
 }

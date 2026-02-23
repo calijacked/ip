@@ -1,7 +1,5 @@
 package ragebait.command;
 
-import java.util.ArrayList;
-
 import ragebait.storage.Storage;
 import ragebait.task.Task;
 import ragebait.task.TaskList;

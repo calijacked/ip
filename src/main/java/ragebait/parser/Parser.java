@@ -1,6 +1,14 @@
 package ragebait.parser;
 
-import ragebait.command.*;
+import ragebait.command.AddCommand;
+import ragebait.command.CommandType;
+import ragebait.command.Command;
+import ragebait.command.DeleteCommand;
+import ragebait.command.ExitCommand;
+import ragebait.command.FindCommand;
+import ragebait.command.ListCommand;
+import ragebait.command.MarkCommand;
+import ragebait.command.UnmarkCommand;
 import ragebait.exception.RagebaitException;
 import ragebait.task.TaskType;
 
@@ -13,10 +21,6 @@ public class Parser {
     public static final int CUTOFF = 1;
     public static final int OFFSET = 1;
     public static final String BLANK = "";
-    public static final String TAG_BY = " /by ";
-    public static final String TAG_FROM = " /from ";
-    public static final String TAG_TO = " /to ";
-    public static final String EVENT_SPLIT_REGEX = " /from | /to ";
     /**
      * Parses a full command string entered by the user and returns the corresponding Command object.
      *
@@ -25,9 +29,14 @@ public class Parser {
      * @throws IllegalArgumentException If the command is unknown or required arguments are missing.
      */
     public static Command parse(String fullCommand) throws RagebaitException {
+        CommandType command;
         // Get the command
         String[] parts = fullCommand.split(" ", 2);
-        CommandType command = CommandType.convertToCommandType(parts[0].toLowerCase());
+        try {
+            command = CommandType.convertToCommandType(parts[0].toLowerCase());
+        } catch (RagebaitException e) {
+            throw e;
+        }
         // Separates single commands from other commands (mark, unmark, todo, event, deadline)
         String args = parts.length > CUTOFF ? parts[1].trim() : BLANK;
 
@@ -55,17 +64,17 @@ public class Parser {
             if (args.isEmpty()) {
                 throw new RagebaitException("No description provided!");
             }
-            return new AddCommand(TaskType.convertToTaskType(command.getCommand()), args);
+            return new AddCommand(TaskType.TODO, args);
         case deadline:
             if (args.isEmpty()) {
                 throw new RagebaitException("No description and by date provided!!");
             }
-            return new AddCommand(TaskType.convertToTaskType(command.getCommand()), args);
+            return new AddCommand(TaskType.DEADLINE, args);
         case event:
             if (args.isEmpty()) {
                 throw new RagebaitException("No description, by and from date provided!!");
             }
-            return new AddCommand(TaskType.convertToTaskType(command.getCommand()), args);
+            return new AddCommand(TaskType.EVENT, args);
         case find:
             if (args.isEmpty()) {
                 throw new RagebaitException("Please provide a keyword to search!");

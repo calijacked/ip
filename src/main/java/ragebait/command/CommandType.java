@@ -1,5 +1,7 @@
 package ragebait.command;
 
+import ragebait.exception.RagebaitException;
+
 public enum CommandType {
     list,
     bye,
@@ -11,21 +13,11 @@ public enum CommandType {
     event,
     find;
 
-    private final String commandString;
-
-    CommandType(String commandString) {
-        this.commandString = commandString;
-    }
-
-    public String getCommand() {
-        return commandString;
-    }
-
-    public static CommandType convertToCommandType(String input) {
+    public static CommandType convertToCommandType(String input) throws RagebaitException {
         try {
             return CommandType.valueOf(input);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Unknown command!");
+            throw new RagebaitException("Unknown command!");
         }
     }
 }

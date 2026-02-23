@@ -45,7 +45,6 @@ public class TaskList {
     public Task remove(int index) {
         return tasks.remove(index);
     }
-
     /**
      * Retrieves the task at the specified index.
      *
@@ -80,13 +79,20 @@ public class TaskList {
      * @return String listing all tasks, or a message if the list is empty.
      */
     public String listTasks() {
+        int lastTask = tasks.size() - 1;
         if (tasks.isEmpty()) {
             return "No tasks in the list!";
         }
 
         StringBuilder sb = new StringBuilder("");
         for (int i = 0; i < tasks.size(); i++) {
-            sb.append(i + 1).append(".").append(tasks.get(i).toString()).append("\n");
+            sb.append(i + 1)
+                    .append(".")
+                    .append(tasks.get(i).toString());
+
+            if (i < lastTask) {
+                sb.append("\n");
+            }
         }
         return sb.toString();
     }

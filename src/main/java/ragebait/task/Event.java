@@ -48,7 +48,9 @@ public class Event extends Task {
     }
 
     public String toFileFormat() {
-        return type.getSymbol() + VERTICAL_BAR_SEPERATOR + super.toFileFormat();
+        DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+        return type.getSymbol() + VERTICAL_BAR_SEPERATOR + super.toFileFormat() + VERTICAL_BAR_SEPERATOR
+                + from.format(displayFormatter) + VERTICAL_BAR_SEPERATOR + to.format(displayFormatter);
     }
     /**
      * Returns a string representation of the Event, including status, start, and end times.

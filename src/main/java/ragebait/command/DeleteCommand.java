@@ -1,6 +1,8 @@
 package ragebait.command;
 
+import ragebait.exception.RagebaitException;
 import ragebait.storage.Storage;
+import ragebait.task.Task;
 import ragebait.task.TaskList;
 import ragebait.ui.UI;
 
@@ -39,13 +41,16 @@ public class DeleteCommand extends Command {
      * @param storage Storage for saving tasks (not used in this command).
      */
     @Override
-    public void execute(TaskList tasks, UI ui, Storage storage) {
+    public void execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
+        Task selectedTask = tasks.get(index);
+
         int endRange = tasks.size();
+        // After removal of an item
+        int newSize = endRange - 1;
         if (index < START_RANGE || index >= endRange) {
-            ui.showMessage("I CAN'T DELETE! THIS DOES NOT EXIST!");
-            return;
+            throw new RagebaitException("I CAN'T DELETE! THIS DOES NOT EXIST!");
         }
+        ui.getDelete(selectedTask, newSize);
         tasks.remove(index);
-        ui.getDelete(tasks.get(index), endRange);
     }
 }
