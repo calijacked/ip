@@ -1,26 +1,30 @@
 package ragebait.exception;
 
 /**
- * A custom exception class for handling errors specific to the Ragebait application.
- * This class extends {@link Exception} and is used to represent errors that occur
- * within the Ragebait application.
+ * Represents a custom exception specific to the Ragebait application.
  *
- * The {@code RagebaitException} allows you to throw exceptions with a detailed error
- * message.
+ * <p>This exception is thrown when invalid user input or application-level
+ * errors occur. It extends {@link Exception}, making it a checked exception
+ * that must be handled or declared.</p>
  */
 public class RagebaitException extends Exception {
 
     /**
-     * Constructs a new {@code RagebaitException} with the specified detail message.
-     * The detail message is a string that provides more information about the exception.
+     * Constructs a {@code RagebaitException} with a specified error message.
      *
-     * @param message the detail message which is saved for later retrieval by the
-     *                {@link #getMessage()} method.
+     * @param message The detail message explaining the cause of the exception.
      */
     public RagebaitException(String message) {
-        super(message); // Call the constructor of the superclass (Exception)
+        super(message);
     }
 
+    /**
+     * Constructs a {@code RagebaitException} with a specified error message
+     * and underlying cause.
+     *
+     * @param message The detail message explaining the cause of the exception.
+     * @param cause   The underlying cause of the exception.
+     */
     public RagebaitException(String message, Throwable cause) {
         super(message, cause);
     }
