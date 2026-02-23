@@ -38,7 +38,7 @@ public class Event extends Task {
      * @param description Description of the event.
      * @param from        Start date/time of the event.
      * @param to          End date/time of the event.
-     * @param isDone      True if the event is already completed, false otherwise.
+     * @param isDone      True if the event is already completed.
      */
     public Event(String description, LocalDateTime from, LocalDateTime to, boolean isDone) {
         this(description, from, to);
@@ -47,13 +47,19 @@ public class Event extends Task {
         }
     }
 
+    /**
+     * Converts the event task into file storage format.
+     *
+     * @return Formatted string for file saving.
+     */
     public String toFileFormat() {
         DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
         return type.getSymbol() + VERTICAL_BAR_SEPERATOR + super.toFileFormat() + VERTICAL_BAR_SEPERATOR
                 + from.format(displayFormatter) + VERTICAL_BAR_SEPERATOR + to.format(displayFormatter);
     }
+
     /**
-     * Returns a string representation of the Event, including status, start, and end times.
+     * Returns a string representation of the Event task, including status and time range.
      *
      * @return String representation of the Event task.
      */
