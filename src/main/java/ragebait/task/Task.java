@@ -54,17 +54,23 @@ public abstract class Task {
     }
 
     /**
-     * Returns a string representing the status of the task for file storage.
+     * Returns a string representing the status icon for file storage.
      *
-     * @return "1" if completed, "0" if not completed.
+     * @return "1" if completed, otherwise "0".
      */
     protected String getStatusIcon() {
         return isDone ? "X" : " ";
     }
 
+    /**
+     * Converts the task into file storage format.
+     *
+     * @return Formatted string representing the task for storage.
+     */
     public String toFileFormat() {
         return (isDone ? MARKED : UNMARKED) + VERTICAL_BAR_SEPERATOR + this.description;
     }
+
     /**
      * Returns a string representation of the task for display purposes,
      * including its type, status, and description.
@@ -76,6 +82,11 @@ public abstract class Task {
         return String.format("[%s] %s", this.getStatusIcon(), description);
     }
 
+    /**
+     * Checks whether the task is marked as completed.
+     *
+     * @return True if the task is completed, false otherwise.
+     */
     public boolean isMarked() {
         return isDone;
     }
