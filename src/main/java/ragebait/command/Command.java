@@ -20,14 +20,6 @@ public abstract class Command {
      * @param storage The Storage responsible for persisting task data.
      * @throws RagebaitException If an error occurs during command execution.
      */
-    public abstract void execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException;
+    public abstract String execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException;
 
-    /**
-     * Returns whether this command should terminate the application.
-     *
-     * @return true if the command exits the program, false otherwise.
-     */
-    public boolean isExit() {
-        return false;
-    }
 }

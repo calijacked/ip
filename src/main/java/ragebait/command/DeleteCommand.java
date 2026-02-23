@@ -46,7 +46,7 @@ public class DeleteCommand extends Command {
      * @throws RagebaitException If the specified index is out of range.
      */
     @Override
-    public void execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
+    public String execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
         Task selectedTask = tasks.get(index);
 
         int endRange = tasks.size();
@@ -56,7 +56,9 @@ public class DeleteCommand extends Command {
             throw new RagebaitException("I CAN'T DELETE! THIS DOES NOT EXIST!");
         }
 
-        ui.getDelete(selectedTask, newSize);
+        String result = ui.getDelete(selectedTask, newSize);
+        storage.save(tasks);
         tasks.remove(index);
+        return result;
     }
 }

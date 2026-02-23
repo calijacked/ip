@@ -19,18 +19,8 @@ public class ExitCommand extends Command {
      * @param storage The Storage responsible for persisting tasks.
      */
     @Override
-    public void execute(TaskList tasks, UI ui, Storage storage) {
-        ui.getGoodbye();
+    public String execute(TaskList tasks, UI ui, Storage storage) {
         storage.save(tasks);
-    }
-
-    /**
-     * Returns true to indicate that this command exits the application.
-     *
-     * @return true, since this command terminates the program.
-     */
-    @Override
-    public boolean isExit() {
-        return true;
+        return ui.getGoodbye();
     }
 }

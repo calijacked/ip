@@ -21,11 +21,11 @@ public class ListCommand extends Command {
      * @param storage The Storage responsible for persisting tasks.
      */
     @Override
-    public void execute(TaskList tasks, UI ui, Storage storage) {
+    public String execute(TaskList tasks, UI ui, Storage storage) {
         if (tasks.size() == NO_TASKS) {
-            ui.getNoTasks();
+            return ui.getNoTasks();
         } else {
-            ui.getListHeader(tasks);
+            return ui.getListHeader(tasks);
         }
     }
 }

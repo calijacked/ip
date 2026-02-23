@@ -37,11 +37,11 @@ public class Ragebait {
     public String getResponse(String input) {
         try {
             Command c = Parser.parse(input); //Returns a Command object
-            c.execute(tasks, ui, storage);
+            String ragebaitResponse = c.execute(tasks, ui, storage);
+            return ragebaitResponse;
         } catch (RagebaitException e) {
-            ui.showError(e.getMessage());
+            return ui.showError(e.getMessage());
         }
-        return "1";
     }
 
     public String getWelcomeMessage() {

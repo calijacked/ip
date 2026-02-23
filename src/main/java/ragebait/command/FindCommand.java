@@ -32,7 +32,7 @@ public class FindCommand extends Command {
      * @param storage The Storage responsible for persisting tasks.
      */
     @Override
-    public void execute(TaskList tasks, UI ui, Storage storage) {
+    public String execute(TaskList tasks, UI ui, Storage storage) {
         TaskList matchingTasks = new TaskList();
         for (Task task : tasks.getAllTasks()) {
             if (task.toString().toLowerCase().contains(keyword.toLowerCase())) {
@@ -41,9 +41,9 @@ public class FindCommand extends Command {
         }
 
         if (matchingTasks.isEmpty()) {
-            ui.getNoTasksFound();
+            return ui.getNoTasksFound();
         } else {
-            ui.getFindHeader(matchingTasks);
+            return ui.getFindHeader(matchingTasks);
         }
     }
 }

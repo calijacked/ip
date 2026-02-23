@@ -46,7 +46,7 @@ public class UnmarkCommand extends Command {
      *                           if the task is already unmarked.
      */
     @Override
-    public void execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
+    public String execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
         Task selectedTask = tasks.get(index);
         int endRange = tasks.size();
 
@@ -59,6 +59,7 @@ public class UnmarkCommand extends Command {
         }
 
         selectedTask.markUndone();
-        ui.getUnmarked(selectedTask);
+        storage.save(tasks);
+        return ui.getUnmarked(selectedTask);
     }
 }

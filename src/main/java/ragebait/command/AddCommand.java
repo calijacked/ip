@@ -67,64 +67,59 @@ public class AddCommand extends Command {
      * @throws RagebaitException If required fields are missing or if date/time parsing fails.
      */
     @Override
-    public void execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
-        try {
-            switch (type) {
-            case TODO:
-                task = new ToDo(args);
-                break;
+    public String execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
 
-            case DEADLINE:
-                if (!args.contains(TAG_BY)) {
-                    throw new RagebaitException("Please include a /by datetime exactly like this: \n"
-                            + "deadline {DESCRIPTTON} /by d/M/yyyy HHmm");
-                }
-                String[] dParts = args.split(TAG_BY, 2);
-                String dDescription = dParts[0].trim();
-                DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-                LocalDateTime by;
-                try {
-                    by = LocalDateTime.parse(dParts[1].trim(), dFormatter);
-                } catch (DateTimeParseException e) {
-                    throw new RagebaitException("Invalid by datetime format! Use d/M/yyyy HHmm");
-                }
-                task = new Deadline(dDescription, by);
-                break;
+        switch (type) {
+        case TODO:
+            task = new ToDo(args);
+            break;
 
-            case EVENT:
-                if (!args.contains(TAG_FROM) || !args.contains(TAG_TO)) {
-                    throw new RagebaitException("Please include a /from datetime and /to datetime exactly like this: \n"
-                            + "event {DESCRIPTION} /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
-                }
-                String[] eParts = args.split(TAG_FROM, 2);
-                String eDescription = eParts[0].trim();
-                String[] fromTo = eParts[1].split(TAG_TO, 2);
-                DateTimeFormatter eFormatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-                LocalDateTime from;
-                LocalDateTime to;
-                try {
-                    from = LocalDateTime.parse(fromTo[0].trim(), eFormatter);
-                } catch (DateTimeParseException e) {
-                    throw new RagebaitException("Invalid from datetime format! Use d/M/yyyy HHmm");
-                }
-                try {
-                    to = LocalDateTime.parse(fromTo[1].trim(), eFormatter);
-                } catch (DateTimeParseException e) {
-                    throw new RagebaitException("Invalid to datetime format! Use d/M/yyyy HHmm");
-                }
-                task = new Event(eDescription, from, to);
-                break;
-
-            default:
-                throw new RagebaitException("Unknown Type!");
+        case DEADLINE:
+            if (!args.contains(TAG_BY)) {
+                throw new RagebaitException("Please include a /by datetime exactly like this: \n"
+                        + "deadline {DESCRIPTTON} /by d/M/yyyy HHmm");
             }
-
-            if (task != null) {
-                tasks.add(task);
-                ui.getTaskAdded(task, tasks.size());
+            String[] dParts = args.split(TAG_BY, 2);
+            String dDescription = dParts[0].trim();
+            DateTimeFormatter dFormatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+            LocalDateTime by;
+            try {
+                by = LocalDateTime.parse(dParts[1].trim(), dFormatter);
+            } catch (DateTimeParseException e) {
+                throw new RagebaitException("Invalid by datetime format! Use d/M/yyyy HHmm");
             }
-        } catch (RagebaitException e) {
-            throw e;
+            task = new Deadline(dDescription, by);
+            break;
+
+        case EVENT:
+            if (!args.contains(TAG_FROM) || !args.contains(TAG_TO)) {
+                throw new RagebaitException("Please include a /from datetime and /to datetime exactly like this: \n"
+                        + "event {DESCRIPTION} /from d/M/yyyy HHmm /to d/M/yyyy HHmm");
+            }
+            String[] eParts = args.split(TAG_FROM, 2);
+            String eDescription = eParts[0].trim();
+            String[] fromTo = eParts[1].split(TAG_TO, 2);
+            DateTimeFormatter eFormatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+            LocalDateTime from;
+            LocalDateTime to;
+            try {
+                from = LocalDateTime.parse(fromTo[0].trim(), eFormatter);
+            } catch (DateTimeParseException e) {
+                throw new RagebaitException("Invalid from datetime format! Use d/M/yyyy HHmm");
+            }
+            try {
+                to = LocalDateTime.parse(fromTo[1].trim(), eFormatter);
+            } catch (DateTimeParseException e) {
+                throw new RagebaitException("Invalid to datetime format! Use d/M/yyyy HHmm");
+            }
+            task = new Event(eDescription, from, to);
+            break;
+
+        default:
+            throw new RagebaitException("Unknown Type!");
         }
+        tasks.add(task);
+        storage.save(tasks);
+        return ui.getTaskAdded(task, tasks.size());
     }
 }
