@@ -41,7 +41,7 @@ public class Parser {
         }
 
         String args = parts.length > CUTOFF ? parts[1].trim() : BLANK;
-
+        assert command != null : "Command cannot be null";
         switch (command) {
         case list:
             return new ListCommand();
