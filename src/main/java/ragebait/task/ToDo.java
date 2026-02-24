@@ -21,7 +21,7 @@ public class ToDo extends Task {
      * Constructs a To-Do task with a given description and completion status.
      *
      * @param description Description of the To-Do task.
-     * @param isDone Whether the task is completed.
+     * @param isDone True if the task is already completed, false otherwise.
      */
     public ToDo(String description, boolean isDone) {
         super(description, TaskType.TODO);
@@ -31,18 +31,20 @@ public class ToDo extends Task {
     }
 
     /**
-     * Converts the To-Do task into file storage format.
+     * Converts the To-Do task into a string suitable for file storage.
      *
      * @return Formatted string representing the To-Do task for storage.
      */
+    @Override
     public String toFileFormat() {
         return type.getSymbol() + VERTICAL_BAR_SEPERATOR + super.toFileFormat();
     }
 
     /**
      * Returns a string representation of the To-Do task for display purposes.
+     * Includes the task type symbol and completion status.
      *
-     * @return String representation of the To-Do task.
+     * @return Display string of the To-Do task.
      */
     @Override
     public String toString() {
