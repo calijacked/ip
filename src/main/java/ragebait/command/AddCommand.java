@@ -112,7 +112,6 @@ public class AddCommand extends Command {
             } catch (DateTimeParseException e) {
                 throw new RagebaitException("Invalid to datetime format! Use d/M/yyyy HHmm");
             }
-            assert !to.isBefore(from) : "Event end datetime must not be before start datetime";;
             task = new Event(eDescription, from, to);
             break;
 
