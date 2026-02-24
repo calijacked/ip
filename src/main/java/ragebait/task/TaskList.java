@@ -1,38 +1,46 @@
 package ragebait.task;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
- * Represents a list of tasks in the Ragebait application.
+ * Represents a collection of tasks in the Ragebait application.
  * Provides methods to add, remove, retrieve, and list tasks.
+ * Encapsulates an internal list of Task objects.
  */
 public class TaskList {
 
     /** Internal list storing all tasks */
-    private final ArrayList<Task> tasks;
+    private final List<Task> tasks;
 
     /**
      * Constructs an empty TaskList.
      */
     public TaskList() {
-        tasks = new ArrayList<>();
+        this.tasks = new ArrayList<>();
     }
 
     /**
-     * Constructs a TaskList with an existing list of tasks.
+     * Constructs a TaskList with a pre-existing list of tasks.
+     * Uses the provided list directly; any external modifications will affect this TaskList.
      *
      * @param tasks Pre-existing list of tasks.
      */
-    public TaskList(ArrayList<Task> tasks) {
+    public TaskList(List<Task> tasks) {
         this.tasks = tasks;
     }
 
     /**
      * Adds a task to the task list.
      *
-     * @param task Task to be added.
+     * @param task Task to be added. Must not be null.
+     * @throws IllegalArgumentException if task is null.
      */
     public void add(Task task) {
+        if (task == null) {
+            throw new IllegalArgumentException("Cannot add a null task.");
+        }
         tasks.add(task);
     }
 
@@ -41,6 +49,7 @@ public class TaskList {
      *
      * @param index Index of the task to remove.
      * @return The removed Task object.
+     * @throws IndexOutOfBoundsException if index is invalid.
      */
     public Task remove(int index) {
         return tasks.remove(index);
@@ -51,6 +60,7 @@ public class TaskList {
      *
      * @param index Index of the task to retrieve.
      * @return Task at the specified index.
+     * @throws IndexOutOfBoundsException if index is invalid.
      */
     public Task get(int index) {
         return tasks.get(index);
@@ -66,32 +76,33 @@ public class TaskList {
     }
 
     /**
-     * Returns the internal list containing all tasks.
+     * Returns an unmodifiable view of the internal task list.
+     * This prevents external modification of the internal list structure.
      *
-     * @return ArrayList of Task objects.
+     * @return Unmodifiable List of Task objects.
      */
-    public ArrayList<Task> getAllTasks() {
-        return tasks;
+    public List<Task> getAllTasks() {
+        return Collections.unmodifiableList(tasks);
     }
 
     /**
      * Returns a formatted string representation of all tasks in the list.
+     * Each task is numbered starting from 1.
      *
      * @return Formatted task list string, or a message if the list is empty.
      */
     public String listTasks() {
-        int lastTask = tasks.size() - 1;
         if (tasks.isEmpty()) {
             return "No tasks in the list!";
         }
 
-        StringBuilder sb = new StringBuilder("");
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tasks.size(); i++) {
             sb.append(i + 1)
                     .append(".")
                     .append(tasks.get(i).toString());
 
-            if (i < lastTask) {
+            if (i < tasks.size() - 1) {
                 sb.append("\n");
             }
         }
