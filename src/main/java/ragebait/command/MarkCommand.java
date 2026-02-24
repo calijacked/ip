@@ -9,13 +9,14 @@ import ragebait.ui.UI;
 /**
  * Command to mark a task as completed in the TaskList.
  * The task is selected using its index.
+ * Assumes the index is 0-based and valid integer input.
  */
 public class MarkCommand extends Command {
 
     /** Minimum valid task index. */
-    private static final int START_RANGE = 0;
+    private static final int START_INDEX = 0;
 
-    /** Index of the task to be marked (0-based indexing). */
+    /** Index of the task to be marked (0-based). */
     private final int index;
 
     /**
@@ -33,17 +34,18 @@ public class MarkCommand extends Command {
      * @param tasks The TaskList containing tasks.
      * @param ui The UI used to display feedback messages.
      * @param storage The Storage responsible for persisting data.
-     * @throws RagebaitException If the task index is out of range or
-     *                           if the task is already marked.
+     * @return A message from the UI confirming the task has been marked.
+     * @throws RagebaitException If the task index is out of range
+     *                           or the task is already marked.
      */
     @Override
     public String execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
-        Task selectedTask = tasks.get(index);
-        int endRange = tasks.size();
-
-        if (index < START_RANGE || index >= endRange) {
-            throw new RagebaitException("I CAN'T MARK SOMETHING THAT DOES NOT EXIST");
+        // Validate index before accessing the list
+        if (index < START_INDEX || index >= tasks.size()) {
+            throw new RagebaitException("Specified task number does not exist!");
         }
+
+        Task selectedTask = tasks.get(index);
 
         if (selectedTask.isMarked()) {
             throw new RagebaitException("Task is already marked!");
@@ -51,7 +53,7 @@ public class MarkCommand extends Command {
 
         selectedTask.markDone();
         storage.save(tasks);
-        return ui.getMarked(tasks.get(index));
+        return ui.getMarked(selectedTask);
     }
 
     /**

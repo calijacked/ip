@@ -47,12 +47,12 @@ public class UnmarkCommand extends Command {
      */
     @Override
     public String execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
-        Task selectedTask = tasks.get(index);
         int endRange = tasks.size();
 
         if (index < START_RANGE || index >= endRange) {
             throw new RagebaitException("I CAN'T UNMARK AN INVISIBLE TASK");
         }
+        Task selectedTask = tasks.get(index);
 
         if (!selectedTask.isMarked()) {
             throw new RagebaitException("Task is already unmarked!");
