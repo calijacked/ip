@@ -6,22 +6,32 @@ package ragebait.task;
  * This class is abstract and should be extended by specific task types like ToDo, Deadline, and Event.
  */
 public abstract class Task {
+    public static final String VERTICAL_BAR_SEPERATOR = " | ";
+    public static final String MARKED = "1";
+    public static final String UNMARKED = "0";
 
-    /** Whether the task is completed */
+    /**
+     * Whether the task is completed
+     */
     protected boolean isDone;
 
-    /** Description of the task */
+    /**
+     * Description of the task
+     */
     protected String description;
 
-    /** Type of the task (TODO, DEADLINE, EVENT) */
+    /**
+     * Type of the task (TODO, DEADLINE, EVENT)
+     */
     protected TaskType type;
+
 
     /**
      * Constructs a new Task with a description and type.
      * The task is initially not completed.
      *
      * @param description Description of the task.
-     * @param type Type of the task.
+     * @param type        Type of the task.
      */
     public Task(String description, TaskType type) {
         this.description = description.trim();
@@ -44,12 +54,21 @@ public abstract class Task {
     }
 
     /**
-     * Returns a string representing the status of the task for file storage.
+     * Returns a string representing the status icon for file storage.
      *
-     * @return "1" if completed, "0" if not completed.
+     * @return "1" if completed, otherwise "0".
      */
     protected String getStatusIcon() {
-        return isDone ? "1" : "0";
+        return isDone ? "X" : " ";
+    }
+
+    /**
+     * Converts the task into file storage format.
+     *
+     * @return Formatted string representing the task for storage.
+     */
+    public String toFileFormat() {
+        return (isDone ? MARKED : UNMARKED) + VERTICAL_BAR_SEPERATOR + this.description;
     }
 
     /**
@@ -60,14 +79,15 @@ public abstract class Task {
      */
     @Override
     public String toString() {
-        return "[" + type.getSymbol() + "]" + (isDone ? "[X] " : "[ ] ") + description;
+        return String.format("[%s] %s", this.getStatusIcon(), description);
     }
 
     /**
-     * Returns a string suitable for saving the task to a file.
-     * Each subclass must implement this to provide its own format.
+     * Checks whether the task is marked as completed.
      *
-     * @return File-format string of the task.
+     * @return True if the task is completed, false otherwise.
      */
-    public abstract String toFileFormat();
+    public boolean isMarked() {
+        return isDone;
+    }
 }

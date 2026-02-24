@@ -50,7 +50,7 @@ test {
 }
 
 application {
-    mainClass.set("ragebait.Ragebait")
+    mainClass.set("ragebait.Launcher")
 }
 
 shadowJar {

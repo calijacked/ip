@@ -9,18 +9,22 @@ import java.time.format.DateTimeFormatter;
  */
 public class Event extends Task {
 
-    /** Start date and time of the event */
+    /**
+     * Start date and time of the event
+     */
     protected LocalDateTime from;
 
-    /** End date and time of the event */
+    /**
+     * End date and time of the event
+     */
     protected LocalDateTime to;
 
     /**
      * Constructs a new Event task with a description, start, and end time.
      *
      * @param description Description of the event.
-     * @param from Start date/time of the event.
-     * @param to End date/time of the event.
+     * @param from        Start date/time of the event.
+     * @param to          End date/time of the event.
      */
     public Event(String description, LocalDateTime from, LocalDateTime to) {
         super(description, TaskType.EVENT);
@@ -32,9 +36,9 @@ public class Event extends Task {
      * Constructs an Event task from file data, with an option to mark it as done.
      *
      * @param description Description of the event.
-     * @param from Start date/time of the event.
-     * @param to End date/time of the event.
-     * @param isDone True if the event is already completed, false otherwise.
+     * @param from        Start date/time of the event.
+     * @param to          End date/time of the event.
+     * @param isDone      True if the event is already completed.
      */
     public Event(String description, LocalDateTime from, LocalDateTime to, boolean isDone) {
         this(description, from, to);
@@ -44,27 +48,25 @@ public class Event extends Task {
     }
 
     /**
-     * Returns a string representation of the Event, including status, start, and end times.
+     * Converts the event task into file storage format.
+     *
+     * @return Formatted string for file saving.
+     */
+    public String toFileFormat() {
+        DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+        return type.getSymbol() + VERTICAL_BAR_SEPERATOR + super.toFileFormat() + VERTICAL_BAR_SEPERATOR
+                + from.format(displayFormatter) + VERTICAL_BAR_SEPERATOR + to.format(displayFormatter);
+    }
+
+    /**
+     * Returns a string representation of the Event task, including status and time range.
      *
      * @return String representation of the Event task.
      */
     @Override
     public String toString() {
         DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
-        return super.toString() + " (from: " + from.format(displayFormatter) + " to: "
-                + to.format(displayFormatter) + ")";
-    }
-
-    /**
-     * Returns a string suitable for saving the Event to a file.
-     * Format: "E | 1/0 | description | dd/MM/yyyy HHmm | dd/MM/yyyy HHmm"
-     *
-     * @return File-format string of the Event task.
-     */
-    @Override
-    public String toFileFormat() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-        return "E | " + (isDone ? "1" : "0") + " | " + description + " | "
-                + from.format(formatter) + " | " + to.format(formatter);
+        return String.format("[%s]%s (from: %s to: %s)", type.getSymbol(), super.toString(),
+                from.format(displayFormatter), to.format(displayFormatter));
     }
 }

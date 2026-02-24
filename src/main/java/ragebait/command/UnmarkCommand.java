@@ -1,49 +1,65 @@
 package ragebait.command;
 
+import ragebait.exception.RagebaitException;
 import ragebait.storage.Storage;
-import ragebait.ui.UI;
+import ragebait.task.Task;
 import ragebait.task.TaskList;
+import ragebait.ui.UI;
 
 /**
- * Command to mark a task as not done in the TaskList.
- * Used when the user wants to undo the completion of a task.
+ * Command to mark a task as not completed in the TaskList.
+ * This command is used to undo a previously marked task.
  */
 public class UnmarkCommand extends Command {
+
+    /** Minimum valid task index. */
+    private static final int START_RANGE = 0;
+
+    /** Index of the task to be unmarked (0-based indexing). */
     private final int index;
 
     /**
      * Constructs an UnmarkCommand for the task at the specified index.
      *
-     * @param index Index of the task to unmark (0-based).
+     * @param index The 0-based index of the task to unmark.
      */
     public UnmarkCommand(int index) {
         this.index = index;
     }
 
     /**
-     * Returns the index of the task to unmark.
+     * Returns the index of the task to be unmarked.
      *
-     * @return Task index.
+     * @return The 0-based task index.
      */
     public int getIndex() {
         return index;
     }
 
     /**
-     * Marks the task at the given index as not done and displays a message.
+     * Executes the unmark command by marking the selected task as not completed.
      *
-     * @param tasks TaskList containing all tasks.
-     * @param ui UI used to display messages.
-     * @param storage Storage for saving data (not used in this command).
+     * @param tasks The TaskList containing tasks.
+     * @param ui The UI used to display feedback messages.
+     * @param storage The Storage used for persistence (not used in this command).
+     * @throws RagebaitException If the task index is out of range or
+     *                           if the task is already unmarked.
      */
     @Override
-    public void execute(TaskList tasks, UI ui, Storage storage) {
-        if (index < 0 || index >= tasks.size()) {
-            ui.showMessage("THIS DOES NOT EXIST!");
-            return;
+    public String execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
+        Task selectedTask = tasks.get(index);
+        int endRange = tasks.size();
+
+        if (index < START_RANGE || index >= endRange) {
+            throw new RagebaitException("I CAN'T UNMARK AN INVISIBLE TASK");
         }
-        tasks.get(index).markUndone();
-        ui.showMessage("WHY ARE YOU SKIVING.");
-        ui.showMessage(tasks.get(index).toString());
+
+        if (!selectedTask.isMarked()) {
+            throw new RagebaitException("Task is already unmarked!");
+        }
+
+        selectedTask.markUndone();
+        storage.save(tasks);
+        return ui.getUnmarked(selectedTask);
     }
 }

@@ -31,22 +31,21 @@ public class ToDo extends Task {
     }
 
     /**
-     * Returns a string representation of the To-Do task for display purposes.
+     * Converts the To-Do task into file storage format.
      *
-     * @return String representation of the task.
+     * @return Formatted string representing the To-Do task for storage.
      */
-    @Override
-    public String toString() {
-        return super.toString();
+    public String toFileFormat() {
+        return type.getSymbol() + VERTICAL_BAR_SEPERATOR + super.toFileFormat();
     }
 
     /**
-     * Returns a string suitable for saving the To-Do task to a file.
+     * Returns a string representation of the To-Do task for display purposes.
      *
-     * @return File-format string of the To-Do task.
+     * @return String representation of the To-Do task.
      */
     @Override
-    public String toFileFormat() {
-        return "T | " + getStatusIcon() + " | " + description;
+    public String toString() {
+        return String.format("[%s]%s", type.getSymbol(), super.toString());
     }
 }

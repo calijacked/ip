@@ -28,7 +28,7 @@ public class TaskList {
     }
 
     /**
-     * Adds a task to the list.
+     * Adds a task to the task list.
      *
      * @param task Task to be added.
      */
@@ -37,27 +37,27 @@ public class TaskList {
     }
 
     /**
-     * Removes a task at the specified index.
+     * Removes a task at the specified index (0-based indexing).
      *
-     * @param index Index of the task to remove (0-based).
-     * @return The removed task.
+     * @param index Index of the task to remove.
+     * @return The removed Task object.
      */
     public Task remove(int index) {
         return tasks.remove(index);
     }
 
     /**
-     * Retrieves the task at the specified index.
+     * Retrieves the task at the specified index (0-based indexing).
      *
-     * @param index Index of the task to retrieve (0-based).
-     * @return Task at the given index.
+     * @param index Index of the task to retrieve.
+     * @return Task at the specified index.
      */
     public Task get(int index) {
         return tasks.get(index);
     }
 
     /**
-     * Returns the number of tasks in the list.
+     * Returns the number of tasks currently stored in the list.
      *
      * @return Number of tasks.
      */
@@ -66,28 +66,44 @@ public class TaskList {
     }
 
     /**
-     * Returns the internal list of all tasks.
+     * Returns the internal list containing all tasks.
      *
-     * @return List of all tasks.
+     * @return ArrayList of Task objects.
      */
     public ArrayList<Task> getAllTasks() {
         return tasks;
     }
 
     /**
-     * Returns a formatted string of all tasks in the list for display.
+     * Returns a formatted string representation of all tasks in the list.
      *
-     * @return String listing all tasks, or a message if the list is empty.
+     * @return Formatted task list string, or a message if the list is empty.
      */
     public String listTasks() {
+        int lastTask = tasks.size() - 1;
         if (tasks.isEmpty()) {
             return "No tasks in the list!";
         }
 
-        StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");
+        StringBuilder sb = new StringBuilder("");
         for (int i = 0; i < tasks.size(); i++) {
-            sb.append(i + 1).append(".").append(tasks.get(i).toString()).append("\n");
+            sb.append(i + 1)
+                    .append(".")
+                    .append(tasks.get(i).toString());
+
+            if (i < lastTask) {
+                sb.append("\n");
+            }
         }
         return sb.toString();
+    }
+
+    /**
+     * Checks whether the task list is empty.
+     *
+     * @return True if the task list contains no tasks, otherwise false.
+     */
+    public boolean isEmpty() {
+        return tasks.isEmpty();
     }
 }

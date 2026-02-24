@@ -1,30 +1,25 @@
 package ragebait.command;
 
+import ragebait.exception.RagebaitException;
 import ragebait.storage.Storage;
 import ragebait.task.TaskList;
 import ragebait.ui.UI;
 
 /**
- * Abstract class representing a user command in the Ragebait application.
- * All commands should extend this class and implement the execute method.
+ * Represents an abstract user command in the Ragebait application.
+ * All concrete command classes should extend this class and implement
+ * the execute method.
  */
 public abstract class Command {
 
     /**
-     * Executes the command on the given tasks using UI and storage.
+     * Executes the command using the given TaskList, UI, and Storage.
      *
-     * @param tasks TaskList to operate on.
-     * @param ui    UI for user interaction.
-     * @param storage Storage for persisting task data.
+     * @param tasks The TaskList to operate on.
+     * @param ui The UI used for user interaction.
+     * @param storage The Storage responsible for persisting task data.
+     * @throws RagebaitException If an error occurs during command execution.
      */
-    public abstract void execute(TaskList tasks, UI ui, Storage storage);
+    public abstract String execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException;
 
-    /**
-     * Indicates whether this command causes the application to exit.
-     *
-     * @return true if the command exits the program; false otherwise.
-     */
-    public boolean isExit() {
-        return false;
-    }
 }

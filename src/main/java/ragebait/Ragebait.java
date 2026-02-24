@@ -1,6 +1,7 @@
 package ragebait;
 
 import ragebait.command.Command;
+import ragebait.exception.RagebaitException;
 import ragebait.parser.Parser;
 import ragebait.storage.Storage;
 import ragebait.task.TaskList;
@@ -11,56 +12,40 @@ import ragebait.ui.UI;
  * Initializes storage, UI, and task list, and runs the main program loop.
  */
 public class Ragebait {
+    static final String FILE_PATH = "data/ragebait.txt";
     private Storage storage;
     private TaskList tasks;
     private UI ui;
 
     /**
-     * Constructs a Ragebait application with a specified file path for storage.
-     *
-     * @param filePath Path to the file where tasks are saved and loaded.
+     * Constructs a Ragebait application with default storage file path.
+     * Initializes UI, Storage, and TaskList.
+     * If task loading fails, starts with an empty task list.
      */
-    public Ragebait(String filePath) {
+    public Ragebait() {
         ui = new UI();
-        storage = new Storage(filePath);
+        storage = new Storage(FILE_PATH);
         try {
-            tasks = new TaskList(storage.load());
-        } catch (Exception e) {
-            ui.showMessage("Error loading tasks. Starting with an empty list.");
+            tasks = new TaskList(storage.load().getAllTasks());
+        } catch (RagebaitException e) {
+            ui.showError("Error loading tasks. Starting with an empty list.");
+            e.printStackTrace();
             tasks = new TaskList();
         }
     }
 
-    /**
-     * Starts the main program loop to read and execute user commands until exit.
-     */
-    public void run() {
-        ui.showWelcome();
-        boolean isExit = false;
-
-        while (!isExit) {
-            try {
-                String fullCommand = ui.readCommand();
-                ui.showLine();
-                Command c = Parser.parse(fullCommand); //Returns a Command object
-                c.execute(tasks, ui, storage);
-                isExit = c.isExit(); //ExitCommand will set this to true
-            } catch (Exception e) {
-                ui.showError(e.getMessage());
-            } finally {
-                ui.showLine();
-            }
+    public String getResponse(String input) {
+        try {
+            Command c = Parser.parse(input); //Returns a Command object
+            String ragebaitResponse = c.execute(tasks, ui, storage);
+            return ragebaitResponse;
+        } catch (RagebaitException e) {
+            return ui.showError(e.getMessage());
         }
-
-        ui.close();
     }
 
-    /**
-     * Entry point of the application.
-     *
-     * @param args Command-line arguments (not used).
-     */
-    public static void main(String[] args) {
-        new Ragebait("data/ragebait.txt").run();
+    public String getWelcomeMessage() {
+        return ui.getWelcome();
     }
 }
+

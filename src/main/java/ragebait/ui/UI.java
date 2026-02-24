@@ -1,13 +1,16 @@
 package ragebait.ui;
-import javafx.application.Application;
 
 import java.util.Scanner;
 
+import ragebait.task.Task;
+import ragebait.task.TaskList;
+
 /**
  * Handles all user interactions in the Ragebait application.
- * Responsible for reading input from the user and displaying messages to the console.
+ * Responsible for generating response messages for display.
  */
 public class UI {
+
     /** Scanner for reading user input */
     private final Scanner sc;
 
@@ -19,52 +22,141 @@ public class UI {
     }
 
     /**
-     * Displays the welcome message when the application starts.
-     */
-    public void showWelcome() {
-        System.out.println("____________________________________________________________");
-        System.out.println("Hello Fatty! I'm ragebait.Ragebait! What can I do for you? :)");
-        System.out.println("____________________________________________________________");
-    }
-
-    /**
-     * Prints a horizontal line separator in the console.
-     */
-    public void showLine() {
-        System.out.println("____________________________________________________________");
-    }
-
-    /**
-     * Displays an error message to the user.
+     * Returns the welcome message.
      *
-     * @param message Error message to display.
+     * @return The welcome message string.
      */
-    public void showError(String message) {
-        System.out.println(message);
+    public String getWelcome() {
+        return "Hello! I'm Ragebait. What disaster are we managing today?";
     }
 
     /**
-     * Reads a line of input from the user, trimming leading and trailing whitespace.
+     * Returns a message after a task is deleted.
      *
-     * @return User input as a trimmed String.
+     * @param task The task that was removed.
+     * @param size The current number of tasks remaining.
+     * @return The deletion confirmation message.
      */
-    public String readCommand() {
-        return sc.nextLine().trim();
+    public String getDelete(Task task, int size) {
+        return "Are you done? or just lazy? Removed:\n" + task
+                + "\nNow you have " + size + " task(s) in the list.";
     }
 
     /**
-     * Closes the input scanner. Should be called when the application is exiting.
+     * Returns a separator line.
+     *
+     * @return The separator line string.
+     */
+    public String showLine() {
+        return "____________________________________________________________";
+    }
+
+    /**
+     * Returns the goodbye message.
+     *
+     * @return The goodbye message string.
+     */
+    public String getGoodbye() {
+        return "Finally. Peace and quiet. I was getting kinda tired of you.";
+    }
+
+    /**
+     * Returns the list header and task contents.
+     *
+     * @param tasks The TaskList containing tasks to display.
+     * @return The formatted task list string.
+     */
+    public String getListHeader(TaskList tasks) {
+        return "Yawn. Here you go:\n" + tasks.listTasks();
+    }
+
+    /**
+     * Returns a message confirming that a task has been added.
+     *
+     * @param t The task that was added.
+     * @param size The updated number of tasks in the list.
+     * @return The task-added confirmation message.
+     */
+    public String getTaskAdded(Task t, int size) {
+        return "Fine. I've added this to your never-ending list:\n  "
+                + t
+                + "\nYou now have " + size + " "
+                + (size == 1 ? "task" : "tasks")
+                + ". Impressive. Truly.";
+    }
+
+    /**
+     * Returns a message indicating a task has been marked as completed.
+     *
+     * @param t The task that was marked.
+     * @return The marked task message string.
+     */
+    public String getMarked(Task t) {
+        return "Oh wow, you actually finished something?\n" + t;
+    }
+
+    /**
+     * Returns a message indicating a task has been unmarked.
+     *
+     * @param t The task that was unmarked.
+     * @return The unmarked task message string.
+     */
+    public String getUnmarked(Task t) {
+        return "Changed your mind already?\n" + t;
+    }
+
+    /**
+     * Returns a message indicating that there are no tasks in the list.
+     *
+     * @return The no-tasks message string.
+     */
+    public String getNoTasks() {
+        return "Miraculously, you have nothing scheduled. Enjoy it while it lasts.";
+    }
+
+    /**
+     * Returns a message indicating that no search results were found.
+     *
+     * @return The no-results-found message string.
+     */
+    public String getNoTasksFound() {
+        return "Do a better job at searching. No results.";
+    }
+
+    /**
+     * Returns search result header and matched task list.
+     *
+     * @param tasks The TaskList containing matched tasks.
+     * @return The formatted find results string.
+     */
+    public String getFindHeader(TaskList tasks) {
+        return "You searched. Here’s what matched your questionable memory:\n"
+                + tasks.listTasks();
+    }
+
+    /**
+     * Returns an error message.
+     *
+     * @param message The error message.
+     * @return The error message string.
+     */
+    public String showError(String message) {
+        return message;
+    }
+
+    /**
+     * Closes the scanner resource used for input.
      */
     public void close() {
         sc.close();
     }
 
     /**
-     * Displays a generic message to the user.
+     * Reads a command input from the user.
      *
-     * @param message Message to display.
+     * @return The trimmed user command string.
      */
-    public void showMessage(String message) {
-        System.out.println(message);
+    public String readCommand() {
+        return sc.nextLine().trim();
     }
 }

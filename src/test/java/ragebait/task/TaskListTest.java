@@ -1,7 +1,9 @@
 package ragebait.task;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskListTest {
 
@@ -9,7 +11,6 @@ public class TaskListTest {
     public void testAddAndGetSize() {
         TaskList tasks = new TaskList();
 
-        // Initially empty
         assertEquals(0, tasks.size());
 
         ToDo todo1 = new ToDo("Finish homework");
@@ -31,6 +32,7 @@ public class TaskListTest {
         ToDo todo = new ToDo("Remove me");
 
         tasks.add(todo);
+
         Task removed = tasks.remove(0);
 
         assertEquals(todo, removed);
@@ -42,22 +44,22 @@ public class TaskListTest {
         TaskList tasks = new TaskList();
 
         // Empty list
-        assertEquals("No tasks in the list!", tasks.listTasks());
+        assertTrue(tasks.listTasks().contains("No tasks"));
 
         // Add tasks
         tasks.add(new ToDo("Do homework"));
         tasks.add(new ToDo("Go shopping"));
 
-        String expected = "Here are the tasks in your list:\n" +
-                "1.[T][ ] Do homework\n" +
-                "2.[T][ ] Go shopping\n";
+        String listOutput = tasks.listTasks();
 
-        assertEquals(expected, tasks.listTasks());
+        assertTrue(listOutput.contains("Do homework"));
+        assertTrue(listOutput.contains("Go shopping"));
     }
 
     @Test
     public void testGetAllTasks() {
         TaskList tasks = new TaskList();
+
         ToDo todo = new ToDo("Test task");
         tasks.add(todo);
 

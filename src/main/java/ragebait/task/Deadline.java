@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
  * Represents a task with a specific deadline.
  * A Deadline task has a description and a due date/time.
  */
+@SuppressWarnings("checkstyle:Regexp")
 public class Deadline extends Task {
 
     /** The due date and time of this deadline task */
@@ -27,16 +28,25 @@ public class Deadline extends Task {
      * Constructs a Deadline task from a string representation of the date (used for loading from file).
      *
      * @param description Description of the task.
-     * @param byStr Due date/time as a string in the format "dd/MM/yyyy HHmm".
-     * @param isDone True if the task is already completed, false otherwise.
+     * @param byDateTime Due date/time of the task.
+     * @param isDone True if the task is already completed.
      */
-    public Deadline(String description, String byStr, boolean isDone) {
-        super(description, TaskType.DEADLINE);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-        this.by = LocalDateTime.parse(byStr, formatter);
+    public Deadline(String description, LocalDateTime byDateTime, boolean isDone) {
+        this(description, byDateTime);
         if (isDone) {
             markDone();
         }
+    }
+
+    /**
+     * Converts the deadline task into file storage format.
+     *
+     * @return Formatted string for file saving.
+     */
+    public String toFileFormat() {
+        DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+        return type.getSymbol() + VERTICAL_BAR_SEPERATOR + super.toFileFormat() + VERTICAL_BAR_SEPERATOR
+                + by.format(displayFormatter);
     }
 
     /**
@@ -46,19 +56,7 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
-        return super.toString() + " (by: " + by.format(formatter) + ")";
-    }
-
-    /**
-     * Returns a string suitable for saving to a file.
-     * Format: "D | 1/0 | description | dd/MM/yyyy HHmm"
-     *
-     * @return File-format string of the task.
-     */
-    @Override
-    public String toFileFormat() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-        return "D | " + (isDone ? "1" : "0") + " | " + description + " | " + by.format(formatter);
+        DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
+        return String.format("[%s]%s (by: %s)", type.getSymbol(), super.toString(), by.format(displayFormatter));
     }
 }
