@@ -8,16 +8,18 @@ import ragebait.ui.UI;
 /**
  * Represents a command that searches for tasks containing
  * a specified keyword in their description.
+ *
+ * The search is case-insensitive and returns all matching tasks.
  */
 public class FindCommand extends Command {
 
-    /** The keyword used to search task descriptions. */
+    /** The keyword used to filter task descriptions */
     private final String keyword;
 
     /**
-     * Creates a FindCommand with the specified keyword.
+     * Constructs a FindCommand with the given keyword.
      *
-     * @param keyword The keyword to search for.
+     * @param keyword The keyword to search for in task descriptions.
      */
     public FindCommand(String keyword) {
         this.keyword = keyword;
@@ -25,15 +27,20 @@ public class FindCommand extends Command {
 
     /**
      * Executes the find command by filtering tasks that contain
-     * the specified keyword and displaying the matching results.
+     * the specified keyword.
      *
-     * @param tasks The TaskList containing all tasks.
-     * @param ui The UI used to display messages.
-     * @param storage The Storage responsible for persisting tasks.
+     * Returns a formatted message from the UI depending on whether
+     * matching tasks were found.
+     *
+     * @param tasks   The TaskList containing all tasks.
+     * @param ui      The UI used to display the search results.
+     * @param storage The Storage (not used in this command).
+     * @return A string message representing search results or no matches.
      */
     @Override
     public String execute(TaskList tasks, UI ui, Storage storage) {
         TaskList matchingTasks = new TaskList();
+
         for (Task task : tasks.getAllTasks()) {
             if (task.toString().toLowerCase().contains(keyword.toLowerCase())) {
                 matchingTasks.add(task);
