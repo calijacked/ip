@@ -1,5 +1,6 @@
 package ragebait.command;
 
+import ragebait.exception.RagebaitException;
 import ragebait.storage.Storage;
 import ragebait.task.TaskList;
 import ragebait.ui.UI;
@@ -19,7 +20,7 @@ public class ExitCommand extends Command {
      * @param storage The Storage responsible for persisting tasks.
      */
     @Override
-    public String execute(TaskList tasks, UI ui, Storage storage) {
+    public String execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
         storage.save(tasks);
         return ui.getGoodbye();
     }

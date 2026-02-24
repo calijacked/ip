@@ -18,22 +18,24 @@ import ragebait.task.TaskType;
 import ragebait.task.ToDo;
 
 /**
- * Handles loading and saving tasks to persistent storage.
- * Manages reading tasks from a file at startup and writing tasks back whenever tasks change.
+ * Handles persistent storage of tasks for the Ragebait application.
+ * Responsible for reading tasks from a file on startup and saving tasks
+ * whenever the TaskList changes.
  */
 public class Storage {
-    static final int MIN_TASK_PARTS = 3;
-    static final int MAX_TASK_PARTS = 5;
-    private static final String SEPERATOR = " \\| ";
+
+    private static final int MIN_TASK_PARTS = 3;
+    private static final int MAX_TASK_PARTS = 5;
+    private static final String SEPARATOR = " \\| ";
     private static final String MARKED_DONE = "1";
 
     /** Path to the file used for storing tasks */
     private final String filePath;
 
     /**
-     * Constructs a Storage object with a given file path.
+     * Constructs a Storage object with the given file path.
      *
-     * @param filePath Path to the file for storing task data.
+     * @param filePath Path to the file used for persisting tasks.
      */
     public Storage(String filePath) {
         this.filePath = filePath;
@@ -41,81 +43,80 @@ public class Storage {
 
     /**
      * Loads tasks from the storage file.
-     * Creates the file and parent directories if they do not exist.
-     * Skips corrupted lines and throws an exception if corruption is detected.
+     * If the file or parent directories do not exist, they are created.
+     * Each line is parsed into a Task object. Corrupted lines throw an exception.
      *
-     * @return TaskList containing loaded Task objects.
-     * @throws RagebaitException If storage loading fails or file data is corrupted.
+     * @return TaskList containing all successfully loaded tasks.
+     * @throws RagebaitException If a line is corrupted or cannot be parsed.
      */
     public TaskList load() throws RagebaitException {
         TaskList tasks = new TaskList();
         File file = new File(filePath);
 
-        file.getParentFile().mkdirs();
+        // Ensure parent directories exist
+        File parent = file.getParentFile();
+        if (parent != null) {
+            parent.mkdirs();
+        }
 
+        // If file doesn't exist yet, return empty task list
         if (!file.exists()) {
             return tasks;
         }
 
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
-
             while ((line = br.readLine()) != null) {
                 try {
                     Task task = parseTask(line);
                     tasks.add(task);
                 } catch (RagebaitException e) {
-                    throw new RagebaitException("Aborting operation. Corrupted line: " + line, e);
+                    throw new RagebaitException("Aborting load. Corrupted line: " + line, e);
                 }
             }
-            br.close();
-
         } catch (IOException e) {
-            System.out.println("Error loading data.");
+            throw new RagebaitException("Error reading storage file: " + filePath, e);
         }
 
         return tasks;
     }
 
     /**
-     * Saves all tasks to the storage file, overwriting previous contents.
+     * Saves all tasks in the TaskList to the storage file.
+     * Overwrites any previous content in the file.
      *
-     * @param tasks TaskList containing tasks to be saved.
+     * @param tasks TaskList containing tasks to save.
+     * @throws RagebaitException If writing to the file fails.
      */
-    public void save(TaskList tasks) {
-
-        try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));
+    public void save(TaskList tasks) throws RagebaitException {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
             for (Task task : tasks.getAllTasks()) {
                 bw.write(task.toFileFormat());
                 bw.newLine();
             }
-            bw.close();
-
         } catch (IOException e) {
-            System.out.println("Error saving data.");
+            throw new RagebaitException("Error saving tasks to file: " + filePath, e);
         }
     }
 
     /**
-     * Parses a line from the storage file into a Task object.
-     * Supports ToDo, Deadline, and Event task types.
+     * Parses a single line from the storage file into a Task object.
+     * Supports ToDo, Deadline, and Event tasks.
      *
-     * @param line Storage file line representing a task.
-     * @return Parsed Task object.
-     * @throws RagebaitException If the task type is unknown or format is invalid.
+     * @param line The line representing a task in storage format.
+     * @return The Task object represented by the line.
+     * @throws RagebaitException If the line format is invalid or task type is unknown.
      */
     public Task parseTask(String line) throws RagebaitException {
-        String[] parts = line.split(SEPERATOR);
+        String[] parts = line.split(SEPARATOR);
 
         if (parts.length < MIN_TASK_PARTS || parts.length > MAX_TASK_PARTS) {
-            throw new RagebaitException("Line is corrupted and is not in correct format");
+            throw new RagebaitException("Corrupted task line: incorrect number of fields.");
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
         TaskType type = TaskType.convertToTaskType(parts[0]);
-        boolean isDone = parts[1].equals(MARKED_DONE);
+        boolean isDone = MARKED_DONE.equals(parts[1]);
         String description = parts[2];
 
         switch (type) {
@@ -129,7 +130,7 @@ public class Storage {
             LocalDateTime toDateTime = LocalDateTime.parse(parts[4], formatter);
             return new Event(description, fromDateTime, toDateTime, isDone);
         default:
-            throw new RagebaitException("Unknown task type found in file");
+            throw new RagebaitException("Unknown task type found in storage file.");
         }
     }
 }
