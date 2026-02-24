@@ -14,8 +14,6 @@ import ragebait.command.MarkCommand;
 import ragebait.command.UnmarkCommand;
 import ragebait.exception.RagebaitException;
 
-
-
 public class ParserTest {
 
     @Test
@@ -45,10 +43,39 @@ public class ParserTest {
     }
 
     @Test
+    public void testInvalidIndexFormat() {
+        assertThrows(RagebaitException.class, () -> Parser.parse("mark abc"));
+    }
+
+    @Test
+    public void testMissingMarkArgument() {
+        assertThrows(RagebaitException.class, () -> Parser.parse("mark"));
+    }
+
+    @Test
+    public void testMissingTodoDescription() {
+        assertThrows(RagebaitException.class, () -> Parser.parse("todo"));
+    }
+
+    @Test
+    public void testMissingDeadlineArguments() {
+        assertThrows(RagebaitException.class, () -> Parser.parse("deadline"));
+    }
+
+    @Test
+    public void testMissingEventArguments() {
+        assertThrows(RagebaitException.class, () -> Parser.parse("event"));
+    }
+
+    @Test
+    public void testEmptyCommand() {
+        assertThrows(RagebaitException.class, () -> Parser.parse(""));
+    }
+
+    @Test
     public void testUnknownCommandThrowsException() {
-        Exception exception = assertThrows(RagebaitException.class, () -> {
-            Parser.parse("fly away");
-        });
+        RagebaitException exception = assertThrows(RagebaitException.class, () -> Parser.parse("fly away"));
+
         assertEquals("Unknown command!", exception.getMessage());
     }
 }

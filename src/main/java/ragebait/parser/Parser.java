@@ -13,77 +13,106 @@ import ragebait.exception.RagebaitException;
 import ragebait.task.TaskType;
 
 /**
- * Parses user input into the corresponding Command objects for the Ragebait application.
- * Converts a raw input string into a specific Command that can be executed.
+ * Responsible for translating raw user input into executable Command objects.
+ *
+ * The Parser extracts the command keyword and its arguments,
+ * validates basic command structure, and delegates semantic validation
+ * to the respective Command classes.
+ *
+ * This class only validates:
+ * - Whether a command exists
+ * - Whether required arguments are present
+ *
+ * It does not validate deeper business rules (e.g., date correctness).
  */
 public class Parser {
-    // --- Syntax Constants ---
-    public static final int CUTOFF = 1;
-    public static final int OFFSET = 1;
-    public static final String BLANK = "";
+
+    private static final int COMMAND_PARTS_LIMIT = 2;
+    private static final int USER_INDEX_OFFSET = 1;
+    private static final String EMPTY = "";
 
     /**
-     * Parses a full command string entered by the user and returns the corresponding Command object.
+     * Parses the given user input string and returns the corresponding Command.
      *
-     * @param fullCommand The raw input string entered by the user.
-     * @return Command object corresponding to the parsed input.
-     * @throws RagebaitException If the command is unknown or arguments are invalid.
+     * @param fullCommand the full raw input entered by the user
+     * @return the Command object representing the user's intention
+     * @throws RagebaitException if the command is unknown or required arguments are missing
      */
     public static Command parse(String fullCommand) throws RagebaitException {
-        CommandType command;
-
-        String[] parts = fullCommand.split(" ", 2);
-
-        try {
-            command = CommandType.convertToCommandType(parts[0].toLowerCase());
-        } catch (RagebaitException e) {
-            throw e;
+        if (fullCommand == null || fullCommand.trim().isEmpty()) {
+            throw new RagebaitException("Command cannot be empty!");
         }
 
-        String args = parts.length > CUTOFF ? parts[1].trim() : BLANK;
-        assert command != null : "Command cannot be null";
-        switch (command) {
+        String[] parts = fullCommand.trim().split(" ", COMMAND_PARTS_LIMIT);
+        CommandType commandType = CommandType.convertToCommandType(parts[0].toLowerCase());
+
+        String args = parts.length > 1 ? parts[1].trim() : EMPTY;
+
+        switch (commandType) {
         case list:
             return new ListCommand();
+
         case bye:
             return new ExitCommand();
+
         case mark:
-            if (args.isEmpty()) {
-                throw new RagebaitException("Specify an existing task number! Check using command list!");
-            }
-            return new MarkCommand(Integer.parseInt(args) - OFFSET);
+            requireArgs(args, "Specify an existing task number! Check using command list!");
+            return new MarkCommand(parseIndex(args));
+
         case unmark:
-            if (args.isEmpty()) {
-                throw new RagebaitException("Specify an existing task number! Check using command list!");
-            }
-            return new UnmarkCommand(Integer.parseInt(args) - OFFSET);
+            requireArgs(args, "Specify an existing task number! Check using command list!");
+            return new UnmarkCommand(parseIndex(args));
+
         case delete:
-            if (args.isEmpty()) {
-                throw new RagebaitException("Specify an existing task number! Check using command list!");
-            }
-            return new DeleteCommand(Integer.parseInt(args) - OFFSET);
+            requireArgs(args, "Specify an existing task number! Check using command list!");
+            return new DeleteCommand(parseIndex(args));
+
         case todo:
-            if (args.isEmpty()) {
-                throw new RagebaitException("No description provided!");
-            }
+            requireArgs(args, "The description of a todo cannot be empty.");
             return new AddCommand(TaskType.TODO, args);
+
         case deadline:
-            if (args.isEmpty()) {
-                throw new RagebaitException("No description and by date provided!!");
-            }
+            requireArgs(args, "The description and by date of a deadline cannot be empty.");
             return new AddCommand(TaskType.DEADLINE, args);
+
         case event:
-            if (args.isEmpty()) {
-                throw new RagebaitException("No description, by and from date provided!!");
-            }
+            requireArgs(args, "The description, from date, and to date of an event cannot be empty.");
             return new AddCommand(TaskType.EVENT, args);
+
         case find:
-            if (args.isEmpty()) {
-                throw new RagebaitException("Please provide a keyword to search!");
-            }
+            requireArgs(args, "Please provide a keyword to search!");
             return new FindCommand(args);
+
         default:
             throw new RagebaitException("Unknown command!");
+        }
+    }
+
+    /**
+     * Ensures that arguments are present.
+     *
+     * @param args the arguments string
+     * @param errorMessage message to throw if arguments are missing
+     * @throws RagebaitException if args are empty
+     */
+    private static void requireArgs(String args, String errorMessage) throws RagebaitException {
+        if (args == null || args.trim().isEmpty()) {
+            throw new RagebaitException(errorMessage);
+        }
+    }
+
+    /**
+     * Parses a user-provided task index into zero-based format.
+     *
+     * @param args the user input index
+     * @return zero-based index
+     * @throws RagebaitException if index is not a valid number
+     */
+    private static int parseIndex(String args) throws RagebaitException {
+        try {
+            return Integer.parseInt(args) - USER_INDEX_OFFSET;
+        } catch (NumberFormatException e) {
+            throw new RagebaitException("Task number must be a valid integer!");
         }
     }
 }

@@ -96,13 +96,4 @@ public class AddCommandTest {
 
         assertThrows(RagebaitException.class, () -> cmd.execute(tasks, ui, storage));
     }
-
-    @Test
-    public void testEmptyTodoDescription() {
-        AddCommand cmd = new AddCommand(
-                TaskType.TODO,
-                "");
-
-        assertThrows(RagebaitException.class, () -> cmd.execute(tasks, ui, storage));
-    }
 }
