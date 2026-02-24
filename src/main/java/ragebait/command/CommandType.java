@@ -5,31 +5,32 @@ import ragebait.exception.RagebaitException;
 /**
  * Represents the different types of commands supported
  * by the Ragebait application.
+ * Each command type corresponds to a specific action the user can perform.
  */
 public enum CommandType {
 
-    /** Lists all tasks. */
+    /** Lists all tasks in the task list. */
     list,
 
     /** Exits the application. */
     bye,
 
-    /** Deletes a task. */
+    /** Deletes a task by its index. */
     delete,
 
-    /** Marks a task as completed. */
+    /** Marks a task as completed by its index. */
     mark,
 
-    /** Unmarks a completed task. */
+    /** Unmarks a previously completed task by its index. */
     unmark,
 
-    /** Creates a todo task. */
+    /** Creates a new To-Do task. */
     todo,
 
-    /** Creates a deadline task. */
+    /** Creates a new Deadline task. */
     deadline,
 
-    /** Creates an event task. */
+    /** Creates a new Event task. */
     event,
 
     /** Finds tasks containing a keyword. */
@@ -39,8 +40,8 @@ public enum CommandType {
      * Converts a string input into the corresponding CommandType.
      *
      * @param input The command word entered by the user.
-     * @return The matching CommandType.
-     * @throws RagebaitException If the input does not match any command type.
+     * @return The matching CommandType enum.
+     * @throws RagebaitException If the input does not match any supported command type.
      */
     public static CommandType convertToCommandType(String input) throws RagebaitException {
         try {
