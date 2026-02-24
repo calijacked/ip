@@ -3,53 +3,46 @@ package ragebait.task;
 import ragebait.exception.RagebaitException;
 
 /**
- * Represents the type of task in the Ragebait application.
- * Each task type has a symbol used for display and file storage.
+ * Represents the type of a task in the Ragebait application.
+ * Each TaskType has a symbol used for display and storage.
  */
 public enum TaskType {
-    /**
-     * To-do task type
-     */
+    /** To-do task type */
     TODO("T"),
 
-    /**
-     * Deadline task type
-     */
+    /** Deadline task type */
     DEADLINE("D"),
 
-    /**
-     * Event task type
-     */
+    /** Event task type */
     EVENT("E");
 
-    /**
-     * Symbol representing the task type
-     */
+    /** Symbol representing the task type in file storage or display */
     private final String symbol;
 
     /**
-     * Constructs a TaskType with the given symbol.
+     * Constructs a TaskType with the specified symbol.
      *
-     * @param symbol Symbol for the task type.
+     * @param symbol Symbol representing this task type.
      */
     TaskType(String symbol) {
         this.symbol = symbol;
     }
 
     /**
-     * Returns the symbol representing the task type.
+     * Returns the symbol associated with this task type.
      *
-     * @return Symbol representing the task type.
+     * @return Task type symbol.
      */
     public String getSymbol() {
         return symbol;
     }
 
     /**
-     * Converts a string symbol into the corresponding TaskType.
+     * Converts a string symbol to its corresponding TaskType.
+     * Used primarily for loading tasks from storage.
      *
-     * @param symbol Symbol string to convert.
-     * @return Matching TaskType.
+     * @param symbol Symbol string to convert (e.g., "T", "D", "E").
+     * @return Corresponding TaskType.
      * @throws RagebaitException If the symbol does not match any TaskType.
      */
     public static TaskType convertToTaskType(String symbol) throws RagebaitException {
