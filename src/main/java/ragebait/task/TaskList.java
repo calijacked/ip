@@ -17,6 +17,7 @@ public class TaskList {
     /**
      * Constructs an empty TaskList.
      */
+
     public TaskList() {
         this.tasks = new ArrayList<>();
     }
@@ -28,7 +29,7 @@ public class TaskList {
      * @param tasks Pre-existing list of tasks.
      */
     public TaskList(List<Task> tasks) {
-        this.tasks = tasks;
+        this.tasks = new ArrayList<>(tasks);
     }
 
     /**
