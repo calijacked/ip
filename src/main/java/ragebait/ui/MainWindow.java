@@ -39,7 +39,7 @@ public class MainWindow extends AnchorPane {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
-    /** Injects the Duke instance */
+    /** Injects the Ragebait instance */
     public void setRagebait(Ragebait ragebait) {
         this.ragebait = ragebait;
         String welcomeMessage = ragebait.getWelcomeMessage();
