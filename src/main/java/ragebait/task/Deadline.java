@@ -7,17 +7,16 @@ import java.time.format.DateTimeFormatter;
  * Represents a task with a specific deadline.
  * A Deadline task has a description and a due date/time.
  */
-@SuppressWarnings("checkstyle:Regexp")
 public class Deadline extends Task {
 
-    /** The due date and time of this deadline task */
-    protected LocalDateTime by;
+    /** The due date and time of this deadline task. */
+    protected final LocalDateTime by;
 
     /**
-     * Constructs a Deadline task with a description and a due date/time.
+     * Constructs a new Deadline task with a description and due date/time.
      *
-     * @param description Description of the task.
-     * @param by Due date and time of the task.
+     * @param description Description of the task. Must not be null or empty.
+     * @param by Due date and time of the task. Must not be null.
      */
     public Deadline(String description, LocalDateTime by) {
         super(description, TaskType.DEADLINE);
@@ -26,11 +25,11 @@ public class Deadline extends Task {
     }
 
     /**
-     * Constructs a Deadline task from a string representation of the date (used for loading from file).
+     * Constructs a Deadline task for loading from storage, including completion status.
      *
      * @param description Description of the task.
      * @param byDateTime Due date/time of the task.
-     * @param isDone True if the task is already completed.
+     * @param isDone True if the task is already completed; false otherwise.
      */
     public Deadline(String description, LocalDateTime byDateTime, boolean isDone) {
         this(description, byDateTime);
@@ -40,18 +39,21 @@ public class Deadline extends Task {
     }
 
     /**
-     * Converts the deadline task into file storage format.
+     * Returns a string representation of this task in file storage format.
+     * Format: TYPE | completion_status | description | due_date
      *
-     * @return Formatted string for file saving.
+     * @return Formatted string suitable for saving to file.
      */
+    @Override
     public String toFileFormat() {
-        DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-        return type.getSymbol() + VERTICAL_BAR_SEPERATOR + super.toFileFormat() + VERTICAL_BAR_SEPERATOR
-                + by.format(displayFormatter);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+        return type.getSymbol() + VERTICAL_BAR_SEPERATOR + super.toFileFormat()
+                + VERTICAL_BAR_SEPERATOR + by.format(formatter);
     }
 
     /**
-     * Returns a string representation of the Deadline task, including its status and due date.
+     * Returns a human-readable string representation of this Deadline task.
+     * Example: [D][✓] Submit report (by: 01 Jan 2026 12:00)
      *
      * @return String representation of the task.
      */
@@ -59,5 +61,14 @@ public class Deadline extends Task {
     public String toString() {
         DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
         return String.format("[%s]%s (by: %s)", type.getSymbol(), super.toString(), by.format(displayFormatter));
+    }
+
+    /**
+     * Returns the due date and time of this Deadline task.
+     *
+     * @return The LocalDateTime representing the deadline.
+     */
+    public LocalDateTime getBy() {
+        return by;
     }
 }
