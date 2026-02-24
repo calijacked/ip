@@ -112,12 +112,16 @@ public class AddCommand extends Command {
             } catch (DateTimeParseException e) {
                 throw new RagebaitException("Invalid to datetime format! Use d/M/yyyy HHmm");
             }
+            if (to.isBefore(from)) {
+                throw new RagebaitException("Your to date should be after from date!");
+            }
             task = new Event(eDescription, from, to);
             break;
 
         default:
             throw new RagebaitException("Unknown Type!");
         }
+        assert task != null : "Task added is null!";
         tasks.add(task);
         storage.save(tasks);
         return ui.getTaskAdded(task, tasks.size());
