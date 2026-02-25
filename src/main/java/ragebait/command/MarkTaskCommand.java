@@ -8,19 +8,21 @@ import ragebait.ui.UI;
 
 /**
  * Command to mark a task as completed in the TaskList.
- * The task is selected using its index.
- * Assumes the index is 0-based and valid integer input.
+ *
+ * The task is selected using its 0-based index.
+ * If the index is invalid or the task is already marked,
+ * a rage-level RagebaitException is thrown to lecture the user.
  */
 public class MarkTaskCommand extends TaskCommand {
 
-    /** Minimum valid task index. */
+    /** Minimum valid task index (0-based). */
     private static final int START_INDEX = 0;
 
     /** Index of the task to be marked (0-based). */
     private final int index;
 
     /**
-     * Constructs a MarkCommand for the task at the specified index.
+     * Constructs a MarkTaskCommand for the task at the specified index.
      *
      * @param index The 0-based index of the task to mark.
      */
@@ -29,12 +31,13 @@ public class MarkTaskCommand extends TaskCommand {
     }
 
     /**
-     * Executes the mark command by marking the selected task as completed.
+     * Executes the mark task command.
      *
-     * @param tasks The TaskList containing tasks.
-     * @param ui The UI used to display feedback messages.
-     * @param storage The Storage responsible for persisting data.
-     * @return A message from the UI confirming the task has been marked.
+     * Marks the specified task as completed and updates storage.
+     *
+     * @param ui The UI used to generate feedback messages.
+     * @param context The execution context containing tasks and storage.
+     * @return A message confirming the task has been marked as done.
      * @throws RagebaitException If the task index is out of range
      *                           or the task is already marked.
      */
@@ -43,15 +46,18 @@ public class MarkTaskCommand extends TaskCommand {
         TaskList tasks = context.tasks;
         Storage taskStorage = context.taskStorage;
 
-        // Validate index before accessing the list
         if (index < START_INDEX || index >= tasks.size()) {
-            throw new RagebaitException("Specified task number does not exist!");
+            throw new RagebaitException(
+                    "Specified task number does not exist! READ THE LIST NEXT TIME."
+            );
         }
 
         Task selectedTask = tasks.get(index);
 
         if (selectedTask.isMarked()) {
-            throw new RagebaitException("Task is already marked!");
+            throw new RagebaitException(
+                    "Task is already marked! Are you even paying attention?"
+            );
         }
 
         selectedTask.markDone();

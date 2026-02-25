@@ -5,18 +5,21 @@ import ragebait.task.TaskList;
 import ragebait.ui.UI;
 
 /**
- * Represents a command that searches for tasks containing
- * a specified keyword in their description.
+ * Command to search for tasks whose descriptions contain a given keyword.
  *
- * The search is case-insensitive and returns all matching tasks.
+ * Performs a case-insensitive search across all tasks and
+ * collects matching tasks into a temporary list.
+ *
+ * If no tasks match, the UI will return a rage-infused
+ * "no tasks found" message to remind the user that reading matters.
  */
 public class FindTaskCommand extends TaskCommand {
 
-    /** The keyword used to filter task descriptions */
+    /** Keyword used to search task descriptions. */
     private final String keyword;
 
     /**
-     * Constructs a FindCommand with the given keyword.
+     * Constructs a FindTaskCommand with the specified keyword.
      *
      * @param keyword The keyword to search for in task descriptions.
      */
@@ -25,16 +28,11 @@ public class FindTaskCommand extends TaskCommand {
     }
 
     /**
-     * Executes the find command by filtering tasks that contain
-     * the specified keyword.
+     * Executes the find task command.
      *
-     * Returns a formatted message from the UI depending on whether
-     * matching tasks were found.
-     *
-     * @param tasks   The TaskList containing all tasks.
-     * @param ui      The UI used to display the search results.
-     * @param storage The Storage (not used in this command).
-     * @return A string message representing search results or no matches.
+     * @param ui The UI used to generate feedback messages.
+     * @param context The execution context containing tasks.
+     * @return A message listing matching tasks or no tasks found message if there are no matches.
      */
     @Override
     public String execute(UI ui, Context context) {

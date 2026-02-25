@@ -1,27 +1,31 @@
 package ragebait.task;
 
 /**
- * Represents a To-Do task in the Ragebait application.
- * A To-Do task only has a description and a completion status,
- * and does not require any date or time.
+ * Represents a ToDo task.
+ *
+ * A ToDo task:
+ * - Has a description
+ * - Has a completion status
+ * - Does not include any date or time information
  */
 public class ToDo extends Task {
 
     /**
-     * Constructs a new To-Do task with the given description.
-     * The task is initially not completed.
+     * Creates a ToDo task with the specified description.
+     * The task is initially marked as not completed.
      *
-     * @param description Description of the To-Do task.
+     * @param description Description of the task.
      */
     public ToDo(String description) {
         super(description, TaskType.TODO);
     }
 
     /**
-     * Constructs a To-Do task with a given description and completion status.
+     * Creates a ToDo task with the specified description
+     * and completion status.
      *
-     * @param description Description of the To-Do task.
-     * @param isDone True if the task is already completed, false otherwise.
+     * @param description Description of the task.
+     * @param isDone Indicates whether the task is completed.
      */
     public ToDo(String description, boolean isDone) {
         super(description, TaskType.TODO);
@@ -31,9 +35,12 @@ public class ToDo extends Task {
     }
 
     /**
-     * Converts the To-Do task into a string suitable for file storage.
+     * Returns a string representation suitable for file storage.
      *
-     * @return Formatted string representing the To-Do task for storage.
+     * Format:
+     * TYPE | completion_status | description
+     *
+     * @return Formatted storage string.
      */
     @Override
     public String toFileFormat() {
@@ -41,10 +48,14 @@ public class ToDo extends Task {
     }
 
     /**
-     * Returns a string representation of the To-Do task for display purposes.
-     * Includes the task type symbol and completion status.
+     * Returns a human-readable string representation of the task.
      *
-     * @return Display string of the To-Do task.
+     * The output includes:
+     * - Task type symbol
+     * - Completion status
+     * - Description
+     *
+     * @return Formatted display string.
      */
     @Override
     public String toString() {

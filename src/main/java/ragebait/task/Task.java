@@ -1,39 +1,50 @@
 package ragebait.task;
 
 /**
- * Represents a generic task in the Ragebait application.
- * Each task has a description, a type, and a completion status.
- * This class is abstract and should be extended by specific task types like ToDo, Deadline, and Event.
+ * Abstract base class representing a task in the application.
+ *
+ * A Task contains:
+ * - A description
+ * - A task type
+ * - A completion status
+ *
+ * This class is intended to be extended by concrete task types
+ * such as ToDo, Deadline, and Event.
  */
 public abstract class Task {
 
-    /** Separator used for file storage format */
+    /** Separator used when formatting tasks for file storage. */
     public static final String VERTICAL_BAR_SEPERATOR = " | ";
 
-    /** Marker for completed tasks in file storage */
+    /** Value representing a completed task in file storage. */
     public static final String MARKED = "1";
 
-    /** Marker for uncompleted tasks in file storage */
+    /** Value representing an incomplete task in file storage. */
     public static final String UNMARKED = "0";
 
-    /** Indicates whether the task is completed */
+    /** Indicates whether the task has been completed. */
     protected boolean isDone;
 
-    /** Description of the task */
+    /** Description of the task. */
     protected final String description;
 
-    /** Type of the task (TODO, DEADLINE, EVENT) */
+    /** Type of the task. */
     protected final TaskType type;
 
     /**
-     * Constructs a new Task with a description and type.
-     * The task is initially not completed.
+     * Constructs a Task with the specified description and type.
+     * The task is initially marked as not completed.
      *
-     * @param description Description of the task. Must not be null or empty.
-     * @param type        Type of the task.
+     * Preconditions:
+     * - description must not be null
+     * - description must not be empty after trimming
+     *
+     * @param description The description of the task.
+     * @param type The type of the task.
      */
     public Task(String description, TaskType type) {
-        assert description != null && !description.trim().isEmpty() : "Task description cannot be null or empty";
+        assert description != null && !description.trim().isEmpty()
+                : "Description must not be null or empty.";
         this.description = description.trim();
         this.type = type;
         this.isDone = false;
@@ -54,9 +65,9 @@ public abstract class Task {
     }
 
     /**
-     * Returns a string representing the status icon for display.
+     * Returns the status indicator used for display.
      *
-     * @return "X" if completed, otherwise a blank space.
+     * @return "X" if the task is completed, otherwise a blank space.
      */
     protected String getStatusIcon() {
         return isDone ? "X" : " ";
@@ -64,19 +75,22 @@ public abstract class Task {
 
     /**
      * Converts the task into a string suitable for file storage.
-     * Format: completion_status | description
      *
-     * @return Formatted string representing the task for storage.
+     * Format:
+     * completion_status | description
+     *
+     * @return A formatted string representing the task.
      */
     public String toFileFormat() {
         return (isDone ? MARKED : UNMARKED) + VERTICAL_BAR_SEPERATOR + this.description;
     }
 
     /**
-     * Returns a human-readable string representation of the task for display.
-     * Includes status and description.
+     * Returns a human-readable string representation of the task.
      *
-     * @return String representation of the task.
+     * The output includes the completion status indicator and description.
+     *
+     * @return A formatted string for display.
      */
     @Override
     public String toString() {
@@ -84,27 +98,27 @@ public abstract class Task {
     }
 
     /**
-     * Checks whether the task is marked as completed.
+     * Returns whether the task is marked as completed.
      *
-     * @return True if the task is completed, false otherwise.
+     * @return true if completed, false otherwise.
      */
     public boolean isMarked() {
         return isDone;
     }
 
     /**
-     * Returns the task's description.
+     * Returns the task description.
      *
-     * @return Description of the task.
+     * @return The description string.
      */
     public String getDescription() {
         return description;
     }
 
     /**
-     * Returns the type of the task.
+     * Returns the task type.
      *
-     * @return TaskType of the task.
+     * @return The TaskType of this task.
      */
     public TaskType getType() {
         return type;

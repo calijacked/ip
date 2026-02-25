@@ -4,40 +4,51 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Represents a task that occurs over a period of time.
- * An Event has a description, a start date/time, and an end date/time.
+ * Represents a task that occurs within a defined time range.
+ *
+ * An Event consists of:
+ * - A description
+ * - A start date and time
+ * - An end date and time
+ *
+ * The end time must not be before the start time.
  */
 public class Event extends Task {
 
-    /** Start date and time of the event */
+    /** Start date and time of the event. */
     protected final LocalDateTime from;
 
-    /** End date and time of the event */
+    /** End date and time of the event. */
     protected final LocalDateTime to;
 
     /**
-     * Constructs a new Event task with a description, start, and end time.
+     * Constructs an Event with the specified description, start time, and end time.
      *
-     * @param description Description of the event. Must not be null or empty.
-     * @param from Start date/time of the event. Must not be null.
-     * @param to End date/time of the event. Must not be null and not before {@code from}.
+     * Preconditions:
+     * - from must not be null
+     * - to must not be null
+     * - to must not be before from
+     *
+     * @param description Description of the event.
+     * @param from Start date and time.
+     * @param to End date and time.
      */
     public Event(String description, LocalDateTime from, LocalDateTime to) {
         super(description, TaskType.EVENT);
-        assert from != null : "Event start datetime cannot be null";
-        assert to != null : "Event end datetime cannot be null";
-        assert !to.isBefore(from) : "Event end datetime must not be before start datetime";
+        assert from != null : "Start date/time must not be null.";
+        assert to != null : "End date/time must not be null.";
+        assert !to.isBefore(from) : "End date/time must not be before start date/time.";
         this.from = from;
         this.to = to;
     }
 
     /**
-     * Constructs an Event task from file data, with an option to mark it as done.
+     * Constructs an Event from stored data and optionally marks it as completed.
      *
      * @param description Description of the event.
-     * @param from Start date/time of the event.
-     * @param to End date/time of the event.
-     * @param isDone True if the event is already completed.
+     * @param from Start date and time.
+     * @param to End date and time.
+     * @param isDone Indicates whether the event is already completed.
      */
     public Event(String description, LocalDateTime from, LocalDateTime to, boolean isDone) {
         this(description, from, to);
@@ -47,28 +58,32 @@ public class Event extends Task {
     }
 
     /**
-     * Returns the start date/time of the event.
+     * Returns the start date and time of the event.
      *
-     * @return LocalDateTime representing the start of the event.
+     * @return The start date/time.
      */
     public LocalDateTime getFrom() {
         return from;
     }
 
     /**
-     * Returns the end date/time of the event.
+     * Returns the end date and time of the event.
      *
-     * @return LocalDateTime representing the end of the event.
+     * @return The end date/time.
      */
     public LocalDateTime getTo() {
         return to;
     }
 
     /**
-     * Returns a string representation of the Event task suitable for file storage.
-     * Format: TYPE | completion_status | description | from | to
+     * Returns a string representation suitable for file storage.
      *
-     * @return Formatted string for saving to file.
+     * Format:
+     * TYPE | marked | description | from | to
+     *
+     * Date/time format used: dd/MM/yyyy HHmm
+     *
+     * @return Formatted string for persistence.
      */
     @Override
     public String toFileFormat() {
@@ -78,10 +93,11 @@ public class Event extends Task {
     }
 
     /**
-     * Returns a human-readable string representation of the Event task,
-     * including its completion status and the time range.
+     * Returns a human-readable string representation of the Event.
      *
-     * @return String representation of the task.
+     * Display format: dd MMM yyyy HH:mm
+     *
+     * @return Formatted display string.
      */
     @Override
     public String toString() {

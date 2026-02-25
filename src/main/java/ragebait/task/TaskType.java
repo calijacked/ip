@@ -3,26 +3,29 @@ package ragebait.task;
 import ragebait.exception.RagebaitException;
 
 /**
- * Represents the type of a task in the Ragebait application.
- * Each TaskType has a symbol used for display and storage.
+ * Enumerates the supported task types.
+ *
+ * Each TaskType is associated with a short symbol
+ * used for display and file storage.
  */
 public enum TaskType {
-    /** To-do task type */
+
+    /** Represents a to-do task. */
     TODO("T"),
 
-    /** Deadline task type */
+    /** Represents a deadline task. */
     DEADLINE("D"),
 
-    /** Event task type */
+    /** Represents an event task. */
     EVENT("E");
 
-    /** Symbol representing the task type in file storage or display */
+    /** Symbol used to represent the task type. */
     private final String symbol;
 
     /**
      * Constructs a TaskType with the specified symbol.
      *
-     * @param symbol Symbol representing this task type.
+     * @param symbol Symbol associated with this task type.
      */
     TaskType(String symbol) {
         this.symbol = symbol;
@@ -31,19 +34,20 @@ public enum TaskType {
     /**
      * Returns the symbol associated with this task type.
      *
-     * @return Task type symbol.
+     * @return The task type symbol.
      */
     public String getSymbol() {
         return symbol;
     }
 
     /**
-     * Converts a string symbol to its corresponding TaskType.
-     * Used primarily for loading tasks from storage.
+     * Converts a symbol string into the corresponding TaskType.
      *
-     * @param symbol Symbol string to convert (e.g., "T", "D", "E").
-     * @return Corresponding TaskType.
-     * @throws RagebaitException If the symbol does not match any TaskType.
+     * The input is trimmed and converted to uppercase before comparison.
+     *
+     * @param symbol Symbol to convert (for example, "T", "D", or "E").
+     * @return Matching TaskType.
+     * @throws RagebaitException If the symbol does not match any defined TaskType.
      */
     public static TaskType convertToTaskType(String symbol) throws RagebaitException {
         String normalised = symbol.trim().toUpperCase();
@@ -52,6 +56,9 @@ public enum TaskType {
                 return type;
             }
         }
-        throw new RagebaitException("Corrupted storage file: invalid task type -> " + normalised);
+        throw new RagebaitException(
+                "Invalid task type symbol detected in storage: " + normalised
+                        + ". Did you even read the format?"
+        );
     }
 }

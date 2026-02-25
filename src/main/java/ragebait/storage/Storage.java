@@ -19,22 +19,28 @@ import ragebait.task.ToDo;
 
 /**
  * Handles persistent storage of tasks for the Ragebait application.
+ *
  * Responsible for reading tasks from a file on startup and saving tasks
- * whenever the TaskList changes.
+ * whenever the TaskList changes. Throws rage-level exceptions when
+ * the storage file is corrupted or unwritable.
  */
 public class Storage {
 
+    /** Minimum and maximum fields expected per task line in storage. */
     private static final int MIN_TASK_PARTS = 3;
     private static final int MAX_TASK_PARTS = 5;
-    private static final String SEPARATOR = " \\| ";
-    private static final String MARKED_DONE = "1";
-    private static final String VERTICAL_BAR_SEPERATOR = " | ";
 
-    /** Path to the file used for storing tasks */
+    /** Separator regex used to split fields in storage file. */
+    private static final String SEPARATOR = " \\| ";
+
+    /** Value indicating a task is marked as done in storage. */
+    private static final String MARKED_DONE = "1";
+
+    /** Path to the storage file. */
     private final String filePath;
 
     /**
-     * Constructs a Storage object with the given file path.
+     * Constructs a Storage object pointing to the given file path.
      *
      * @param filePath Path to the file used for persisting tasks.
      */
@@ -44,8 +50,9 @@ public class Storage {
 
     /**
      * Loads tasks from the storage file.
-     * If the file or parent directories do not exist, they are created.
-     * Each line is parsed into a Task object. Corrupted lines throw an exception.
+     *
+     * Creates parent directories if they do not exist.
+     * Returns an empty TaskList if the file does not exist.
      *
      * @return TaskList containing all successfully loaded tasks.
      * @throws RagebaitException If a line is corrupted or cannot be parsed.
@@ -54,30 +61,27 @@ public class Storage {
         TaskList tasks = new TaskList();
         File file = new File(filePath);
 
-        // Ensure parent directories exist
         File parent = file.getParentFile();
         if (parent != null) {
             parent.mkdirs();
         }
 
-        // If file doesn't exist yet, return empty task list
         if (!file.exists()) {
-            return tasks;
+            return tasks; // Calmly return empty task list
         }
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
                 try {
-                    // Storage does its own parsing separate form user typing.
                     Task task = parseTask(line);
                     tasks.add(task);
                 } catch (RagebaitException e) {
-                    throw new RagebaitException("Aborting load. Corrupted line: " + line, e);
+                    throw new RagebaitException("Aborting load. Corrupted task line: " + line, e);
                 }
             }
         } catch (IOException e) {
-            throw new RagebaitException("Error reading storage file: " + filePath, e);
+            throw new RagebaitException("Failed to read storage file: " + filePath, e);
         }
 
         return tasks;
@@ -85,7 +89,6 @@ public class Storage {
 
     /**
      * Saves all tasks in the TaskList to the storage file.
-     * Overwrites any previous content in the file.
      *
      * @param tasks TaskList containing tasks to save.
      * @throws RagebaitException If writing to the file fails.
@@ -97,23 +100,24 @@ public class Storage {
                 bw.newLine();
             }
         } catch (IOException e) {
-            throw new RagebaitException("Error saving tasks to file: " + filePath, e);
+            throw new RagebaitException("Failed to save tasks to file: " + filePath + ". Seriously, fix your disk!", e);
         }
     }
 
     /**
      * Parses a single line from the storage file into a Task object.
+     *
      * Supports ToDo, Deadline, and Event tasks.
      *
      * @param line The line representing a task in storage format.
-     * @return The Task object represented by the line.
+     * @return Task object represented by the line.
      * @throws RagebaitException If the line format is invalid or task type is unknown.
      */
     public Task parseTask(String line) throws RagebaitException {
         String[] parts = line.split(SEPARATOR);
 
         if (parts.length < MIN_TASK_PARTS || parts.length > MAX_TASK_PARTS) {
-            throw new RagebaitException("Corrupted task line: incorrect number of fields.");
+            throw new RagebaitException("Corrupted task line: invalid number of fields. Are you trying to break me?");
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
@@ -132,7 +136,7 @@ public class Storage {
             LocalDateTime toDateTime = LocalDateTime.parse(parts[4], formatter);
             return new Event(description, fromDateTime, toDateTime, isDone);
         default:
-            throw new RagebaitException("Unknown task type found in storage file.");
+            throw new RagebaitException("Unknown task type found in storage file. What did you put in here?");
         }
     }
 }

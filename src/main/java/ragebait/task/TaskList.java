@@ -5,102 +5,116 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Represents a collection of tasks in the Ragebait application.
- * Provides methods to add, remove, retrieve, and list tasks.
- * Encapsulates an internal list of Task objects.
+ * Manages a collection of Task objects.
+ *
+ * Provides operations to:
+ * - Add tasks
+ * - Remove tasks
+ * - Retrieve tasks
+ * - List tasks
+ *
+ * The internal list is encapsulated to prevent direct external modification.
  */
 public class TaskList {
 
-    /** Internal list storing all tasks */
+    /** Internal list storing all tasks. */
     private final List<Task> tasks;
 
     /**
-     * Constructs an empty TaskList.
+     * Creates an empty TaskList.
      */
-
     public TaskList() {
         this.tasks = new ArrayList<>();
     }
 
     /**
-     * Constructs a TaskList with a pre-existing list of tasks.
-     * Uses the provided list directly; any external modifications will affect this TaskList.
+     * Creates a TaskList initialized with the given tasks.
      *
-     * @param tasks Pre-existing list of tasks.
+     * A defensive copy of the provided list is created to prevent
+     * external modifications from affecting this TaskList.
+     *
+     * @param tasks List of tasks used to initialize this TaskList.
      */
     public TaskList(List<Task> tasks) {
         this.tasks = new ArrayList<>(tasks);
     }
 
     /**
-     * Adds a task to the task list.
+     * Adds a task to the list.
      *
      * @param task Task to be added. Must not be null.
      * @throws IllegalArgumentException if task is null.
      */
     public void add(Task task) {
         if (task == null) {
-            throw new IllegalArgumentException("Cannot add a null task.");
+            throw new IllegalArgumentException("Task must not be null.");
         }
         tasks.add(task);
     }
 
     /**
-     * Removes a task at the specified index (0-based indexing).
+     * Removes and returns the task at the specified index.
+     *
+     * Indexing is zero-based.
      *
      * @param index Index of the task to remove.
-     * @return The removed Task object.
-     * @throws IndexOutOfBoundsException if index is invalid.
+     * @return The removed Task.
+     * @throws IndexOutOfBoundsException if the index is invalid.
      */
     public Task remove(int index) {
         return tasks.remove(index);
     }
 
     /**
-     * Retrieves the task at the specified index (0-based indexing).
+     * Returns the task at the specified index.
+     *
+     * Indexing is zero-based.
      *
      * @param index Index of the task to retrieve.
-     * @return Task at the specified index.
-     * @throws IndexOutOfBoundsException if index is invalid.
+     * @return The Task at the specified index.
+     * @throws IndexOutOfBoundsException if the index is invalid.
      */
     public Task get(int index) {
         return tasks.get(index);
     }
 
     /**
-     * Returns the number of tasks currently stored in the list.
+     * Returns the number of tasks in the list.
      *
-     * @return Number of tasks.
+     * @return Total number of tasks.
      */
     public int size() {
         return tasks.size();
     }
 
     /**
-     * Returns an unmodifiable view of the internal task list.
-     * This prevents external modification of the internal list structure.
+     * Returns an unmodifiable view of the task list.
      *
-     * @return Unmodifiable List of Task objects.
+     * This prevents modification of the internal list structure.
+     *
+     * @return Unmodifiable list of tasks.
      */
     public List<Task> getAllTasks() {
         return Collections.unmodifiableList(tasks);
     }
 
     /**
-     * Returns a formatted string representation of all tasks in the list.
-     * Each task is numbered starting from 1.
+     * Returns a formatted string representation of all tasks.
      *
-     * @return Formatted task list string, or a message if the list is empty.
+     * Tasks are numbered starting from 1.
+     * If the list is empty, a message is returned.
+     *
+     * @return Formatted string of tasks or an empty-list message.
      */
     public String listTasks() {
         if (tasks.isEmpty()) {
-            return "No tasks in the list!";
+            return "Task list is empty.";
         }
 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tasks.size(); i++) {
             sb.append(i + 1)
-                    .append(".")
+                    .append(". ")
                     .append(tasks.get(i).toString());
 
             if (i < tasks.size() - 1) {
@@ -111,9 +125,9 @@ public class TaskList {
     }
 
     /**
-     * Checks whether the task list is empty.
+     * Returns whether the task list contains no tasks.
      *
-     * @return True if the task list contains no tasks, otherwise false.
+     * @return true if empty, false otherwise.
      */
     public boolean isEmpty() {
         return tasks.isEmpty();

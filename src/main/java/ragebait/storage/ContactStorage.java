@@ -11,35 +11,50 @@ import ragebait.contacts.Contact;
 import ragebait.contacts.ContactList;
 import ragebait.exception.RagebaitException;
 
+/**
+ * Handles persistent storage of contacts for the Ragebait application.
+ *
+ * Supports loading contacts from a file and saving them back.
+ * Ensures directories exist and throws rage-level exceptions when
+ * the file is missing, corrupted, or unwritable.
+ */
 public class ContactStorage {
 
+    /** Regex separator used for file storage. */
     private static final String SEPARATOR = " \\| ";
+
+    /** Path to the storage file. */
     private final String filePath;
 
+    /**
+     * Constructs a ContactStorage for the given file path.
+     *
+     * @param filePath Path to the file where contacts will be loaded/saved.
+     */
     public ContactStorage(String filePath) {
         this.filePath = filePath;
     }
 
     /**
-     * Loads contacts from storage file.
-     * Creates parent directories if they don't exist.
+     * Loads contacts from the storage file.
+     *
+     * Creates parent directories if they do not exist.
+     * Returns an empty ContactList if the file does not exist yet.
      *
      * @return ContactList containing all successfully loaded contacts.
-     * @throws RagebaitException If reading file fails or line is malformed.
+     * @throws RagebaitException If reading the file fails or a line is corrupted.
      */
     public ContactList load() throws RagebaitException {
         ContactList contacts = new ContactList();
         File file = new File(filePath);
 
-        // Ensure parent directories exist
         File parent = file.getParentFile();
         if (parent != null) {
             parent.mkdirs();
         }
 
-        // If file doesn't exist yet, return empty list
         if (!file.exists()) {
-            return contacts;
+            return contacts; // Empty list, calm down
         }
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -62,7 +77,7 @@ public class ContactStorage {
     /**
      * Saves all contacts to the storage file.
      *
-     * @param contacts ContactList containing all contacts to save.
+     * @param contacts ContactList containing all contacts to persist.
      * @throws RagebaitException If writing to the file fails.
      */
     public void save(ContactList contacts) throws RagebaitException {
@@ -72,23 +87,24 @@ public class ContactStorage {
                 bw.newLine();
             }
         } catch (IOException e) {
-            throw new RagebaitException("Error saving contacts to file: " + filePath, e);
+            throw new RagebaitException("Error saving contacts to file: " + filePath
+                    + ". Fix your disk or permissions!", e);
         }
     }
 
     /**
-     * Parses a single line from the storage file into a Contact object.
+     * Parses a single line from storage into a Contact object.
      *
      * Expected format: name | phone | email
      *
-     * @param line The line representing a contact in storage format.
-     * @return Contact object
-     * @throws RagebaitException If line format is invalid.
+     * @param line Line from the storage file.
+     * @return Contact object created from the line.
+     * @throws RagebaitException If the line format is invalid or corrupted.
      */
     private Contact parseContactLine(String line) throws RagebaitException {
         String[] parts = line.split(SEPARATOR);
         if (parts.length != 3) {
-            throw new RagebaitException("Corrupted contact line: " + line);
+            throw new RagebaitException("Corrupted contact line detected: " + line + " WHAT DID YOU DO?!");
         }
         String name = parts[0].trim();
         String phone = parts[1].trim();

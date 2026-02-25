@@ -53,7 +53,7 @@ public class Deadline extends Task {
 
     /**
      * Returns a human-readable string representation of this Deadline task.
-     * Example: [D][✓] Submit report (by: 01 Jan 2026 12:00)
+     * Example: [D][X] Submit report (by: 01 Jan 2026 12:00)
      *
      * @return String representation of the task.
      */

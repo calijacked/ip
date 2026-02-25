@@ -8,7 +8,11 @@ import ragebait.ui.UI;
 
 /**
  * Represents a command that deletes a task from the TaskList.
+ *
  * The task is removed based on its 0-based index.
+ * If the index is invalid, a RagebaitException is thrown
+ * with a rage-level message to remind the user that not everything
+ * they imagine exists.
  */
 public class DeleteTaskCommand extends TaskCommand {
 
@@ -19,7 +23,7 @@ public class DeleteTaskCommand extends TaskCommand {
     private final int index;
 
     /**
-     * Constructs a DeleteCommand for the task at the specified index.
+     * Constructs a DeleteTaskCommand for the task at the specified index.
      *
      * @param index The 0-based index of the task to delete.
      */
@@ -37,14 +41,15 @@ public class DeleteTaskCommand extends TaskCommand {
     }
 
     /**
-     * Executes the delete command by removing the task at the given index
-     * from the TaskList and returning a confirmation message.
+     * Executes the delete task command.
      *
-     * @param tasks The TaskList containing all tasks.
-     * @param ui The UI used to display feedback messages.
-     * @param storage The Storage responsible for persisting tasks.
-     * @return Message confirming the task deletion and showing the new task count.
-     * @throws RagebaitException If the index is out of valid range.
+     * Removes the task at the specified index from the TaskList,
+     * updates storage, and returns a UI message confirming deletion.
+     *
+     * @param ui The UI component used to generate feedback messages.
+     * @param context The execution context containing tasks and storage.
+     * @return A message confirming task deletion.
+     * @throws RagebaitException If the index is out of bounds.
      */
     @Override
     public String execute(UI ui, Context context) throws RagebaitException {
@@ -53,7 +58,9 @@ public class DeleteTaskCommand extends TaskCommand {
         int endRange = tasks.size();
 
         if (index < START_RANGE || index >= endRange) {
-            throw new RagebaitException("I CAN'T DELETE! THIS DOES NOT EXIST!");
+            throw new RagebaitException(
+                    "I CAN'T DELETE! THIS DOES NOT EXIST! READ THE LIST NEXT TIME."
+            );
         }
 
         Task selectedTask = tasks.get(index);
