@@ -102,7 +102,6 @@ public class MainWindow extends AnchorPane {
         }
 
         userInput.clear();
-
         String trimmed = input.trim();
         String[] parts = trimmed.split("\\s+");
 
