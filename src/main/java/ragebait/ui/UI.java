@@ -62,7 +62,7 @@ public class UI {
     }
 
     public String showError(String message) {
-        return "Error. Obviously.\n" + message;
+        return "!Error! \n" + message;
     }
 
     public String getContactAdded(Contact contact, int size) {

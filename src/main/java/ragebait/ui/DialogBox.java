@@ -13,28 +13,31 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.text.TextFlow;
 
 /**
  * Represents a dialog box in the Ragebait GUI.
- * Each dialog box contains a speaker's display picture and a text label.
- * Can be flipped so that the image appears on the left (for Ragebait responses)
+ * Each dialog box contains a speaker's display picture and a text label or formatted TextFlow.
+ * The dialog box can be flipped so that the image appears on the left (for bot responses)
  * or on the right (for user input).
  */
 public class DialogBox extends HBox {
 
-    /** Label containing the dialog text */
     @FXML
     private Label dialog;
 
-    /** ImageView representing the speaker's face */
     @FXML
     private ImageView displayPicture;
 
+    // ----------------- CONSTRUCTORS -----------------
+
     /**
-     * Private constructor that loads the FXML layout and initializes the dialog box.
+     * Private constructor for a standard text message dialog box.
+     * Loads the FXML layout and sets the text and display image.
      *
-     * @param text Text content of the dialog
-     * @param img Image representing the speaker
+     * @param text the message to display in the dialog box
+     * @param img the display picture of the speaker
      */
     private DialogBox(String text, Image img) {
         try {
@@ -51,8 +54,81 @@ public class DialogBox extends HBox {
     }
 
     /**
-     * Flips the dialog box horizontally so that the ImageView is on the left
-     * and the text label is on the right. Used for Ragebait messages.
+     * Private constructor for a dialog box with a formatted TextFlow,
+     * such as color-coded error messages.
+     * The TextFlow is styled and arranged with the image.
+     *
+     * @param flow the TextFlow containing formatted text
+     * @param img the display picture of the speaker
+     */
+    private DialogBox(TextFlow flow, Image img) {
+        // AI Assisted. Used ChatGPT to generate this constructor
+        // to highlight error messages to let user see the structue easily.
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
+            fxmlLoader.setController(this);
+            fxmlLoader.setRoot(this);
+            fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // clear the HBox children to control order manually
+        getChildren().clear();
+        flow.getStyleClass().add("text-flow-bubble");
+        flow.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        flow.setMinHeight(Region.USE_PREF_SIZE);
+        flow.setMaxHeight(Region.USE_PREF_SIZE);
+        // Add image first, then TextFlow (image left, text right)
+        getChildren().addAll(flow, displayPicture);
+        // Set image
+        displayPicture.setImage(img);
+    }
+
+    // ----------------- STATIC FACTORY METHODS -----------------
+
+    /**
+     * Creates a dialog box for user messages with the image on the right.
+     *
+     * @param text the message text
+     * @param img the user's display picture
+     * @return a DialogBox instance representing the user's message
+     */
+    public static DialogBox getUserDialog(String text, Image img) {
+        return new DialogBox(text, img);
+    }
+
+    /**
+     * Creates a dialog box for Ragebait bot messages with the image on the left.
+     *
+     * @param text the message text
+     * @param img the bot's display picture
+     * @return a DialogBox instance representing the bot's message
+     */
+    public static DialogBox getRagebaitDialog(String text, Image img) {
+        DialogBox db = new DialogBox(text, img);
+        db.flip();
+        return db;
+    }
+
+    /**
+     * Creates a dialog box for formatted error messages with the image on the left.
+     *
+     * @param flow the formatted TextFlow (e.g., color-coded error)
+     * @param img the bot's display picture
+     * @return a DialogBox instance representing the error message
+     */
+    public static DialogBox getErrorDialog(TextFlow flow, Image img) {
+        DialogBox db = new DialogBox(flow, img);
+        db.flip();
+        return db;
+    }
+
+    // ----------------- HELPER METHODS -----------------
+
+    /**
+     * Flips the dialog box horizontally.
+     * Used for bot messages so that the image appears on the left.
+     * The alignment is set to top left, and the dialog label is styled.
      */
     private void flip() {
         ObservableList<Node> tmp = FXCollections.observableArrayList(getChildren());
@@ -60,31 +136,5 @@ public class DialogBox extends HBox {
         getChildren().setAll(tmp);
         setAlignment(Pos.TOP_LEFT);
         dialog.getStyleClass().add("reply-label");
-    }
-
-    /**
-     * Creates a dialog box representing user input.
-     * Image is displayed on the right, text on the left.
-     *
-     * @param text Text of the user message
-     * @param img Image representing the user
-     * @return Configured DialogBox instance
-     */
-    public static DialogBox getUserDialog(String text, Image img) {
-        return new DialogBox(text, img);
-    }
-
-    /**
-     * Creates a dialog box representing Ragebait's response.
-     * Image is displayed on the left, text on the right.
-     *
-     * @param text Text of the Ragebait message
-     * @param img Image representing Ragebait
-     * @return Configured DialogBox instance
-     */
-    public static DialogBox getRagebaitDialog(String text, Image img) {
-        DialogBox db = new DialogBox(text, img);
-        db.flip();
-        return db;
     }
 }

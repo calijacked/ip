@@ -1,39 +1,64 @@
+/* AI Assisted to make the dialog look clearer. Asked ChatGPT for better font and size */
+/* DEFAULT CHAT BUBBLE */
 .label {
-    background:black;
-    -fx-background-color: background;
-    -fx-border-color: #d55e00 #009e73 #cc79a7 #0072b2;
-    -fx-border-width: 2px;
-    -fx-background-radius: 1em 1em 0 1em;
-    -fx-border-radius: 1em 1em 0 1em;
-    -fx-text-fill: ladder(background, white 49%, black 50%);
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ffe58f;
+    -fx-border-width: 2;
+    -fx-background-radius: 16 16 4 16;
+    -fx-border-radius: 16 16 4 16;
+    -fx-text-fill: #222222;       /* darker text */
+    -fx-font-family: "Segoe UI", "Helvetica", "Arial", sans-serif;
+    -fx-font-size: 16px;           /* bigger text */
+    -fx-font-weight: 600;          /* semi-bold but crisp */
+    -fx-padding: 8 12 8 12;
 }
 
+/* BOT / REPLY BUBBLE (flipped corner) */
 .reply-label {
-    -fx-background-radius: 1em 1em 1em 0;
-    -fx-border-radius: 1em 1em 1em 0;
+    -fx-background-color: #fff4b3;
+    -fx-border-color: #ffd966;
+    -fx-background-radius: 16 16 16 4;
+    -fx-border-radius: 16 16 16 4;
+    -fx-text-fill: #222222;
+    -fx-font-family: "Segoe UI", "Helvetica", "Arial", sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
 }
-/* Paste this below reply-label */
+
+/* ADD MESSAGE */
 .add-label {
-    -fx-background-color: yellow;
+    -fx-background-color: #e6ffcc;
+    -fx-border-color: #b3e6a8;
+    -fx-text-fill: #222222;
+    -fx-font-family: "Segoe UI", "Helvetica", "Arial", sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
 }
 
+/* MARKED MESSAGE */
 .marked-label {
-    -fx-background-color: palegreen;
+    -fx-background-color: #d9fdd3;
+    -fx-border-color: #a8e6a1;
+    -fx-text-fill: #222222;
+    -fx-font-family: "Segoe UI", "Helvetica", "Arial", sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
 }
 
+/* DELETE MESSAGE */
 .delete-label {
-    -fx-background-color: lightpink;
+    -fx-background-color: #ffd6d6;
+    -fx-border-color: #ff9e9e;
+    -fx-text-fill: #222222;
+    -fx-font-family: "Segoe UI", "Helvetica", "Arial", sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
 }
-
-#displayPicture {
-    /* Shadow effect on image. */
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 5, 5);
-
-    /* Change size of image. */
-    -fx-scale-x: 1;
-    -fx-scale-y: 1;
-
-    /* Rotate image clockwise by degrees. */
-    -fx-rotate: 0;
+.text-flow-bubble {
+    -fx-background-color: #fff4b3;
+    -fx-border-color: #ffd966;
+    -fx-border-width: 2;
+    -fx-background-radius: 16 16 16 4;
+    -fx-border-radius: 16 16 16 4;
+    -fx-padding: 6 12 2 12;  /* bottom padding smaller */
 }
-

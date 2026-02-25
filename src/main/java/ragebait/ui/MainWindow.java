@@ -10,20 +10,22 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 import ragebait.Ragebait;
+import ragebait.exception.RagebaitException;
 
 /**
  * Controller class for the main GUI window of Ragebait.
  * Handles user interactions, displays dialog boxes for user and Ragebait messages,
- * and manages the welcome message and application exit behavior.
+ * manages the welcome message, and handles application exit behavior with a fade-out effect.
  */
 public class MainWindow extends AnchorPane {
 
     /** Command string to exit the application */
     private static final String BYE = "bye";
 
-    /** Scroll pane containing dialog messages */
+    /** Scroll pane containing the dialog messages */
     @FXML
     private ScrollPane scrollPane;
 
@@ -39,22 +41,23 @@ public class MainWindow extends AnchorPane {
     @FXML
     private Button sendButton;
 
-    /** Rectangle used for fade-out effect on exit */
+    /** Rectangle used for fade-out effect when exiting the application */
     @FXML
     private Rectangle fadeOverlay;
 
     /** Reference to the Ragebait chatbot logic */
     private Ragebait ragebait;
 
-    /** Image representing the user */
+    /** Image representing the user in the dialog boxes */
     private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/angry.png"));
 
-    /** Image representing Ragebait */
+    /** Image representing Ragebait in the dialog boxes */
     private final Image ragebaitImage = new Image(this.getClass().getResourceAsStream("/images/troll.png"));
 
     /**
      * Initializes the main window after FXML is loaded.
-     * Binds the scroll pane to the height of the dialog container so it scrolls automatically.
+     * Binds the scroll pane's vertical value to the height of the dialog container
+     * so that it automatically scrolls to the latest message.
      */
     @FXML
     public void initialize() {
@@ -62,10 +65,10 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Injects the Ragebait instance into this controller.
+     * Sets the Ragebait chatbot instance for this controller.
      * Also displays the welcome message when the application starts.
      *
-     * @param ragebait The Ragebait chatbot instance
+     * @param ragebait the Ragebait chatbot instance to be used
      */
     public void setRagebait(Ragebait ragebait) {
         this.ragebait = ragebait;
@@ -76,18 +79,27 @@ public class MainWindow extends AnchorPane {
     /**
      * Handles user input when the send button is pressed or Enter is hit.
      * Displays the user's message and Ragebait's response in dialog boxes.
+     * If an exception occurs, displays a color-coded error message instead.
      * Clears the input field after processing.
-     * If the user types the exit command, disables input and plays a fade-out animation before closing.
+     * If the user types the exit command, disables input and plays a fade-out animation
+     * before closing the application.
      */
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
-        String response = ragebait.getResponse(input);
-
-        dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
-                DialogBox.getRagebaitDialog(response, ragebaitImage)
-        );
+        try {
+            String response = ragebait.getResponse(input);
+            dialogContainer.getChildren().addAll(
+                    DialogBox.getUserDialog(input, userImage),
+                    DialogBox.getRagebaitDialog(response, ragebaitImage)
+            );
+        } catch (RagebaitException e) {
+            TextFlow formattedError = ErrorMessageFormatter.format(e.getMessage());
+            dialogContainer.getChildren().addAll(
+                    DialogBox.getUserDialog(input, userImage),
+                    DialogBox.getErrorDialog(formattedError, ragebaitImage)
+            );
+        }
 
         userInput.clear();
 
@@ -95,7 +107,8 @@ public class MainWindow extends AnchorPane {
             userInput.setDisable(true);
             sendButton.setDisable(true);
 
-            FadeTransition fade = new FadeTransition(Duration.seconds(1.5), fadeOverlay);
+            // AI Assisted: Used ChatGPT to get fade transition to black before exiting
+            FadeTransition fade = new FadeTransition(Duration.seconds(2.5), fadeOverlay);
             fade.setFromValue(0);
             fade.setToValue(1);
             fade.setOnFinished(e -> Platform.exit());

@@ -1,47 +1,86 @@
 .root {
-    main-color: rgb(237, 255, 242);       /* Create a looked-up color called "main-color" within root. */
+    main-color: #fffbe6;
     -fx-background-color: main-color;
 }
 
+/* TEXT FIELD */
 .text-field {
-    -fx-background-color: #d9ffe2;
-    -fx-font: 20px "Arial";
+    -fx-background-color: #ffffff;
+    -fx-font: 18px "Arial";
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #ffe58f;
+    -fx-border-width: 2;
+    -fx-padding: 8;
 }
 
+/* BUTTON */
 .button {
-    -fx-background-color: mediumspringgreen;
-    -fx-font: italic bold 16px "Arial";
+    -fx-background-color: #ffd966;   /* soft warm yellow */
+    -fx-text-fill: #333333;
+    -fx-font: bold 16px "Arial";
+    -fx-background-radius: 20;
+    -fx-padding: 8 16 8 16;
 }
 
+/* HOVER */
 .button:hover {
-    -fx-background-color:cyan;
-    -fx-font-size: 18px;
+    -fx-background-color: #ffcc33;
 }
 
+/* PRESSED */
 .button:pressed {
-    -fx-background-color:orange;
-    -fx-font-size: 20px;
+    -fx-background-color: #ffb300;
 }
 
+/* SCROLL PANE */
 .scroll-pane,
 .scroll-pane .viewport {
     -fx-background-color: transparent;
 }
 
+/* SCROLL BAR */
 .scroll-bar {
-    -fx-font-size: 10px;  /* Change width of scroll bar. */
-    -fx-background-color: main-color;
+    -fx-background-color: main-color; /* darker light pastel blue */
 }
 
+/* SCROLL THUMB */
 .scroll-bar .thumb {
-    -fx-background-color: #ff9cb4;
+    -fx-background-color: #cce7ff;   /* light pastel blue */
     -fx-background-radius: 1em;
 }
 
-/* Hides the increment and decrement buttons. */
+/* Hides increment/decrement buttons */
 .scroll-bar .increment-button,
 .scroll-bar .decrement-button {
     -fx-pref-height: 0;
     -fx-opacity: 0;
 }
+/* Base error text styling */
+.error-text,
+.error-tag,
+.error-datetime,
+.error-command {
+    -fx-font-size: 16px;                        /* all same size */
+    -fx-font-family: "Segoe UI", "Helvetica", "Arial", sans-serif;
+}
 
+/* Normal error words (red) */
+.error-text {
+    -fx-fill: #cc0000;       /* red */
+}
+
+/* Highlight tags like /by, /from, /to */
+.error-tag {
+    -fx-fill: #ff9900;       /* orange */
+    -fx-font-weight: 600;    /* semi-bold */
+}
+
+/* Highlight date/time formats */
+.error-datetime {
+    -fx-fill: #3399ff;       /* blue */
+    -fx-font-style: italic;
+}
+.error-command {
+    -fx-fill: #00aa00;       /* green */
+}

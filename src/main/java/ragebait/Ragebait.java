@@ -109,13 +109,9 @@ public class Ragebait {
      * @param input Raw user input.
      * @return Response message.
      */
-    public String getResponse(String input) {
-        try {
-            Command command = Parser.parse(input);
-            return command.execute(ui, context);
-        } catch (RagebaitException e) {
-            return ui.showError(e.getMessage());
-        }
+    public String getResponse(String input) throws RagebaitException {
+        Command command = Parser.parse(input);
+        return command.execute(ui, context);
     }
 
     /**
