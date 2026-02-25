@@ -1,7 +1,5 @@
 package ragebait.command;
 
-import ragebait.storage.ContactStorage;
-import ragebait.storage.Storage;
 import ragebait.task.Task;
 import ragebait.task.TaskList;
 import ragebait.ui.UI;
