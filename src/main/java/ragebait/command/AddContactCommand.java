@@ -87,7 +87,6 @@ public class AddContactCommand extends ContactCommand {
      */
     private Contact createContact() throws RagebaitException {
         if (!args.contains(NAME) || !args.contains(PHONE_NUMBER) || !args.contains(EMAIL)) {
-            System.out.println(args);
             throw new RagebaitException(
                     "Wow. You had ONE job. Format it properly: contact /name <NAME> /phone <PHONE> /email <EMAIL>."
             );
