@@ -14,7 +14,7 @@ public class FindContactCommand extends ContactCommand {
         ContactList matchingContacts = new ContactList();
 
         for (Contact contact : contacts.getAllContacts()) {
-            if (contact.toString().toLowerCase().contains(keyword.toLowerCase())) {
+            if (contact.getName().toLowerCase().contains(keyword.toLowerCase())) {
                 matchingContacts.add(contact);
             }
         }

@@ -44,7 +44,7 @@ public class FindTaskCommand extends TaskCommand {
         TaskList matchingTasks = new TaskList();
 
         for (Task task : tasks.getAllTasks()) {
-            if (task.toString().toLowerCase().contains(keyword.toLowerCase())) {
+            if (task.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
                 matchingTasks.add(task);
             }
         }

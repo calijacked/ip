@@ -93,7 +93,7 @@ public class Storage {
     public void save(TaskList tasks) throws RagebaitException {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
             for (Task task : tasks.getAllTasks()) {
-                bw.write( VERTICAL_BAR_SEPERATOR + task.toFileFormat());
+                bw.write(task.toFileFormat());
                 bw.newLine();
             }
         } catch (IOException e) {

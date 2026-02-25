@@ -42,17 +42,17 @@ public class Parser {
         // Task or Contact
         Category category = Category.convertToCategory(parts[0].toLowerCase());
         if (parts.length < 2) {
-            throw new RagebaitException("Please specify a command after the category!");
+            throw new RagebaitException("Please specify a command after " + category + " !");
         }
         CommandType commandType = CommandType.convertToCommandType(parts[1].toLowerCase());
         // Only list can have empty args
         String args = parts.length > 2 ? parts[2].trim() : EMPTY;
 
         switch (category) {
-        case TASK:
+        case task:
             return parseTaskCommand(commandType, args);
 
-        case CONTACT:
+        case contact:
             return parseContactCommand(commandType, args);
 
         default:

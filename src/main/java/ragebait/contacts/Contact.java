@@ -22,7 +22,7 @@ public class Contact {
 
     @Override
     public String toString() {
-        return name + " | Phone: " + phone + " | Email: " + email;
+        return "Name: " + name + " | Phone: " + phone + " | Email: " + email;
     }
 
     public String toFileFormat() {

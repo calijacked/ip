@@ -12,7 +12,7 @@ public class ContactList {
     }
 
     public ContactList(List<Contact> contacts) {
-        this.contacts = contacts;
+        this.contacts = new ArrayList<>(contacts);
     }
 
     public void add(Contact c) {

@@ -134,7 +134,7 @@ public class UI {
     }
 
     public String getContactAdded(Contact contact, int size) {
-        return "Fine. I've added this to your contacts list:\n  "
+        return "Fine. I've added this to your contacts list:\n"
                 + contact
                 + "\nYou now have " + size + " "
                 + (size == 1 ? "task" : "tasks");
