@@ -1,8 +1,11 @@
 package ragebait;
 
 import ragebait.command.Command;
+import ragebait.command.Context;
+import ragebait.contacts.ContactList;
 import ragebait.exception.RagebaitException;
 import ragebait.parser.Parser;
+import ragebait.storage.ContactStorage;
 import ragebait.storage.Storage;
 import ragebait.task.TaskList;
 import ragebait.ui.UI;
@@ -17,16 +20,21 @@ import ragebait.ui.UI;
 public class Ragebait {
 
     /** Default file path used for storing task data */
-    private static final String FILE_PATH = "data/ragebait.txt";
+    private static final String TASK_FILE_PATH = "data/ragebaitTasks.txt";
+    private static final String CONTACTS_FILE_PATH = "data/ragebaitContacts.txt";
 
     /** Responsible for persisting task data to storage */
-    private final Storage storage;
+    private final Storage taskStorage;
 
     /** Collection of tasks currently managed by the application */
     private final TaskList tasks;
 
     /** Handles user interaction and message formatting */
     private final UI ui;
+
+    private final ContactStorage contactStorage;
+    private final ContactList contacts;
+    private final Context context;
 
     /**
      * Constructs a Ragebait application instance.
@@ -37,17 +45,35 @@ public class Ragebait {
      */
     public Ragebait() {
         ui = new UI();
-        storage = new Storage(FILE_PATH);
+        taskStorage = new Storage(TASK_FILE_PATH);
+        tasks = initialiseTasks(TASK_FILE_PATH);
+        contactStorage = new ContactStorage(CONTACTS_FILE_PATH);
+        contacts = initialiseContacts(CONTACTS_FILE_PATH);
+        context = new Context(tasks, taskStorage, contacts, contactStorage);
+    }
 
+    public TaskList initialiseTasks(String filePath) {
         TaskList loadedTasks;
         try {
-            loadedTasks = new TaskList(storage.load().getAllTasks());
+            loadedTasks = new TaskList(taskStorage.load().getAllTasks());
         } catch (RagebaitException e) {
             ui.showError("Error loading tasks. Starting with an empty list.");
             e.printStackTrace();
             loadedTasks = new TaskList();
         }
-        tasks = loadedTasks;
+        return loadedTasks;
+    }
+
+    public ContactList initialiseContacts(String filePath) {
+        ContactList loadedContacts;
+        try {
+            loadedContacts = new ContactList(contactStorage.load().getAllContacts());
+        } catch (RagebaitException e) {
+            ui.showError("Error loading tasks. Starting with an empty list.");
+            e.printStackTrace();
+            loadedContacts = new ContactList();
+        }
+        return loadedContacts;
     }
 
     /**
@@ -63,7 +89,7 @@ public class Ragebait {
     public String getResponse(String input) {
         try {
             Command command = Parser.parse(input);
-            return command.execute(tasks, ui, storage);
+            return command.execute(ui, context);
         } catch (RagebaitException e) {
             return ui.showError(e.getMessage());
         }

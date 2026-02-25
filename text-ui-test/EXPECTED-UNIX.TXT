@@ -46,7 +46,7 @@ ____________________________________________________________
 Specify the ragebait.ragebait.task number to mark!
 ____________________________________________________________
 ____________________________________________________________
-Please enter a ragebait.command. (todo, list, deadline, event, blah or bye)
+Please enter a ragebait.taskCommand. (todo, list, deadline, event, blah or bye)
 ____________________________________________________________
 ____________________________________________________________
 Finally! I was getting tired of you!

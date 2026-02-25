@@ -1,14 +1,6 @@
 package ragebait.parser;
 
-import ragebait.command.AddCommand;
-import ragebait.command.Command;
-import ragebait.command.CommandType;
-import ragebait.command.DeleteCommand;
-import ragebait.command.ExitCommand;
-import ragebait.command.FindCommand;
-import ragebait.command.ListCommand;
-import ragebait.command.MarkCommand;
-import ragebait.command.UnmarkCommand;
+import ragebait.command.*;
 import ragebait.exception.RagebaitException;
 import ragebait.task.TaskType;
 
@@ -26,8 +18,8 @@ import ragebait.task.TaskType;
  * It does not validate deeper business rules (e.g., date correctness).
  */
 public class Parser {
-
-    private static final int COMMAND_PARTS_LIMIT = 2;
+    private static final String BYE = "bye";
+    private static final int COMMAND_PARTS_LIMIT = 3;
     private static final int USER_INDEX_OFFSET = 1;
     private static final String EMPTY = "";
 
@@ -42,47 +34,82 @@ public class Parser {
         if (fullCommand == null || fullCommand.trim().isEmpty()) {
             throw new RagebaitException("Command cannot be empty!");
         }
+        String trimmed = fullCommand.trim();
+        if (trimmed.equalsIgnoreCase(BYE)) {
+            return new ExitCommand();
+        }
+        String[] parts = trimmed.split(" ", COMMAND_PARTS_LIMIT);
+        // Task or Contact
+        Category category = Category.convertToCategory(parts[0].toLowerCase());
+        if (parts.length < 2) {
+            throw new RagebaitException("Please specify a command after the category!");
+        }
+        CommandType commandType = CommandType.convertToCommandType(parts[1].toLowerCase());
+        // Only list can have empty args
+        String args = parts.length > 2 ? parts[2].trim() : EMPTY;
 
-        String[] parts = fullCommand.trim().split(" ", COMMAND_PARTS_LIMIT);
-        CommandType commandType = CommandType.convertToCommandType(parts[0].toLowerCase());
+        switch (category) {
+        case TASK:
+            return parseTaskCommand(commandType, args);
 
-        String args = parts.length > 1 ? parts[1].trim() : EMPTY;
+        case CONTACT:
+            return parseContactCommand(commandType, args);
 
+        default:
+            throw new RagebaitException("Unknown category! Use task or contact!");
+        }
+    }
+    private static TaskCommand parseTaskCommand(CommandType commandType, String args) throws RagebaitException {
         switch (commandType) {
         case list:
-            return new ListCommand();
-
-        case bye:
-            return new ExitCommand();
+            return new ListTaskCommand();
 
         case mark:
-            requireArgs(args, "Specify an existing task number! Check using command list!");
-            return new MarkCommand(parseIndex(args));
+            requireArgs(args, "Specify an existing task number! Check using command task list!");
+            return new MarkTaskCommand(parseIndex(args));
 
         case unmark:
-            requireArgs(args, "Specify an existing task number! Check using command list!");
-            return new UnmarkCommand(parseIndex(args));
+            requireArgs(args, "Specify an existing task number! Check using command task list!");
+            return new UnmarkTaskCommand(parseIndex(args));
 
         case delete:
-            requireArgs(args, "Specify an existing task number! Check using command list!");
-            return new DeleteCommand(parseIndex(args));
+            requireArgs(args, "Specify an existing task number! Check using command task list!");
+            return new DeleteTaskCommand(parseIndex(args));
 
         case todo:
             requireArgs(args, "The description of a todo cannot be empty.");
-            return new AddCommand(TaskType.TODO, args);
+            return new AddTaskCommand(TaskType.TODO, args);
 
         case deadline:
             requireArgs(args, "The description and by date of a deadline cannot be empty.");
-            return new AddCommand(TaskType.DEADLINE, args);
+            return new AddTaskCommand(TaskType.DEADLINE, args);
 
         case event:
             requireArgs(args, "The description, from date, and to date of an event cannot be empty.");
-            return new AddCommand(TaskType.EVENT, args);
+            return new AddTaskCommand(TaskType.EVENT, args);
 
         case find:
-            requireArgs(args, "Please provide a keyword to search!");
-            return new FindCommand(args);
+            requireArgs(args, "Please provide a keyword to search for a task!");
+            return new FindTaskCommand(args);
 
+        default:
+            throw new RagebaitException("Unknown command!");
+        }
+    }
+
+    private static ContactCommand parseContactCommand(CommandType commandType, String args) throws RagebaitException {
+        switch (commandType) {
+        case list:
+            return new ListContactCommand();
+        case add:
+            requireArgs(args, "The details of the contact cannot be empty!");
+            return new AddContactCommand(args);
+        case delete:
+            requireArgs(args, "Specify an existing contact! Check using contact list!");
+            return new DeleteContactCommand(parseIndex(args));
+        case find:
+            requireArgs(args, "Please provide a keyword to search for a contact!");
+            return new FindContactCommand(args);
         default:
             throw new RagebaitException("Unknown command!");
         }

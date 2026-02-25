@@ -10,7 +10,7 @@ import ragebait.ui.UI;
  * Represents a command that deletes a task from the TaskList.
  * The task is removed based on its 0-based index.
  */
-public class DeleteCommand extends Command {
+public class DeleteTaskCommand extends TaskCommand {
 
     /** Minimum valid task index (0-based). */
     private static final int START_RANGE = 0;
@@ -23,7 +23,7 @@ public class DeleteCommand extends Command {
      *
      * @param index The 0-based index of the task to delete.
      */
-    public DeleteCommand(int index) {
+    public DeleteTaskCommand(int index) {
         this.index = index;
     }
 
@@ -47,7 +47,9 @@ public class DeleteCommand extends Command {
      * @throws RagebaitException If the index is out of valid range.
      */
     @Override
-    public String execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
+    public String execute(UI ui, Context context) throws RagebaitException {
+        TaskList tasks = context.tasks;
+        Storage taskStorage = context.taskStorage;
         int endRange = tasks.size();
 
         if (index < START_RANGE || index >= endRange) {
@@ -58,7 +60,7 @@ public class DeleteCommand extends Command {
         String result = ui.getDelete(selectedTask, endRange - 1);
 
         tasks.remove(index);
-        storage.save(tasks);
+        taskStorage.save(tasks);
 
         return result;
     }

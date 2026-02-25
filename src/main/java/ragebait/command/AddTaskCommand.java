@@ -25,7 +25,7 @@ import ragebait.ui.UI;
  * DEADLINE: deadline DESCRIPTION /by d/M/yyyy HHmm
  * EVENT: event DESCRIPTION /from d/M/yyyy HHmm /to d/M/yyyy HHmm
  */
-public class AddCommand extends Command {
+public class AddTaskCommand extends TaskCommand {
 
     /** Tag used to separate description and deadline datetime. */
     public static final String TAG_BY = " /by ";
@@ -55,7 +55,7 @@ public class AddCommand extends Command {
      * @param type The type of task to create.
      * @param args The raw argument string provided by the user.
      */
-    public AddCommand(TaskType type, String args) {
+    public AddTaskCommand(TaskType type, String args) {
         this.type = type;
         this.args = args;
     }
@@ -71,12 +71,13 @@ public class AddCommand extends Command {
      * @throws RagebaitException If input validation or parsing fails.
      */
     @Override
-    public String execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
-
+    public String execute(UI ui, Context context) throws RagebaitException {
+        TaskList tasks = context.tasks;
+        Storage taskStorage = context.taskStorage;
         Task task = createTask();
 
         tasks.add(task);
-        storage.save(tasks);
+        taskStorage.save(tasks);
 
         return ui.getTaskAdded(task, tasks.size());
     }

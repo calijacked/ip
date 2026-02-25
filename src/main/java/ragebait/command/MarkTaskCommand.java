@@ -11,7 +11,7 @@ import ragebait.ui.UI;
  * The task is selected using its index.
  * Assumes the index is 0-based and valid integer input.
  */
-public class MarkCommand extends Command {
+public class MarkTaskCommand extends TaskCommand {
 
     /** Minimum valid task index. */
     private static final int START_INDEX = 0;
@@ -24,7 +24,7 @@ public class MarkCommand extends Command {
      *
      * @param index The 0-based index of the task to mark.
      */
-    public MarkCommand(int index) {
+    public MarkTaskCommand(int index) {
         this.index = index;
     }
 
@@ -39,7 +39,10 @@ public class MarkCommand extends Command {
      *                           or the task is already marked.
      */
     @Override
-    public String execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
+    public String execute(UI ui, Context context) throws RagebaitException {
+        TaskList tasks = context.tasks;
+        Storage taskStorage = context.taskStorage;
+
         // Validate index before accessing the list
         if (index < START_INDEX || index >= tasks.size()) {
             throw new RagebaitException("Specified task number does not exist!");
@@ -52,7 +55,7 @@ public class MarkCommand extends Command {
         }
 
         selectedTask.markDone();
-        storage.save(tasks);
+        taskStorage.save(tasks);
         return ui.getMarked(selectedTask);
     }
 

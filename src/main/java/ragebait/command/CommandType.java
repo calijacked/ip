@@ -34,7 +34,9 @@ public enum CommandType {
     event,
 
     /** Finds tasks containing a keyword. */
-    find;
+    find,
+
+    add;
 
     /**
      * Converts a string input into the corresponding CommandType.

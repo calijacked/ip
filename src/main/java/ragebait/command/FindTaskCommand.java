@@ -1,5 +1,6 @@
 package ragebait.command;
 
+import ragebait.storage.ContactStorage;
 import ragebait.storage.Storage;
 import ragebait.task.Task;
 import ragebait.task.TaskList;
@@ -11,7 +12,7 @@ import ragebait.ui.UI;
  *
  * The search is case-insensitive and returns all matching tasks.
  */
-public class FindCommand extends Command {
+public class FindTaskCommand extends TaskCommand {
 
     /** The keyword used to filter task descriptions */
     private final String keyword;
@@ -21,7 +22,7 @@ public class FindCommand extends Command {
      *
      * @param keyword The keyword to search for in task descriptions.
      */
-    public FindCommand(String keyword) {
+    public FindTaskCommand(String keyword) {
         this.keyword = keyword;
     }
 
@@ -38,7 +39,8 @@ public class FindCommand extends Command {
      * @return A string message representing search results or no matches.
      */
     @Override
-    public String execute(TaskList tasks, UI ui, Storage storage) {
+    public String execute(UI ui, Context context) {
+        TaskList tasks = context.tasks;
         TaskList matchingTasks = new TaskList();
 
         for (Task task : tasks.getAllTasks()) {

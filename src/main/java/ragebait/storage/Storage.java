@@ -28,6 +28,7 @@ public class Storage {
     private static final int MAX_TASK_PARTS = 5;
     private static final String SEPARATOR = " \\| ";
     private static final String MARKED_DONE = "1";
+    private static final String VERTICAL_BAR_SEPERATOR = " | ";
 
     /** Path to the file used for storing tasks */
     private final String filePath;
@@ -68,6 +69,7 @@ public class Storage {
             String line;
             while ((line = br.readLine()) != null) {
                 try {
+                    // Storage does its own parsing separate form user typing.
                     Task task = parseTask(line);
                     tasks.add(task);
                 } catch (RagebaitException e) {
@@ -91,7 +93,7 @@ public class Storage {
     public void save(TaskList tasks) throws RagebaitException {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
             for (Task task : tasks.getAllTasks()) {
-                bw.write(task.toFileFormat());
+                bw.write( VERTICAL_BAR_SEPERATOR + task.toFileFormat());
                 bw.newLine();
             }
         } catch (IOException e) {

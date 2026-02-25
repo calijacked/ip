@@ -1,5 +1,7 @@
 package ragebait.ui;
 
+import ragebait.contacts.Contact;
+import ragebait.contacts.ContactList;
 import ragebait.task.Task;
 import ragebait.task.TaskList;
 
@@ -130,4 +132,33 @@ public class UI {
     public String showError(String message) {
         return message;
     }
+
+    public String getContactAdded(Contact contact, int size) {
+        return "Fine. I've added this to your contacts list:\n  "
+                + contact
+                + "\nYou now have " + size + " "
+                + (size == 1 ? "task" : "tasks");
+    }
+
+    public String getDeleteContact(Contact selectedContact, int size) {
+        return "Are you two still friends?\n" + selectedContact
+                + "\nNow you have " + size + " contact(s) in the list.";
+    }
+
+    public String getNoContactsFound() {
+        return "Do a better job at searching. Or do you have no friends?";
+    }
+
+    public String getFindContactHeader(ContactList matchingContacts) {
+        return "You searched. Here are your contacts lol:\n"
+                + matchingContacts.listContacts();
+    }
+    public String getNoContacts() {
+        return "WOW. You actually have nobody in your life.";
+    }
+
+    public String getContactList(ContactList contacts) {
+        return "Yawn. Contacts:\n" + contacts.listContacts();
+    }
 }
+

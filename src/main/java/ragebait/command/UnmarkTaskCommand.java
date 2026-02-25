@@ -10,7 +10,7 @@ import ragebait.ui.UI;
  * Represents a command to mark a task as not completed (undo mark) in the TaskList.
  * The task is identified by its 0-based index in the TaskList.
  */
-public class UnmarkCommand extends Command {
+public class UnmarkTaskCommand extends TaskCommand {
 
     /** Minimum valid task index. */
     private static final int MIN_INDEX = 0;
@@ -23,7 +23,7 @@ public class UnmarkCommand extends Command {
      *
      * @param index The 0-based index of the task to unmark.
      */
-    public UnmarkCommand(int index) {
+    public UnmarkTaskCommand(int index) {
         this.index = index;
     }
 
@@ -41,7 +41,10 @@ public class UnmarkCommand extends Command {
      * @throws RagebaitException If the index is invalid or the task is already unmarked.
      */
     @Override
-    public String execute(TaskList tasks, UI ui, Storage storage) throws RagebaitException {
+    public String execute(UI ui, Context context) throws RagebaitException {
+        TaskList tasks = context.tasks;
+        Storage taskStorage = context.taskStorage;
+
         int endIndex = tasks.size();
 
         // Validate index before accessing list
@@ -58,7 +61,7 @@ public class UnmarkCommand extends Command {
 
         // Mark task as undone and persist changes
         selectedTask.markUndone();
-        storage.save(tasks);
+        taskStorage.save(tasks);
 
         return ui.getUnmarked(selectedTask);
     }

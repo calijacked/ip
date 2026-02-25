@@ -1,6 +1,5 @@
 package ragebait.command;
 
-import ragebait.storage.Storage;
 import ragebait.task.TaskList;
 import ragebait.ui.UI;
 
@@ -10,7 +9,7 @@ import ragebait.ui.UI;
  * If the task list is empty, a message indicating no tasks is returned.
  * Otherwise, all tasks are formatted and displayed via the UI.
  */
-public class ListCommand extends Command {
+public class ListTaskCommand extends TaskCommand {
 
     /** Constant representing an empty task list */
     private static final int NO_TASKS = 0;
@@ -24,7 +23,8 @@ public class ListCommand extends Command {
      * @return A formatted string representing the list of tasks, or a message if empty.
      */
     @Override
-    public String execute(TaskList tasks, UI ui, Storage storage) {
+    public String execute(UI ui, Context context) {
+        TaskList tasks = context.tasks;
         if (tasks.size() == NO_TASKS) {
             return ui.getNoTasks();
         } else {
