@@ -103,7 +103,10 @@ public class MainWindow extends AnchorPane {
 
         userInput.clear();
 
-        if (input.equals(BYE)) {
+        String trimmed = input.trim();
+        String[] parts = trimmed.split("\\s+");
+
+        if (parts[0].equals(BYE)) {
             userInput.setDisable(true);
             sendButton.setDisable(true);
 

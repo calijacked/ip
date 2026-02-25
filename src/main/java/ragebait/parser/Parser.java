@@ -53,11 +53,12 @@ public class Parser {
         }
 
         String trimmed = fullCommand.trim();
-        if (trimmed.equalsIgnoreCase(BYE)) {
+        String[] parts = trimmed.split(" ", COMMAND_PARTS_LIMIT);
+
+        if (parts[0].equalsIgnoreCase(BYE)) {
             return new ExitCommand();
         }
 
-        String[] parts = trimmed.split(" ", COMMAND_PARTS_LIMIT);
         Category category = Category.convertToCategory(parts[0].toLowerCase());
 
         if (parts.length < 2) {

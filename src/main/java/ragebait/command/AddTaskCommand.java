@@ -95,7 +95,6 @@ public class AddTaskCommand extends TaskCommand {
 
         tasks.add(task);
         taskStorage.save(tasks);
-
         return ui.getTaskAdded(task, tasks.size());
     }
 
