@@ -6,61 +6,65 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ragebait.command.*;
+import ragebait.command.AddTaskCommand;
+import ragebait.command.DeleteTaskCommand;
+import ragebait.command.ExitCommand;
 import ragebait.command.ListTaskCommand;
+import ragebait.command.MarkTaskCommand;
+import ragebait.command.UnmarkTaskCommand;
 import ragebait.exception.RagebaitException;
 
 public class ParserTest {
 
     @Test
     public void testParseKnownCommands() throws RagebaitException {
-        assertTrue(Parser.parse("list") instanceof ListTaskCommand);
         assertTrue(Parser.parse("bye") instanceof ExitCommand);
-        assertTrue(Parser.parse("todo read book") instanceof AddTaskCommand);
-        assertTrue(Parser.parse("deadline submit /by 01/01/2026 1200") instanceof AddTaskCommand);
+        assertTrue(Parser.parse("task list") instanceof ListTaskCommand);
+        assertTrue(Parser.parse("task todo read book") instanceof AddTaskCommand);
+        assertTrue(Parser.parse("task deadline submit /by 01/01/2026 1200") instanceof AddTaskCommand);
     }
 
     @Test
     public void testParseMarkCommand() throws RagebaitException {
-        MarkTaskCommand mark = (MarkTaskCommand) Parser.parse("mark 1");
+        MarkTaskCommand mark = (MarkTaskCommand) Parser.parse("task mark 1");
         assertEquals(0, mark.getIndex());
     }
 
     @Test
     public void testParseUnmarkCommand() throws RagebaitException {
-        UnmarkTaskCommand unmark = (UnmarkTaskCommand) Parser.parse("unmark 2");
+        UnmarkTaskCommand unmark = (UnmarkTaskCommand) Parser.parse("task unmark 2");
         assertEquals(1, unmark.getIndex());
     }
 
     @Test
     public void testParseDeleteCommand() throws RagebaitException {
-        DeleteTaskCommand delete = (DeleteTaskCommand) Parser.parse("delete 3");
+        DeleteTaskCommand delete = (DeleteTaskCommand) Parser.parse("task delete 3");
         assertEquals(2, delete.getIndex());
     }
 
     @Test
     public void testInvalidIndexFormat() {
-        assertThrows(RagebaitException.class, () -> Parser.parse("mark abc"));
+        assertThrows(RagebaitException.class, () -> Parser.parse("task mark abc"));
     }
 
     @Test
     public void testMissingMarkArgument() {
-        assertThrows(RagebaitException.class, () -> Parser.parse("mark"));
+        assertThrows(RagebaitException.class, () -> Parser.parse("task mark"));
     }
 
     @Test
     public void testMissingTodoDescription() {
-        assertThrows(RagebaitException.class, () -> Parser.parse("todo"));
+        assertThrows(RagebaitException.class, () -> Parser.parse("task todo"));
     }
 
     @Test
     public void testMissingDeadlineArguments() {
-        assertThrows(RagebaitException.class, () -> Parser.parse("deadline"));
+        assertThrows(RagebaitException.class, () -> Parser.parse("task deadline"));
     }
 
     @Test
     public void testMissingEventArguments() {
-        assertThrows(RagebaitException.class, () -> Parser.parse("event"));
+        assertThrows(RagebaitException.class, () -> Parser.parse("task event"));
     }
 
     @Test
@@ -70,8 +74,8 @@ public class ParserTest {
 
     @Test
     public void testUnknownCommandThrowsException() {
-        RagebaitException exception = assertThrows(RagebaitException.class, () -> Parser.parse("fly away"));
-
-        assertEquals("Unknown command!", exception.getMessage());
+        RagebaitException exception = assertThrows(RagebaitException.class, () -> Parser.parse("task fly"));
+        assertEquals("Unknown command: \"fly\". That’s not in the system. Try using an actual command.",
+                exception.getMessage());
     }
 }

@@ -18,7 +18,7 @@ public class UserInterfaceTest {
     @Test
     void testShowWelcome() {
         String output = ui.getWelcome();
-        assertTrue(output.contains("Ragebait"));
+        assertTrue(output.contains("Oh look who’s back. I’m Ragebait Bot. How can I help you today! :)"));
     }
 
     @Test

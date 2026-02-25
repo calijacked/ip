@@ -6,7 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ragebait.contacts.ContactList;
 import ragebait.exception.RagebaitException;
+import ragebait.storage.ContactStorage;
 import ragebait.storage.Storage;
 import ragebait.task.TaskList;
 import ragebait.task.TaskType;
@@ -17,18 +19,25 @@ public class AddTaskCommandTest {
     private TaskList tasks;
     private UI ui;
     private Storage storage;
+    private Context context;
 
     @BeforeEach
     public void setUp() {
         tasks = new TaskList();
         ui = new UI();
         storage = new Storage("test.txt");
+
+        // Minimal setup required for Context
+        ContactList contacts = new ContactList();
+        ContactStorage contactStorage = new ContactStorage("testContacts.txt");
+
+        context = new Context(tasks, storage, contacts, contactStorage);
     }
 
     @Test
     public void testCreateTodoSuccess() throws RagebaitException {
         AddTaskCommand cmd = new AddTaskCommand(TaskType.TODO, "read book");
-        String result = cmd.execute(tasks, ui, storage);
+        String result = cmd.execute(ui, context);
         assertTrue(result.contains("read book"));
     }
 
@@ -38,7 +47,7 @@ public class AddTaskCommandTest {
                 TaskType.DEADLINE,
                 "submit /by 01/01/2026 1200");
 
-        String result = cmd.execute(tasks, ui, storage);
+        String result = cmd.execute(ui, context);
         assertTrue(result.contains("submit"));
     }
 
@@ -48,7 +57,7 @@ public class AddTaskCommandTest {
                 TaskType.EVENT,
                 "meeting /from 1/1/2024 1210 /to 1/2/2024 2200");
 
-        String result = cmd.execute(tasks, ui, storage);
+        String result = cmd.execute(ui, context);
         assertTrue(result.contains("meeting"));
     }
 
@@ -58,7 +67,7 @@ public class AddTaskCommandTest {
                 TaskType.EVENT,
                 "lul /from 1/1/2024 1210 /to 1/2/2024 2401");
 
-        assertThrows(RagebaitException.class, () -> cmd.execute(tasks, ui, storage));
+        assertThrows(RagebaitException.class, () -> cmd.execute(ui, context));
     }
 
     @Test
@@ -67,7 +76,7 @@ public class AddTaskCommandTest {
                 TaskType.EVENT,
                 "lul /from 1/1/2024 1210 /to 1/2/2022 2200");
 
-        assertThrows(RagebaitException.class, () -> cmd.execute(tasks, ui, storage));
+        assertThrows(RagebaitException.class, () -> cmd.execute(ui, context));
     }
 
     @Test
@@ -76,7 +85,7 @@ public class AddTaskCommandTest {
                 TaskType.DEADLINE,
                 "submit /by 32/01/2024 1200");
 
-        assertThrows(RagebaitException.class, () -> cmd.execute(tasks, ui, storage));
+        assertThrows(RagebaitException.class, () -> cmd.execute(ui, context));
     }
 
     @Test
@@ -85,7 +94,7 @@ public class AddTaskCommandTest {
                 TaskType.DEADLINE,
                 "submit 01/01/2026 1200");
 
-        assertThrows(RagebaitException.class, () -> cmd.execute(tasks, ui, storage));
+        assertThrows(RagebaitException.class, () -> cmd.execute(ui, context));
     }
 
     @Test
@@ -94,6 +103,6 @@ public class AddTaskCommandTest {
                 TaskType.EVENT,
                 "meeting 1/1/2024 1200");
 
-        assertThrows(RagebaitException.class, () -> cmd.execute(tasks, ui, storage));
+        assertThrows(RagebaitException.class, () -> cmd.execute(ui, context));
     }
 }

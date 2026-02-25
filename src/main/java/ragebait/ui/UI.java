@@ -12,7 +12,7 @@ import ragebait.task.TaskList;
 public class UI {
 
     public String getWelcome() {
-        return "Oh look who’s back. What chaos are we pretending to organize today?";
+        return "Oh look who’s back. I’m Ragebait Bot. How can I help you today! :)";
     }
 
     public String getDelete(Task task, int size) {
