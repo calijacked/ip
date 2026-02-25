@@ -9,12 +9,14 @@ mkdir -p "$REPO_ROOT/bin"
 # delete previous output
 rm -f ACTUAL.TXT
 
-# compile all java files from src/main/java into bin folder
-if ! javac -Xlint:none -d "$REPO_ROOT/bin" "$REPO_ROOT/src/main/java/ragebait"/*.java
+# compile all java files recursively from src/main/java into bin folder
+find "$REPO_ROOT/src/main/java" -name "*.java" > sources.txt
+if ! javac -Xlint:none -d "$REPO_ROOT/bin" @sources.txt
 then
     echo "********** BUILD FAILURE **********"
     exit 1
 fi
+rm sources.txt
 
 # run the program with input redirection
 java -cp "$REPO_ROOT/bin" ragebait.Ragebait < input.txt > ACTUAL.TXT
