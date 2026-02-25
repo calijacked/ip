@@ -1,35 +1,26 @@
 #!/usr/bin/env bash
 
+# set repo root
+REPO_ROOT=$(pwd)/..
+
 # create bin directory if it doesn't exist
-if [ ! -d "../bin" ]
-then
-    mkdir ../bin
-fi
+mkdir -p "$REPO_ROOT/bin"
 
-# delete output from previous run
-if [ -e "./ACTUAL.TXT" ]
-then
-    rm ACTUAL.TXT
-fi
+# delete previous output
+rm -f ACTUAL.TXT
 
-# compile the code into the bin folder, terminates if error occurred
-if ! javac -cp /Users/tzjack/Documents/NUS/School/Y2S2/CS2103/ip/src/main/java -Xlint:none -d ../bin ../src/main/java/*.java
+# compile all java files from src/main/java into bin folder
+if ! javac -Xlint:none -d "$REPO_ROOT/bin" "$REPO_ROOT/src/main/java/ragebait"/*.java
 then
     echo "********** BUILD FAILURE **********"
     exit 1
 fi
 
-# run the program, feed commands from input.txt file and redirect the output to the ACTUAL.TXT
-java -classpath ../bin Ragebait < input.txt > ACTUAL.TXT
+# run the program with input redirection
+java -cp "$REPO_ROOT/bin" ragebait.Ragebait < input.txt > ACTUAL.TXT
 
-# convert to UNIX format
-# cp EXPECTED.TXT EXPECTED-UNIX.TXT
-# dos2unix ACTUAL.TXT EXPECTED-UNIX.TXT
-
-# compare the output to the expected output
-diff ACTUAL.TXT EXPECTED.TXT
-if [ $? -eq 0 ]
-then
+# compare output with expected
+if diff ACTUAL.TXT EXPECTED.TXT >/dev/null; then
     echo "Test result: PASSED"
     exit 0
 else
