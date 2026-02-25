@@ -41,6 +41,28 @@ public class AddContactCommand extends ContactCommand {
         String name = phoneSplit[0].trim();
         String phone = emailSplit[0].trim();
         String email = emailSplit[1].trim();
+
+        if (!isValidEmail(email)) {
+            throw new RagebaitException("Invalid email format: " + email);
+        }
+
+        if (!isValidPhone(phone)) {
+            throw new RagebaitException("Phone number must be 8 digits! " + phone + " is not valid!");
+        }
+
         return new Contact(name, phone, email);
+    }
+    // Basic email validation
+    public static boolean isValidEmail(String email) {
+        // Simple regex for standard emails
+        String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return email != null && email.matches(regex);
+    }
+
+    // Basic phone number validation
+    public static boolean isValidPhone(String phone) {
+        // Only digits, length 3-15
+        String regex = "\\d{8}";
+        return phone != null && phone.matches(regex);
     }
 }
