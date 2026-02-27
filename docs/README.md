@@ -27,7 +27,7 @@ Here is the overview of all commands in the CLI application.
 ### General Commands
 
 | Feature | Format | Example |
-|------|------|--------|
+|--------| ------ | -------|
 | Exit|`bye`|`bye`|
 | Add ToDo Task|`task todo <description>`|`task todo Buy milk`|
 | Add Deadline Task | `task deadline <description> /by <d/M/YYYY HHMM>` | `task deadline Submit report /by 25/2/2026 2359` |
