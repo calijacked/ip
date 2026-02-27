@@ -25,10 +25,11 @@ Check your Java version with:
 Here is the overview of all commands in the CLI application.
 
 ### General Commands
+
 | Feature | Format | Example |
-|---------|--------|---------|
-| Exit | `bye`    | `bye`|
-| Add ToDo Task | `task todo <description>` | `task todo Buy milk` |
+|------|------|--------|
+| Exit|`bye`|`bye`|
+| Add ToDo Task|`task todo <description>`|`task todo Buy milk`|
 | Add Deadline Task | `task deadline <description> /by <d/M/YYYY HHMM>` | `task deadline Submit report /by 25/2/2026 2359` |
 | Add Event Task| `task event <description> /from <d/M/YYYY HHMM> /to <d/M/YYYY HHMM>` | `task event Team meeting /from 25/2/2026 1400 /to 25/2/2026 1500` |
 | List Tasks | `task list` | `task list` |
@@ -220,7 +221,7 @@ Commitment issues already?
 
 ## 9. Find Task
 
-Searches the task list for tasks that contain the given keyword in their description.
+Searches the task list for tasks that contain the given keyword in their <description>.
 
 **Format:** `task find <keyword>`
 
@@ -321,7 +322,7 @@ You’re left with 1 contact(s). Choose wisely next time.
 
 ## 13. Find Task
 
-Searches the contact list for contacts whose names contain the specified keyword.
+Searches the contact list for contacts whose <name> contain the specified keyword.
 
 **Format:** `contact find <keyword>`
 
