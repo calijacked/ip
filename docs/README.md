@@ -333,7 +333,6 @@ Searches the contact list for contacts whose <name> contain the specified keywor
 ```
 Search done. These are your so-called contacts:
 1. Name: Jack | Phone: 91234567 | Email: jack@example.com
-
 ```
 
 **Notes:**
