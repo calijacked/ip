@@ -10,7 +10,7 @@ Ragebait is a command-line interface (CLI) application that helps users manage t
 - Maintain a contact list with names, phone numbers, and emails
 - Add, view, delete, and find contacts
 
-### Prerequisites
+# Prerequisites
 **Java 17 or above** must be installed on your system.  
 **Mac users:** Ensure your JDK version matches the app’s requirements.
 Check your Java version with: 
@@ -21,7 +21,7 @@ Check your Java version with:
 3. Copy the ragebait.jar file into this folder.
 4. Launch the app by running the jar file: ```java -jar ragebait.jar```
 
-## Commands
+# Commands
 Here is the overview of all commands in the CLI application.
 
 ### General Commands
